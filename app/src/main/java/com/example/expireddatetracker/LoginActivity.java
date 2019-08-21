@@ -27,6 +27,7 @@ import android.provider.ContactsContract;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -44,10 +45,17 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -76,15 +84,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private UserLoginTask mAuthTask = null;
 
     // UI references.
+    private JSONArray tips;
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
     private View signUp;
+    private TextView tipView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getJson();
+        tipView = findViewById(R.id.tip);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -230,6 +242,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
+        Random rand= new Random();
+        int tipnum = rand.nextInt(tips.length());
+        try {
+            String temp =  tips.getJSONObject(tipnum).getString("tips_text");
+            tipView.setText(temp);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -241,7 +261,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
-
+            tipView.setVisibility(show?View.VISIBLE:View.GONE);
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
@@ -255,6 +275,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            tipView.setVisibility(show?View.VISIBLE:View.GONE);
         }
     }
 
@@ -337,6 +358,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                  class Signup extends AsyncTask<String,Void,Boolean>{
                     @Override
                     protected Boolean doInBackground(String... strings) {
+//                        JSONParser jsonParser = new JSONParser();
+//                        try
+//                        {
+//                            FileReader reader = new FileReader("employees.json")
+//                            //Read JSON file
+//                            Object obj = jsonParser.parse(reader);
+//
+//                            JSONArray employeeList = (JSONArray) obj;
+//                            System.out.println(employeeList);
+//
+//                            //Iterate over employee array
+//                            employeeList.forEach( emp -> parseEmployeeObject( (JSONObject) emp ) );
+//
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
                         isEmailValid(strings[0]);
                         isPasswordValid(strings[1]);
                         password.setText(strings[0]);
@@ -401,11 +438,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 return false;
             }
-
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
@@ -427,6 +463,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Intent toMain = new Intent(LoginActivity.this,MainActivity.class);
                 startActivity(toMain);
                 finish();
+
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -438,6 +475,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
+    }
+
+    private void getJson(){
+            String json ;
+            tips = new JSONArray();
+        try {
+            InputStream is = getAssets().open("tips.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer,"UTF-8");
+            tips = new JSONArray(json);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 }
 
