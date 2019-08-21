@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:background="#069FB9"
+    android:background="@drawable/stroke"
     android:orientation="vertical">
     <EditText
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
 <LinearLayout
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".Fragments.HomeFragment"
-    android:background="#0DAEF0"
+    android:background="#FFFFFF"
     android:id="@+id/home_contain"
     android:orientation="vertical"
     android:layout_width="match_parent"
