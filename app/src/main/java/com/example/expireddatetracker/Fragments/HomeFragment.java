@@ -40,14 +40,14 @@ public class HomeFragment extends Fragment {
         return x;
     }
     private void init(View x){
-        String[] types = {"fruit","milk","meat","seafood","poultry","vegetable"};
+        String[] types = {"Fruit","Milk","Meat","Seafood","Poultry","Vegetable"};
         Map<String, Integer> map = new HashMap<String,Integer>();
-        map.put("fruit",R.drawable.fruit);
-        map.put("milk",R.drawable.milk);
-        map.put("meat",R.drawable.meat);
-        map.put("seafood",R.drawable.seafood);
-        map.put("poultry",R.drawable.poultry);
-        map.put("vegetable",R.drawable.vegetable);
+        map.put("Fruit",R.drawable.fruit);
+        map.put("Milk",R.drawable.milk);
+        map.put("Meat",R.drawable.meat);
+        map.put("Seafood",R.drawable.seafood);
+        map.put("Poultry",R.drawable.poultry);
+        map.put("Vegetable",R.drawable.vegetable);
         LinearLayout layout = x.findViewById(R.id.home_contain);
         for(int temp=0;temp< types.length;temp++){
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);

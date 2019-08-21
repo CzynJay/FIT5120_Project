@@ -10,8 +10,8 @@
         android:layout_width="@dimen/imagebutton_height"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:layout_weight="1">
-        android:background="@drawable/round_shape">
+        android:layout_weight="1"
+        >
 
         <ImageButton
             android:id="@+id/img1"
@@ -25,7 +25,7 @@
 
         <TextView
             android:id="@+id/tx1"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/imagebutton_height"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/img1"
             android:layout_marginBottom="0dp"
@@ -41,21 +41,20 @@
         android:layout_margin="20dp"
         android:layout_weight="1"
         android:id="@+id/layout2"
-        android:background="@drawable/round_shape">
+        >
 
         <ImageButton
             android:id="@+id/img2"
             android:layout_width="@dimen/imagebutton_height"
             android:layout_height="@dimen/imagebutton_height"
             android:layout_weight="1"
+
             android:adjustViewBounds="true"
             android:background="@drawable/round_shape"
-            android:padding="20dp"
-
             android:scaleType="fitCenter" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/imagebutton_height"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/img2"
             android:layout_marginBottom="0dp"
