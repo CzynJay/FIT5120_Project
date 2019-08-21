@@ -345,6 +345,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                     @Override
                     protected void onPostExecute(Boolean aBoolean) {
+                        //todo
                         email.setText("xxx");
                         mEmailView.setText("xxx");
                         mPasswordView.setText("dddd");
