@@ -2,15 +2,33 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:background="@drawable/stroke"
     android:orientation="vertical">
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/stroke">
     <EditText
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="41dp"
-        android:layout_margin="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/searchbar"
+        android:layout_marginRight="20dp"
         android:gravity="center"
+        android:inputType="text"
         android:background="@drawable/round_backgroud"
         android:hint="Search...." />
+   <ImageButton
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:id="@+id/searchbutton"
+       android:src="@drawable/ic_magnifying_glass"
+       android:layout_marginRight="20dp"
+       android:background="#00FF0000"
+       android:layout_gravity="center"/>
+
+    </LinearLayout>
 <ScrollView
     xmlns:app="http://schemas.android.com/apk/res-auto"
 

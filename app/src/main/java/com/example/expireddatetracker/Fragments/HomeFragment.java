@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,13 +20,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HomeFragment extends Fragment {
-
+    private ImageButton bt;
+    private EditText searchBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View x  = inflater.inflate(R.layout.fragment_home, container, false);
+        init(x);
+        ImageButton bt = x.findViewById(R.id.searchbutton);
+        searchBar = x.findViewById(R.id.searchbar);
+        bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchBar.setText("abc");
+            }
+        });
+        return x;
+    }
+    private void init(View x){
         String[] types = {"fruit","milk","meat","seafood","poultry","vegetable"};
         Map<String, Integer> map = new HashMap<String,Integer>();
         map.put("fruit",R.drawable.fruit);
@@ -48,10 +62,10 @@ public class HomeFragment extends Fragment {
             TextView tx2 = v.findViewById(R.id.tx2);
             tx2.setText(types[temp]);
             layout.addView(v);
-        }
-        return x;
-    }
+        };
 
+
+    }
 
 
 }
