@@ -2,7 +2,10 @@ package com.example.expireddatetracker.Fragments;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -21,6 +24,8 @@ import com.example.expireddatetracker.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static android.content.Context.VIBRATOR_SERVICE;
 
 public class HomeFragment extends Fragment {
     private ImageButton bt;
@@ -56,7 +61,7 @@ public class HomeFragment extends Fragment {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
-        width /= 2;
+        width = (int)(width / (2.5));
         RelativeLayout.LayoutParams paramsBt = new RelativeLayout.LayoutParams(width, width);
         for(int temp=0;temp< types.length;temp++){
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -92,10 +97,21 @@ public class HomeFragment extends Fragment {
         };
 
     }
+    private void vibrate()
+    {
+        Vibrator vibrator = (Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
+        if (Build.VERSION.SDK_INT >= 26) {
+            vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            vibrator.vibrate(200);
+        }
+
+    }
     private void search(String q)
     {
         if(q.trim().length()==0){
             searchBar.setHint("Please enter food name");
+            vibrate();
             searchBar.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.shake));}
         else{
         Bundle bundle = new Bundle();
