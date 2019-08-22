@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.expireddatetracker.R;
@@ -51,6 +53,11 @@ public class HomeFragment extends Fragment {
         map.put("Poultry",R.drawable.poultry);
         map.put("Vegetable",R.drawable.vegetable);
         LinearLayout layout = x.findViewById(R.id.home_contain);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        width /= 2;
+        RelativeLayout.LayoutParams paramsBt = new RelativeLayout.LayoutParams(width, width);
         for(int temp=0;temp< types.length;temp++){
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final View v = vi.inflate(R.layout.image_button, null);
@@ -63,6 +70,10 @@ public class HomeFragment extends Fragment {
             bt2.setImageResource(map.get(types[temp]));
             final TextView tx2 = v.findViewById(R.id.tx2);
             tx2.setText(types[temp]);
+            bt1.setLayoutParams(paramsBt);
+            bt2.setLayoutParams(paramsBt);
+            tx1.getLayoutParams().width = width;
+            tx2.getLayoutParams().width = width;
             layout.addView(v);
             bt1.setOnClickListener(new View.OnClickListener() {
                 @Override
