@@ -4,5 +4,5 @@ This is a project for FIT5120.
 ## Description
 This repository will contain all the data and code for our mobile applcation, FootTyro.
 
-[Versions](/master/versions.md)
+[Versions](/blob/Iteration1/Versions.md)
       
