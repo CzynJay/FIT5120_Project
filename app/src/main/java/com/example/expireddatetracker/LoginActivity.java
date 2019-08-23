@@ -10,9 +10,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+
 import android.app.LoaderManager.LoaderCallbacks;
 
 import android.content.CursorLoader;
@@ -36,6 +34,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -44,6 +43,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,6 +59,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -358,22 +362,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                  class Signup extends AsyncTask<String,Void,Boolean>{
                     @Override
                     protected Boolean doInBackground(String... strings) {
-//                        JSONParser jsonParser = new JSONParser();
-//                        try
-//                        {
-//                            FileReader reader = new FileReader("employees.json")
-//                            //Read JSON file
-//                            Object obj = jsonParser.parse(reader);
-//
-//                            JSONArray employeeList = (JSONArray) obj;
-//                            System.out.println(employeeList);
-//
-//                            //Iterate over employee array
-//                            employeeList.forEach( emp -> parseEmployeeObject( (JSONObject) emp ) );
-//
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
                         isEmailValid(strings[0]);
                         isPasswordValid(strings[1]);
                         password.setText(strings[0]);
@@ -383,7 +371,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     @Override
                     protected void onPostExecute(Boolean aBoolean) {
                         //todo
-                        email.setText("xxx");
                         mEmailView.setText("xxx");
                         mPasswordView.setText("dddd");
                         popupWindow.dismiss();

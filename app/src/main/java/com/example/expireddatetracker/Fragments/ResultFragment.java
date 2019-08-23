@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
-import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,7 +24,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ResultFragment extends Fragment {
+import androidx.fragment.app.Fragment;
+
+public class ResultFragment extends Fragment implements View.OnClickListener {
     private TextView tx ;
     private ImageView bt;
     final private  String foodSource = "foodsource.json";
@@ -51,8 +52,6 @@ public class ResultFragment extends Fragment {
                          )
                          .replace(R.id.fragment_container,new HomeFragment())
                          .commit();
-
-
              }
          });
         return x;
@@ -103,7 +102,7 @@ public class ResultFragment extends Fragment {
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int heightPixels = displayMetrics.heightPixels;
         int widthPixels  = displayMetrics.widthPixels;
-        LinearLayout.LayoutParams paramsBt = new LinearLayout.LayoutParams(widthPixels, heightPixels/7);
+        LinearLayout.LayoutParams paramsBt = new LinearLayout.LayoutParams(widthPixels, heightPixels/8);
         if (jsonArray.length()==0)
         {
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -111,7 +110,7 @@ public class ResultFragment extends Fragment {
             TextView main = v.findViewById(R.id.mainname);
             TextView sub = v.findViewById(R.id.subname);
             main.setText("No result");
-            sub.setText("Please enter correct food");
+            sub.setText("Please enter correct food name");
             v.setLayoutParams(paramsBt);
             layout.addView(v);
         }
@@ -123,6 +122,8 @@ public class ResultFragment extends Fragment {
             TextView main = v.findViewById(R.id.mainname);
             TextView sub = v.findViewById(R.id.subname);
             JSONObject temp = (JSONObject) jsonArray.get(i);
+            v.setTag(temp.get("food_id"));
+            v.setOnClickListener(this);
             main.setText(temp.getString("food_name"));
             v.setLayoutParams(paramsBt);
             sub.setText(temp.getString("food_subtitle").equals("null")?"":temp.getString("food_subtitle"));
@@ -135,6 +136,8 @@ public class ResultFragment extends Fragment {
     }
 
 
+    @Override
+    public void onClick(View v) {
 
-
+    }
 }
