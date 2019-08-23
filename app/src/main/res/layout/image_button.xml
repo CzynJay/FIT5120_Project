@@ -22,7 +22,7 @@
             android:background="@drawable/round_shape"
             android:padding="20dp"
 
-            android:scaleType="centerInside"
+            android:scaleType="center"
             android:src="@drawable/vegetable" />
 
         <TextView
@@ -54,7 +54,7 @@
 
             android:adjustViewBounds="true"
             android:background="@drawable/round_shape"
-            android:scaleType="centerInside" />
+            android:scaleType="center" />
 
         <TextView
             android:layout_width="@dimen/imagebutton_height"

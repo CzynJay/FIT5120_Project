@@ -1,6 +1,7 @@
 package com.example.expireddatetracker.Fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -50,6 +51,7 @@ public class HomeFragment extends Fragment {
     }
     private void init(View x){
         String[] types = {"Fruit","Milk","Meat","Seafood","Poultry","Vegetable"};
+        //int[] colors = {Color.GREEN,Color.CYAN,Color.RED,Color.YELLOW,Color.RED,Color.YELLOW};
         Map<String, Integer> map = new HashMap<String,Integer>();
         map.put("Fruit",R.drawable.fruit);
         map.put("Milk",R.drawable.milk);

@@ -4,7 +4,7 @@
     <LinearLayout android:layout_width="match_parent"
         android:layout_height="wrap_content"
        android:orientation="horizontal"
-        android:background="#85DD1E"
+        android:background="@drawable/stroke"
         >
     <ImageButton
         android:id="@+id/back"
@@ -30,10 +30,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         >
-        <ImageView android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_fridge"
-            android:layout_width="wrap_content"/>
     </LinearLayout>
 
 

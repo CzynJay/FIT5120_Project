@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.example.expireddatetracker.R;
 
+import org.json.JSONArray;
+
 public class ResultFragment extends Fragment {
     private TextView tx ;
     private ImageView bt;
@@ -25,9 +27,7 @@ public class ResultFragment extends Fragment {
         bt = x.findViewById(R.id.back);
         String v = bundle.getString("key");
         tx.setText(v);
-
-
-         bt.setOnClickListener(new View.OnClickListener() {
+        bt.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
                  getActivity().getSupportFragmentManager()
@@ -42,6 +42,14 @@ public class ResultFragment extends Fragment {
              }
          });
         return x;
+    }
+
+    private JSONArray searchResult(String querry)
+    {
+
+
+
+        return  null;
     }
 
 
