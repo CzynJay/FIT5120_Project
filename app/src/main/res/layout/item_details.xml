@@ -57,7 +57,9 @@
                 android:textAllCaps="false" />
 
     </LinearLayout>
- <ScrollView android:layout_width="match_parent" android:layout_height="wrap_content">
+ <ScrollView android:layout_width="match_parent"
+     android:layout_marginTop="30dp"
+     android:layout_height="wrap_content">
 <LinearLayout
     android:id="@+id/edu_container"
     android:layout_width="match_parent"

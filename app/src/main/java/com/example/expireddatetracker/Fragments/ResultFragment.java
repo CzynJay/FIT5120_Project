@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,10 +32,11 @@ import androidx.fragment.app.Fragment;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
-public class ResultFragment extends Fragment implements View.OnClickListener {
+public class ResultFragment extends Fragment {
     private TextView tx ;
     private ImageView bt;
     final private  String foodSource = "foodsource.json";
+    private String foodname = "";
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -96,8 +98,14 @@ public class ResultFragment extends Fragment implements View.OnClickListener {
                 JSONObject temp = (JSONObject) source.get(i);
                 String value = temp.toString();
                 if (!multi) {
+                    if (isNumeric(query))
+                    {
+                        if((int)temp.get("food_id")==Integer.parseInt(query))
+                            result.put(temp);
+                    }
+                    else{
                     if (value.contains(query))
-                        result.put(temp);
+                        result.put(temp);}
                 }
                 else{
                     for(String s:query.split("&"))
@@ -138,9 +146,19 @@ public class ResultFragment extends Fragment implements View.OnClickListener {
             final View v = vi.inflate(R.layout.search_row, null);
             TextView main = v.findViewById(R.id.mainname);
             TextView sub = v.findViewById(R.id.subname);
-            JSONObject temp = (JSONObject) jsonArray.get(i);
+            final JSONObject temp = (JSONObject) jsonArray.get(i);
             v.setTag(temp.get("food_id"));
-            v.setOnClickListener(this);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        foodname = temp.get("food_name").toString();
+                        popup(v);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
             main.setText(temp.getString("food_name"));
             v.setLayoutParams(paramsBt);
             sub.setText(temp.getString("food_subtitle").equals("null")?"":temp.getString("food_subtitle"));
@@ -152,9 +170,17 @@ public class ResultFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    public static boolean isNumeric(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
+    }
 
-    @Override
-    public void onClick(View v) {
+
+    public void popup(View v) {
         LayoutInflater layoutInflater = (LayoutInflater)getActivity().getBaseContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -170,10 +196,27 @@ public class ResultFragment extends Fragment implements View.OnClickListener {
         popupWindow.setAnimationStyle(R.style.Animation_Design_BottomSheetDialog);
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
         final TextView title = popupView.findViewById(R.id.foodname);
-        title.setText(v.getTag().toString());
+        final String tag = v.getTag().toString();
+        title.setText(foodname);
         final View close = popupView.findViewById(R.id.back2list);
         final LinearLayout container = popupView.findViewById(R.id.edu_container);
-        popupwindowInit(container,"storage.json",v.getTag().toString());
+        final Button storagebt = popupView.findViewById(R.id.storage_button);
+        storagebt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                container.removeAllViews();
+                popupwindowInit(container,"storage.json",tag);
+            }
+        });
+        final Button cookingbt = popupView.findViewById(R.id.cooking_button);
+        cookingbt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                container.removeAllViews();
+                popupwindowInit(container,"cook.json",tag);
+            }
+        });
+        popupwindowInit(container,"storage.json",tag);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,6 +239,8 @@ public class ResultFragment extends Fragment implements View.OnClickListener {
             try {
                 JSONObject json = res.getJSONObject(0);
                 tx.setText(json.getString("storage_method_tips"));
+                if (source.startsWith("c"))
+                    tx.setText("succ");
                 popup.addView(v);
             } catch (JSONException e) {
                 e.printStackTrace();
