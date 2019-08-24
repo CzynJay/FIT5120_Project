@@ -1,17 +1,23 @@
 package com.example.expireddatetracker.Fragments;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,6 +31,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import androidx.fragment.app.Fragment;
+
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class ResultFragment extends Fragment implements View.OnClickListener {
     private TextView tx ;
@@ -80,15 +88,28 @@ public class ResultFragment extends Fragment implements View.OnClickListener {
 
     private JSONArray searchResult(JSONArray source,String query)
     {
+        boolean multi = false;
+        if (query.split("&").length>1)
+            multi=true;
         JSONArray result= new JSONArray();
 
         for(int i =0;i<source.length();i++)
         {
             try {
                 JSONObject temp = (JSONObject) source.get(i);
-                //todo
-                if(temp.toString().contains(query))
-                    result.put(temp);
+                String value = temp.toString();
+                if (!multi) {
+                    if (value.contains(query))
+                        result.put(temp);
+                }
+                else{
+                    for(String s:query.split("&"))
+                    {
+                        if (value.contains(s.trim()))
+                            result.put(temp);
+                    }
+
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -105,7 +126,7 @@ public class ResultFragment extends Fragment implements View.OnClickListener {
         LinearLayout.LayoutParams paramsBt = new LinearLayout.LayoutParams(widthPixels, heightPixels/8);
         if (jsonArray.length()==0)
         {
-            LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
             final View v = vi.inflate(R.layout.search_row, null);
             TextView main = v.findViewById(R.id.mainname);
             TextView sub = v.findViewById(R.id.subname);
@@ -117,7 +138,7 @@ public class ResultFragment extends Fragment implements View.OnClickListener {
         for(int i=0;i<jsonArray.length();i++)
         {
             try {
-            LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
             final View v = vi.inflate(R.layout.search_row, null);
             TextView main = v.findViewById(R.id.mainname);
             TextView sub = v.findViewById(R.id.subname);
@@ -138,6 +159,29 @@ public class ResultFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
+        LayoutInflater layoutInflater = (LayoutInflater)getActivity().getBaseContext()
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = (int) (displayMetrics.heightPixels );
+        int width = (int)(displayMetrics.widthPixels);
+        View popupView = layoutInflater.inflate(R.layout.item_details, null);
+        final PopupWindow popupWindow=new PopupWindow(popupView,
+                width, height,
+                true);
+        popupWindow.setTouchable(true);
+        popupWindow.setFocusable(true);
+        popupWindow.setAnimationStyle(R.style.Animation_Design_BottomSheetDialog);
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+        final TextView title = popupView.findViewById(R.id.foodname);
+        title.setText(v.getTag().toString());
+        final View close = popupView.findViewById(R.id.back2list);
+        final View container = popupView.findViewById(R.id.edu_container);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
     }
 }

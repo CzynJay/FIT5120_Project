@@ -51,11 +51,11 @@ public class HomeFragment extends Fragment {
         return x;
     }
     private void init(View x){
-        String[] types = {"Fruit","Milk","Meat","Seafood","Poultry","Vegetable"};
+        String[] types = {"Fruit","Dairy & Milk","Meat","Seafood","Poultry","Vegetable"};
         //int[] colors = {Color.GREEN,Color.CYAN,Color.RED,Color.YELLOW,Color.RED,Color.YELLOW};
         Map<String, Integer> map = new HashMap<String,Integer>();
         map.put("Fruit",R.drawable.fruit);
-        map.put("Milk",R.drawable.milk);
+        map.put("Dairy & Milk",R.drawable.milk);
         map.put("Meat",R.drawable.meat);
         map.put("Seafood",R.drawable.seafood);
         map.put("Poultry",R.drawable.poultry);
