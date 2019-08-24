@@ -1,15 +1,11 @@
 package com.example.expireddatetracker.Fragments;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
+
 import android.os.Bundle;
 
+import android.text.Layout;
 import android.util.DisplayMetrics;
-import android.util.Log;
+
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.expireddatetracker.R;
+import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -108,7 +105,6 @@ public class ResultFragment extends Fragment implements View.OnClickListener {
                         if (value.contains(s.trim()))
                             result.put(temp);
                     }
-
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -176,12 +172,35 @@ public class ResultFragment extends Fragment implements View.OnClickListener {
         final TextView title = popupView.findViewById(R.id.foodname);
         title.setText(v.getTag().toString());
         final View close = popupView.findViewById(R.id.back2list);
-        final View container = popupView.findViewById(R.id.edu_container);
+        final LinearLayout container = popupView.findViewById(R.id.edu_container);
+        popupwindowInit(container,"storage.json",v.getTag().toString());
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
             }
         });
+    }
+
+    private void popupwindowInit(LinearLayout popup, String source, String id){
+        JSONArray lists = loadJsonFile(source);
+        JSONArray res = searchResult(lists,id);
+        LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View v = vi.inflate(R.layout.edu_row, null);
+        final TextView tx = v.findViewById(R.id.edu_info);
+        if (res.length()==0) {
+            tx.setText("no result");
+            popup.addView(v);
+        }
+        else{
+            try {
+                JSONObject json = res.getJSONObject(0);
+                tx.setText(json.getString("storage_method_tips"));
+                popup.addView(v);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }
