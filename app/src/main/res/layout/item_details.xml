@@ -8,6 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/stroke"
+        android:weightSum="10"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <ImageButton
@@ -15,38 +17,47 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
+            android:layout_weight="1"
             android:background="#00FF0000"
             android:src="@drawable/ic_return" />
 
         <TextView
             android:id="@+id/foodname"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="8"
             android:layout_gravity="center"
             android:gravity="center"
             android:text="3333"
             android:textSize="20dp"
             android:textStyle="bold|italic" />
+
+        <Button android:id="@+id/add_button"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Track"
+            android:gravity="center"
+            android:background="#00FF0000"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp"
+            />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginBottom="20dp"
         android:weightSum="2">
-
-
             <Button
                 android:id="@+id/storage_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/button_change"
-
                 android:text="Storing"
                 android:textAllCaps="false" />
-
-
             <Button
                 android:id="@+id/cooking_button"
                 android:layout_width="match_parent"
@@ -55,7 +66,6 @@
                 android:layout_height="wrap_content"
                 android:text="Cooking"
                 android:textAllCaps="false" />
-
     </LinearLayout>
  <ScrollView android:layout_width="match_parent"
      android:layout_marginTop="30dp"
@@ -65,8 +75,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:divider="@drawable/empty_tall_divider"
     >
-
-</LinearLayout></ScrollView>
+</LinearLayout>
+ </ScrollView>
 
 </LinearLayout>

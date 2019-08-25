@@ -127,7 +127,7 @@ public class ResultFragment extends Fragment {
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int heightPixels = displayMetrics.heightPixels;
         int widthPixels  = displayMetrics.widthPixels;
-        LinearLayout.LayoutParams paramsBt = new LinearLayout.LayoutParams(widthPixels, heightPixels/8);
+        LinearLayout.LayoutParams paramsBt = new LinearLayout.LayoutParams(widthPixels, heightPixels/12);
         if (jsonArray.length()==0)
         {
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -179,7 +179,6 @@ public class ResultFragment extends Fragment {
         }
     }
 
-
     public void popup(View v) {
         LayoutInflater layoutInflater = (LayoutInflater)getActivity().getBaseContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -226,11 +225,17 @@ public class ResultFragment extends Fragment {
     }
 
     private void popupwindowInit(LinearLayout popup, String source, String id){
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = (int) (displayMetrics.heightPixels );
+        int width = (int)(displayMetrics.widthPixels);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width/2, height/6);
         JSONArray lists = loadJsonFile(source);
         JSONArray res = searchResult(lists,id);
         LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         final View v = vi.inflate(R.layout.edu_row, null);
         final TextView tx = v.findViewById(R.id.edu_info);
+        final ImageView im = v.findViewById(R.id.edu_img);
         if (res.length()==0) {
             tx.setText("no result");
             popup.addView(v);
@@ -238,8 +243,16 @@ public class ResultFragment extends Fragment {
         else{
             try {
                 JSONObject json = res.getJSONObject(0);
-                tx.setText(json.getString("storage_method_tips"));
-                if (source.startsWith("c"))
+                if(source.equals("storage.json"))
+                {
+                    im.setImageResource(R.drawable.freeze);
+                    im.setLayoutParams(params);
+                    String temp = json.getString("storage_method_tips");
+                    temp = temp.equals("NaN")||temp.equals("null")?"Not Available":temp;
+                    tx.setText(temp);
+                    tx.setLayoutParams(params);
+                }
+                else if (source.startsWith("c"))
                     tx.setText("succ");
                 popup.addView(v);
             } catch (JSONException e) {

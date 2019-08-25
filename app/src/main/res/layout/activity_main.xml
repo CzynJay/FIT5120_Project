@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="56dp"
         android:text="@string/title_home"
+        android:background="@drawable/edu_background"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <com.google.android.material.bottomnavigation.BottomNavigationView

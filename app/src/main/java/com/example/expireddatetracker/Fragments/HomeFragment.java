@@ -51,11 +51,11 @@ public class HomeFragment extends Fragment {
         return x;
     }
     private void init(View x){
-        String[] types = {"Fruit","Dairy & Milk","Meat","Seafood","Poultry","Vegetable"};
+        String[] types = {"Fruit","Dairy & Egg","Meat","Seafood","Poultry","Vegetable"};
         //int[] colors = {Color.GREEN,Color.CYAN,Color.RED,Color.YELLOW,Color.RED,Color.YELLOW};
         Map<String, Integer> map = new HashMap<String,Integer>();
         map.put("Fruit",R.drawable.fruit);
-        map.put("Dairy & Milk",R.drawable.milk);
+        map.put("Dairy & Egg",R.drawable.milk);
         map.put("Meat",R.drawable.meat);
         map.put("Seafood",R.drawable.seafood);
         map.put("Poultry",R.drawable.poultry);
@@ -125,7 +125,7 @@ public class HomeFragment extends Fragment {
                 .beginTransaction()
                 .setCustomAnimations(android.R.anim.slide_in_left,android.R.anim.slide_out_right,
                         android.R.anim.slide_in_left, android.R.anim.slide_out_right
-                )
+                ).addToBackStack(null)
                 .replace(R.id.fragment_container,fragment)
                 .commit();
         }

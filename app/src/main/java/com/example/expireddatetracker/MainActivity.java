@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.example.expireddatetracker.Fragments.HomeFragment;
 import com.example.expireddatetracker.Fragments.NotificationFragment;
+import com.example.expireddatetracker.Fragments.ResultFragment;
 import com.example.expireddatetracker.Fragments.TrackFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -69,7 +70,8 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (doubleBackToExitPressedOnce|| f instanceof ResultFragment) {
             super.onBackPressed();
             return;
         }
