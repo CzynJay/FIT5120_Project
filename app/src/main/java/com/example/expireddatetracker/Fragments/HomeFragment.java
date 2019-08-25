@@ -113,6 +113,8 @@ public class HomeFragment extends Fragment {
     private void search(String q)
     {
         if(q.trim().length()==0){
+            searchBar.setText("");
+            searchBar.clearFocus();
             searchBar.setHint("Please enter food name");
             vibrate();
             searchBar.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.shake));}
