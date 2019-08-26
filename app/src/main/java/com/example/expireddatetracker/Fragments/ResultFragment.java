@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Layout;
 import android.util.DisplayMetrics;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.expireddatetracker.R;
@@ -27,6 +29,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.fragment.app.Fragment;
 
@@ -34,9 +38,11 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class ResultFragment extends Fragment {
     private TextView tx ;
+
     private ImageView bt;
     final private  String foodSource = "foodsource.json";
     private String foodname = "";
+    private JSONArray foods = new JSONArray();
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -45,8 +51,8 @@ public class ResultFragment extends Fragment {
         tx = x.findViewById(R.id.query);
         bt = x.findViewById(R.id.back);
         String querry = bundle.getString("key");
-        JSONArray jarry = loadJsonFile(foodSource);
-        JSONArray result = searchResult(jarry,querry);
+        foods = loadJsonFile(foodSource);
+        JSONArray result = searchResult(foods,querry);
         showResult(x,result);
         tx.setText(querry);
         bt.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +102,8 @@ public class ResultFragment extends Fragment {
         {
             try {
                 JSONObject temp = (JSONObject) source.get(i);
-                String value = temp.toString();
+                String value = temp.toString().toLowerCase();
+                query = query.toLowerCase();
                 if (!multi) {
                     if (isNumeric(query))
                     {
@@ -204,7 +211,7 @@ public class ResultFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 container.removeAllViews();
-                popupwindowInit(container,"storage.json",tag);
+                popupwindowInit(container,"foodsource.json",tag);
             }
         });
         final Button cookingbt = popupView.findViewById(R.id.cooking_button);
@@ -215,7 +222,7 @@ public class ResultFragment extends Fragment {
                 popupwindowInit(container,"cook.json",tag);
             }
         });
-        popupwindowInit(container,"storage.json",tag);
+        popupwindowInit(container,"foodsource.json",tag);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -230,35 +237,54 @@ public class ResultFragment extends Fragment {
         int height = (int) (displayMetrics.heightPixels );
         int width = (int)(displayMetrics.widthPixels);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width/2, height/6);
-        JSONArray lists = loadJsonFile(source);
+        JSONArray lists = source.equals("foodsource.json")?foods:loadJsonFile(source);
         JSONArray res = searchResult(lists,id);
         LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View v = vi.inflate(R.layout.edu_row, null);
-        final TextView tx = v.findViewById(R.id.edu_info);
-        final ImageView im = v.findViewById(R.id.edu_img);
         if (res.length()==0) {
-            tx.setText("no result");
+            final View v = vi.inflate(R.layout.edu_row, null);
+            final TextView edu_info = v.findViewById(R.id.edu_info);
+            final ImageView im = v.findViewById(R.id.edu_img);
+            edu_info.setText("no result");
             popup.addView(v);
         }
         else{
             try {
                 JSONObject json = res.getJSONObject(0);
-                if(source.equals("storage.json"))
+                if(source.equals("foodsource.json"))
                 {
-                    im.setImageResource(R.drawable.freeze);
-                    im.setLayoutParams(params);
-                    String temp = json.getString("storage_method_tips");
-                    temp = temp.equals("NaN")||temp.equals("null")?"Not Available":temp;
-                    tx.setText(temp);
-                    tx.setLayoutParams(params);
+                    String[] storageTypes = {"DOP_Pantry_Max","DOP_Freeze_Max","DOP_Refrigerate_Max"};
+                    for(String item:storageTypes)
+                    {
+                        final View v = vi.inflate(R.layout.edu_row, null);
+                        final TextView edu_info = v.findViewById(R.id.edu_info);
+                        final ImageView im = v.findViewById(R.id.edu_img);
+                        String temp = json.getString(item);
+                        temp = temp.equals("NaN")||temp.equals("null")?"Not Available":temp;
+                        im.setImageResource(imgSwithcher(item));
+                        im.setLayoutParams(params);
+                        edu_info.setText(temp);
+                        edu_info.setLayoutParams(params);
+                        popup.addView(v);
+                    }
+
                 }
                 else if (source.startsWith("c"))
-                    tx.setText("succ");
-                popup.addView(v);
+                    Log.e("sad","asdasd");
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
     }
+    private int imgSwithcher(String src)
+    {
+        switch (src){
+        case "DOP_Pantry_Max": return R.drawable.pantry;
+            case "DOP_Freeze_Max": return R.drawable.freeze;
+            default:return R.drawable.refrigerate;
+        }
+
+    }
+
 }
