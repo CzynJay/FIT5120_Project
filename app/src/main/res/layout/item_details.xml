@@ -69,11 +69,12 @@
     </LinearLayout>
  <ScrollView android:layout_width="match_parent"
      android:layout_marginTop="10dp"
-     android:layout_height="wrap_content">
+     android:layout_height="match_parent">
 <LinearLayout
     android:id="@+id/edu_container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
     android:orientation="vertical"
     android:showDividers="middle"
     android:divider="@drawable/img_gap"
