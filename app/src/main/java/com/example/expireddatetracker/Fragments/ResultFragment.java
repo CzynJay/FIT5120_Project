@@ -241,9 +241,9 @@ public class ResultFragment extends Fragment {
         JSONArray res = searchResult(lists,id);
         LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         if (res.length()==0) {
-            final View v = vi.inflate(R.layout.edu_row, null);
-            final TextView edu_info = v.findViewById(R.id.edu_info);
-            final ImageView im = v.findViewById(R.id.edu_img);
+            View v = vi.inflate(R.layout.edu_row, null);
+            TextView edu_info = v.findViewById(R.id.edu_info);
+            ImageView im = v.findViewById(R.id.edu_img);
             edu_info.setText("no result");
             popup.addView(v);
         }
@@ -255,20 +255,23 @@ public class ResultFragment extends Fragment {
                     String[] storageTypes = {"DOP_Pantry_Max","DOP_Freeze_Max","DOP_Refrigerate_Max"};
                     for(String item:storageTypes)
                     {
-                        final View v = vi.inflate(R.layout.edu_row, null);
-                        final TextView edu_info = v.findViewById(R.id.edu_info);
-                        final ImageView im = v.findViewById(R.id.edu_img);
+                        View v = vi.inflate(R.layout.edu_row, null);
+                        TextView edu_info = v.findViewById(R.id.edu_info);
+                        ImageView im = v.findViewById(R.id.edu_img);
+                        TextView type = v.findViewById(R.id.edu_type);
                         String temp = json.getString(item);
-                        temp = temp.equals("NaN")||temp.equals("null")?"Not Available":temp;
+                        String unit = unitSwitcher(item);
+                        temp = temp.equals("NaN")||temp.equals("null")?"Not Recommended":String.valueOf((int)((double)Double.valueOf(temp)))+ " "+ json.getString(unit);
                         im.setImageResource(imgSwithcher(item));
                         im.setLayoutParams(params);
+                        type.setText(typeSwitcher(item));
                         edu_info.setText(temp);
                         edu_info.setLayoutParams(params);
                         popup.addView(v);
                     }
 
                 }
-                else if (source.startsWith("c"))
+                else if (source.equals("cook.json"))
                     Log.e("sad","asdasd");
 
             } catch (JSONException e) {
@@ -277,14 +280,35 @@ public class ResultFragment extends Fragment {
         }
 
     }
+
     private int imgSwithcher(String src)
     {
-        switch (src){
-        case "DOP_Pantry_Max": return R.drawable.pantry;
+        switch (src)
+        {
+            case "DOP_Pantry_Max": return R.drawable.pantry;
             case "DOP_Freeze_Max": return R.drawable.freeze;
             default:return R.drawable.refrigerate;
         }
 
+    }
+
+    private String typeSwitcher(String src)
+    {
+        switch (src){
+            case "DOP_Pantry_Max": return "Pantry";
+            case "DOP_Freeze_Max": return "Freeze";
+            default:return "Refrigerate";
+        }
+
+    }
+
+    private String unitSwitcher(String src){
+        switch (src){
+            case "DOP_Pantry_Max": return "DOP_Pantry_Metric";
+            case "DOP_Freeze_Max": return "DOP_Freeze_Metric";
+            default:return "DOP_Refrigerate_Metric";
+
+        }
     }
 
 }

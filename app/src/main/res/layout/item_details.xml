@@ -48,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:weightSum="2">
             <Button
                 android:id="@+id/storage_button"
@@ -68,7 +68,7 @@
                 android:textAllCaps="false" />
     </LinearLayout>
  <ScrollView android:layout_width="match_parent"
-     android:layout_marginTop="30dp"
+     android:layout_marginTop="10dp"
      android:layout_height="wrap_content">
 <LinearLayout
     android:id="@+id/edu_container"
