@@ -10,18 +10,12 @@ import com.example.expireddatetracker.Fragments.HomeFragment;
 import com.example.expireddatetracker.Fragments.NotificationFragment;
 import com.example.expireddatetracker.Fragments.ResultFragment;
 import com.example.expireddatetracker.Fragments.TrackFragment;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -35,6 +29,10 @@ public class MainActivity extends AppCompatActivity {
             Fragment fragment = null;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    FragmentManager fm = getSupportFragmentManager();
+                    for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+                        fm.popBackStack();
+                    }
                     fragment = new HomeFragment();
                     break;
                 case R.id.navigation_dashboard:

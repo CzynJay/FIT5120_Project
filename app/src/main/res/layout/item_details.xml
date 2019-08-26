@@ -35,10 +35,10 @@
         <Button android:id="@+id/add_button"
             android:layout_width="wrap_content"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="Track"
             android:gravity="center"
-            android:background="#00FF0000"
+            android:background="@drawable/round_shape"
             android:layout_gravity="center"
             android:layout_marginRight="5dp"
             />
