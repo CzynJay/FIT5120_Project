@@ -135,9 +135,10 @@ public class ResultFragment extends Fragment {
         LinearLayout layout = x.findViewById(R.id.result_container);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int heightPixels = displayMetrics.heightPixels;
+
+        //int heightPixels = displayMetrics.heightPixels;
         int widthPixels  = displayMetrics.widthPixels;
-        LinearLayout.LayoutParams paramsBt = new LinearLayout.LayoutParams(widthPixels, heightPixels/12);
+        //LinearLayout.LayoutParams paramsBt = new LinearLayout.LayoutParams(widthPixels, heightPixels/20);
         if (jsonArray.length()==0)
         {
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -146,7 +147,13 @@ public class ResultFragment extends Fragment {
             TextView sub = v.findViewById(R.id.subname);
             main.setText("No result");
             sub.setText("Please enter correct food name");
-            v.setLayoutParams(paramsBt);
+            int main_height = main.getMaxHeight();
+            int sub_height = sub.getMaxHeight();
+            int total_height = main_height + sub_height;
+
+
+            LinearLayout.LayoutParams paramsBt = new LinearLayout.LayoutParams(widthPixels, total_height);
+            //v.setLayoutParams(paramsBt);
             layout.addView(v);
         }
         for(int i=0;i<jsonArray.length();i++)
@@ -170,12 +177,23 @@ public class ResultFragment extends Fragment {
                 }
             });
             main.setText(temp.getString("food_name"));
-            v.setLayoutParams(paramsBt);
+
             sub.setText(temp.getString("food_subtitle").equals("null")?"":temp.getString("food_subtitle"));
+
+            int main_height = main.getMaxHeight();
+            int sub_height = sub.getMaxHeight();
+            int total_height = main_height + sub_height;
+
+
+                LinearLayout.LayoutParams paramsBt = new LinearLayout.LayoutParams(widthPixels, total_height);
+
+            v.setLayoutParams(paramsBt);
             layout.addView(v);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
         }
 
     }
