@@ -210,8 +210,8 @@ public class ResultFragment extends Fragment {
         final View storageIndicator = popupView.findViewById(R.id.storage_indicator);
         title.setText(foodname);
         final View close = popupView.findViewById(R.id.back2list);
-        storageIndicator.getLayoutParams().width = width/3;
-        cookIndicator.getLayoutParams().width=width/3;
+        storageIndicator.getLayoutParams().width =  (int)(width/2.5);
+        cookIndicator.getLayoutParams().width=(int)(width/2.5);
         final LinearLayout container = popupView.findViewById(R.id.edu_container);
         final Button storagebt = popupView.findViewById(R.id.storage_button);
         storagebt.setOnClickListener(new View.OnClickListener() {
