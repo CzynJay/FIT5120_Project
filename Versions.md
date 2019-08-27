@@ -1,3 +1,6 @@
+# Version 1.0.19
+* Added some UI changes
+* Fixed missing subtitle bug
 # Version 1.0.18
 * Bug fixes
 # Version 1.0.17
