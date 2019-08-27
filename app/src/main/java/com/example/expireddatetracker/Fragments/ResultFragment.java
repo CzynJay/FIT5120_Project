@@ -121,7 +121,7 @@ public class ResultFragment extends Fragment {
                     for(String s:query.split("&"))
                     {
                         if (value.contains(s.trim()))
-                            result.put(temp);
+                        result.put(temp);break;
                     }
                 }
             } catch (JSONException e) {
@@ -206,13 +206,19 @@ public class ResultFragment extends Fragment {
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
         final TextView title = popupView.findViewById(R.id.foodname);
         final String tag = v.getTag().toString();
+        final View cookIndicator = popupView.findViewById(R.id.cook_indicator);
+        final View storageIndicator = popupView.findViewById(R.id.storage_indicator);
         title.setText(foodname);
         final View close = popupView.findViewById(R.id.back2list);
+        storageIndicator.getLayoutParams().width = width/3;
+        cookIndicator.getLayoutParams().width=width/3;
         final LinearLayout container = popupView.findViewById(R.id.edu_container);
         final Button storagebt = popupView.findViewById(R.id.storage_button);
         storagebt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                storageIndicator.setVisibility(View.VISIBLE);
+                cookIndicator.setVisibility(View.GONE);
                 container.removeAllViews();
                 popupwindowInit(container,"foodsource.json",tag);
             }
@@ -221,11 +227,13 @@ public class ResultFragment extends Fragment {
         cookingbt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                storageIndicator.setVisibility(View.GONE);
+                cookIndicator.setVisibility(View.VISIBLE);
                 container.removeAllViews();
                 popupwindowInit(container,"cook.json",tag);
             }
         });
-        popupwindowInit(container,"foodsource.json",tag);
+        storagebt.callOnClick();
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
