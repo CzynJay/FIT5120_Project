@@ -1,6 +1,9 @@
 package com.example.expireddatetracker.Fragments;
 
 
+import android.annotation.SuppressLint;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import android.text.Layout;
@@ -231,12 +234,13 @@ public class ResultFragment extends Fragment {
         });
     }
 
+    @SuppressLint("ResourceAsColor")
     private void popupwindowInit(LinearLayout popup, String source, String id){
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = (int) (displayMetrics.heightPixels );
         int width = (int)(displayMetrics.widthPixels);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width/2, height/6);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width/2, height/7);
         JSONArray lists = source.equals("foodsource.json")?foods:loadJsonFile(source);
         JSONArray res = searchResult(lists,id);
         LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -263,16 +267,50 @@ public class ResultFragment extends Fragment {
                         String unit = unitSwitcher(item);
                         temp = temp.equals("NaN")||temp.equals("null")?"Not Recommended":String.valueOf((int)((double)Double.valueOf(temp)))+ " "+ json.getString(unit);
                         im.setImageResource(imgSwithcher(item));
-                        im.setLayoutParams(params);
                         type.setText(typeSwitcher(item));
                         edu_info.setText(temp);
+                        im.setLayoutParams(params);
                         edu_info.setLayoutParams(params);
                         popup.addView(v);
                     }
-
                 }
                 else if (source.equals("cook.json"))
-                    Log.e("sad","asdasd");
+                {
+                    String method = "preparation_text";
+                    String [] cook = {"Cooking_Temperature","Preparation_size","Cooking_time"};
+                    for(int i=0;i<res.length();i++)
+                    {
+                        JSONObject temp = res.getJSONObject(i);
+                        TextView methodName = new TextView(getActivity().getApplicationContext());
+                        LinearLayout.LayoutParams methodParmas =
+                        new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        methodParmas.gravity = Gravity.CENTER;
+                        methodName.setTextSize(20);
+                        methodName.setTextColor(R.color.fui_bgGitHub);
+                        methodName.setTypeface(methodName.getTypeface(), Typeface.BOLD);
+                        methodName.setGravity(Gravity.CENTER);
+                        methodName.setPaintFlags(methodName.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+                        methodName.setText("Cooking Method: "+ temp.getString(method));
+                        popup.addView(methodName);
+                        for(String item:cook){
+                            View v = vi.inflate(R.layout.edu_row, null);
+                            TextView edu_info = v.findViewById(R.id.edu_info);
+                            ImageView im = v.findViewById(R.id.edu_img);
+                            TextView type = v.findViewById(R.id.edu_type);
+                            String val = json.getString(item);
+                            val = val.equals("NaN")||val.equals("null")?"Not Recommended":val;
+                            val = item.equals("Cooking_Temperature")?val+" °C":val;
+                            type.setText(typeSwitcher(item));
+                            im.setImageResource(imgSwithcher(item));
+                            edu_info.setText(val);
+                            im.setLayoutParams(params);
+                            edu_info.setLayoutParams(params);
+                            popup.addView(v);
+                        }
+
+                    }
+
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -287,6 +325,9 @@ public class ResultFragment extends Fragment {
         {
             case "DOP_Pantry_Max": return R.drawable.pantry;
             case "DOP_Freeze_Max": return R.drawable.freeze;
+            case "Cooking_Temperature": return R.drawable.temperature;
+            case "Preparation_size": return R.drawable.size;
+            case "Cooking_time": return R.drawable.timer;
             default:return R.drawable.refrigerate;
         }
 
@@ -297,6 +338,9 @@ public class ResultFragment extends Fragment {
         switch (src){
             case "DOP_Pantry_Max": return "Pantry";
             case "DOP_Freeze_Max": return "Freeze";
+            case "Cooking_Temperature": return "Temperature";
+            case "Preparation_size": return "Size";
+            case "Cooking_time": return "Duration";
             default:return "Refrigerate";
         }
 

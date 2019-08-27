@@ -1,20 +1,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@drawable/edu_background"
-    android:orientation="vertical">
+    >
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/stroke"
-        android:weightSum="10"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="10"
+>
+
 
         <ImageButton
             android:id="@+id/back2list"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:layout_weight="1"
@@ -25,61 +31,66 @@
             android:id="@+id/foodname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="8"
             android:layout_gravity="center"
+            android:layout_weight="8"
             android:gravity="center"
             android:text="3333"
             android:textSize="20dp"
             android:textStyle="bold|italic" />
-
-        <Button android:id="@+id/add_button"
-            android:layout_width="wrap_content"
-            android:layout_weight="1"
-            android:layout_height="35dp"
-            android:text="Track"
-            android:gravity="center"
-            android:background="@drawable/round_shape"
-            android:layout_gravity="center"
-            android:layout_marginRight="5dp"
-            />
+        <Button
+        android:id="@+id/add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        android:layout_marginRight="5dp"
+        android:layout_weight="1"
+        android:background="@drawable/round_shape"
+        android:gravity="center"
+        android:text="Track" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/buttonViews"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
         android:orientation="horizontal"
-        android:layout_marginBottom="10dp"
         android:weightSum="2">
-            <Button
-                android:id="@+id/storage_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/button_change"
-                android:text="Storing"
-                android:textAllCaps="false" />
-            <Button
-                android:id="@+id/cooking_button"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/button_change"
-                android:layout_height="wrap_content"
-                android:text="Cooking"
-                android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/storage_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_change"
+            android:text="Storing"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/cooking_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_change"
+            android:text="Cooking"
+            android:textAllCaps="false" />
     </LinearLayout>
- <ScrollView android:layout_width="match_parent"
-     android:layout_marginTop="10dp"
-     android:layout_height="match_parent">
-<LinearLayout
-    android:id="@+id/edu_container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_vertical"
-    android:orientation="vertical"
-    android:showDividers="middle"
-    android:divider="@drawable/img_gap"
-    >
-</LinearLayout>
- </ScrollView>
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="40dp"
+        >
+
+        <LinearLayout
+            android:id="@+id/edu_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@drawable/img_gap"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:showDividers="middle"></LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
