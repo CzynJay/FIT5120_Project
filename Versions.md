@@ -1,3 +1,9 @@
+# Version 1.0.18
+* Bug fixes
+# Version 1.0.17
+# Version 1.0.16
+# Version 1.0.15
+# Version 1.0.14
 # Version 1.0.13
 * Bug fixes
 # Version 1.0.12
