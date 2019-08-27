@@ -3,7 +3,9 @@
 # Version 1.0.17
 # Version 1.0.16
 # Version 1.0.15
+* Establish connection with Firebase Auth
 # Version 1.0.14
+* Added images
 # Version 1.0.13
 * Bug fixes
 # Version 1.0.12
