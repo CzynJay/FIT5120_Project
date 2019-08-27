@@ -135,7 +135,7 @@ public class ResultFragment extends Fragment {
         LinearLayout layout = x.findViewById(R.id.result_container);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
+        //This line was causing subtitles missing
         //int heightPixels = displayMetrics.heightPixels;
         int widthPixels  = displayMetrics.widthPixels;
         //LinearLayout.LayoutParams paramsBt = new LinearLayout.LayoutParams(widthPixels, heightPixels/20);
