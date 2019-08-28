@@ -1,3 +1,5 @@
+# Version 1.0.21
+* Added animation
 # Version 1.0.20
 * Bug fixes
 # Version 1.0.19
