@@ -1,3 +1,5 @@
+# Version 1.0.22
+* Changed application name and icon
 # Version 1.0.21
 * Added animation
 # Version 1.0.20
