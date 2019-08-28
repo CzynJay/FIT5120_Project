@@ -55,7 +55,6 @@ public class UserLoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         getJson();
         initializeUI();
-
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +62,15 @@ public class UserLoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        showProgress(true);
+        UserLoginTask u= new UserLoginTask(true);
+        u.execute();
+    }
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
@@ -126,31 +134,33 @@ public class UserLoginActivity extends AppCompatActivity {
             return;
         }
         showProgress(true);
-        UserLoginTask task1 = new UserLoginTask();
-        task1.execute(email,password);
+        UserLoginTask u = new UserLoginTask(false);
+        u.execute(email,password);
 
     }
 
     public class UserLoginTask extends AsyncTask<String, Void, Boolean> {
-        private boolean res = false;
+        boolean res =false;
+        public UserLoginTask(boolean val)
+        {
+            res =val;
+        }
 
         @Override
         protected Boolean doInBackground(String... params) {
             // TODO: attempt authentication against a network service.
-
-            mAuth.signInWithEmailAndPassword(params[0],params[1] )
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                res = true;
-                            }
-                            else {
-                                res=false;
-                            }
-                        }
-                    });
+            if (!res){
+                mAuth.signInWithEmailAndPassword(params[0],params[1])
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    res = true;
+                                } else {
+                                    UserLoginTask u = new UserLoginTask(false);
+                                    res=false;
+                                }}
+                        });}
             try {
                 // Simulate network access.
                 Thread.sleep(3000);
