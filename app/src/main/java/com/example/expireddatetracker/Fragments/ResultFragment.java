@@ -14,6 +14,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -38,6 +40,7 @@ import java.util.Map;
 import androidx.fragment.app.Fragment;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 public class ResultFragment extends Fragment {
     private TextView tx ;
@@ -235,20 +238,72 @@ public class ResultFragment extends Fragment {
         storagebt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                storageIndicator.setVisibility(View.VISIBLE);
-                cookIndicator.setVisibility(View.GONE);
-                container.removeAllViews();
-                popupwindowInit(container,"foodsource.json",tag);
+                Animation animSlide = AnimationUtils.loadAnimation(getContext(),
+                        R.anim.fui_slide_out_left);
+                animSlide.setDuration(500);
+                animSlide.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                        storageIndicator.setVisibility(View.VISIBLE);
+                        Animation animSlide = AnimationUtils.loadAnimation(getContext(),
+                                R.anim.fui_slide_in_right);
+                        animSlide.setDuration(500);
+                        container.removeAllViews();
+                        popupwindowInit(container,"foodsource.json",tag);
+                        storageIndicator.startAnimation(animSlide);
+                        container.startAnimation(animSlide);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        cookIndicator.setVisibility(View.GONE);
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+                });
+                cookIndicator.startAnimation(animSlide);
+
+
+
             }
         });
         final Button cookingbt = popupView.findViewById(R.id.cooking_button);
         cookingbt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                storageIndicator.setVisibility(View.GONE);
-                cookIndicator.setVisibility(View.VISIBLE);
-                container.removeAllViews();
-                popupwindowInit(container,"cook.json",tag);
+                Animation animSlide = AnimationUtils.loadAnimation(getContext(),
+                        R.anim.anim_slide_out_right);
+                animSlide.setDuration(500);
+                animSlide.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                        cookIndicator.setVisibility(View.VISIBLE);
+                        Animation animSlide = AnimationUtils.loadAnimation(getContext(),
+                                R.anim.anim_slide_in_right);
+                        animSlide.setDuration(500);
+                        container.removeAllViews();
+                        popupwindowInit(container,"cook.json",tag);
+                        cookIndicator.startAnimation(animSlide);
+                        container.startAnimation(animSlide);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        storageIndicator.setVisibility(View.GONE);
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                storageIndicator.startAnimation(animSlide);
+
+
             }
         });
         storagebt.callOnClick();
@@ -261,7 +316,7 @@ public class ResultFragment extends Fragment {
     }
 
     @SuppressLint("ResourceAsColor")
-    private void popupwindowInit(LinearLayout popup, String source, String id){
+    private void popupwindowInit(final LinearLayout popup, String source, String id){
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = (int) (displayMetrics.heightPixels );

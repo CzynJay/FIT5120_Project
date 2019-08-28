@@ -178,7 +178,6 @@ public class UserLoginActivity extends AppCompatActivity {
                 Intent toMain = new Intent(UserLoginActivity.this,MainActivity.class);
                 startActivity(toMain);
                 finish();
-
             } else {
                 passwordTV.setError(getString(R.string.error_incorrect_password));
                 passwordTV.requestFocus();
