@@ -53,7 +53,7 @@
             android:id="@+id/storage_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
+            
             android:background="@drawable/button_change"
             android:text="Storing"
             android:textAllCaps="false" />
