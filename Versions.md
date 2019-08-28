@@ -1,3 +1,5 @@
+# Version 1.0.23
+* Fixed temperature bug
 # Version 1.0.22
 * Changed application name and icon
 # Version 1.0.21
