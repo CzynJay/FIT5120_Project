@@ -266,7 +266,7 @@ public class ResultFragment extends Fragment {
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = (int) (displayMetrics.heightPixels );
         int width = (int)(displayMetrics.widthPixels);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width/2, height/7);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)(width/2.5), height/7);
         JSONArray lists = source.equals("foodsource.json")?foods:loadJsonFile(source);
         JSONArray res = searchResult(lists,id);
         LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -274,7 +274,7 @@ public class ResultFragment extends Fragment {
             View v = vi.inflate(R.layout.edu_row, null);
             TextView edu_info = v.findViewById(R.id.edu_info);
             ImageView im = v.findViewById(R.id.edu_img);
-            edu_info.setText("no result");
+            edu_info.setText("No Recommendation");
             popup.addView(v);
         }
         else{
@@ -291,7 +291,7 @@ public class ResultFragment extends Fragment {
                         TextView type = v.findViewById(R.id.edu_type);
                         String temp = json.getString(item);
                         String unit = unitSwitcher(item);
-                        temp = temp.equals("NaN")||temp.equals("null")?"Not Recommended":String.valueOf((int)((double)Double.valueOf(temp)))+ " "+ json.getString(unit);
+                        temp = temp.equals("NaN")||temp.equals("null")?"Not Recommended":(String.valueOf((int)((double)Double.valueOf(temp)))+ " "+ json.getString(unit));
                         im.setImageResource(imgSwithcher(item));
                         type.setText(typeSwitcher(item));
                         edu_info.setText(temp);
@@ -325,7 +325,7 @@ public class ResultFragment extends Fragment {
                             TextView type = v.findViewById(R.id.edu_type);
                             String val = json.getString(item);
                             val = val.equals("NaN")||val.equals("null")?"Not Recommended":val;
-                            val = item.equals("Cooking_Temperature")?val+" °C":val;
+                            val = item.equals("Cooking_Temperature") && !val.equals("Not Recommended")?val+" °C":val;
                             type.setText(typeSwitcher(item));
                             im.setImageResource(imgSwithcher(item));
                             edu_info.setText(val);
