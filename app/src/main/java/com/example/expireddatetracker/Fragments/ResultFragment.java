@@ -5,11 +5,8 @@ import android.annotation.SuppressLint;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
-
-import android.text.Layout;
 import android.util.DisplayMetrics;
 
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,16 +14,12 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.expireddatetracker.R;
-import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,13 +27,10 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import androidx.fragment.app.Fragment;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 public class ResultFragment extends Fragment {
     private TextView tx ;
@@ -229,12 +219,12 @@ public class ResultFragment extends Fragment {
         final String tag = v.getTag().toString();
         final View cookIndicator = popupView.findViewById(R.id.cook_indicator);
         final View storageIndicator = popupView.findViewById(R.id.storage_indicator);
-        title.setText(foodname);
-        final View close = popupView.findViewById(R.id.back2list);
-        storageIndicator.getLayoutParams().width =  (int)(width/2.5);
-        cookIndicator.getLayoutParams().width=(int)(width/2.5);
         final LinearLayout container = popupView.findViewById(R.id.edu_container);
         final Button storagebt = popupView.findViewById(R.id.storage_button);
+        final View close = popupView.findViewById(R.id.back2list);
+        title.setText(foodname);
+        storageIndicator.getLayoutParams().width =  (int)(width/2.5);
+        cookIndicator.getLayoutParams().width=(int)(width/2.5);
         storagebt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -264,6 +254,7 @@ public class ResultFragment extends Fragment {
                     public void onAnimationRepeat(Animation animation) {
                     }
                 });
+                if(storageIndicator.getVisibility()==View.GONE)
                 cookIndicator.startAnimation(animSlide);
 
 
@@ -301,7 +292,8 @@ public class ResultFragment extends Fragment {
 
                     }
                 });
-                storageIndicator.startAnimation(animSlide);
+                if(cookIndicator.getVisibility()==View.GONE)
+                    storageIndicator.startAnimation(animSlide);
 
 
             }
@@ -435,5 +427,6 @@ public class ResultFragment extends Fragment {
 
         }
     }
+
 
 }
