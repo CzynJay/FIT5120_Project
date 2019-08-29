@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "610858907535",
+    "firebase_url": "https://expireddateproject.firebaseio.com",
+    "project_id": "expireddateproject",
+    "storage_bucket": "expireddateproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:610858907535:android:11bd7d79fc113042",
+        "android_client_info": {
+          "package_name": "com.example.expireddatetracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "610858907535-n3n2vd2miavaoadbidi8q989mglni8fi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.expireddatetracker",
+            "certificate_hash": "8d5254f636ee6fc41c67775789a1eb091b3ab3e9"
+          }
+        },
+        {
+          "client_id": "610858907535-bkq38c4hqer0dam2c7qmibb56hvquu7k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmRRG2p-qr4mq7XfudL7AFTAg8ybqI12k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "610858907535-bkq38c4hqer0dam2c7qmibb56hvquu7k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
