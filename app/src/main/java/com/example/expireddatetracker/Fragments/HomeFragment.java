@@ -1,27 +1,24 @@
 package com.example.expireddatetracker.Fragments;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.example.expireddatetracker.R;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,26 +27,44 @@ import androidx.fragment.app.Fragment;
 import static android.content.Context.VIBRATOR_SERVICE;
 
 public class HomeFragment extends Fragment {
-    private ImageButton bt;
     private EditText searchBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View x  = inflater.inflate(R.layout.fragment_home, container, false);
-        init(x);
-        ImageButton bt = x.findViewById(R.id.searchbutton);
-        searchBar = x.findViewById(R.id.searchbar);
-        bt.setOnClickListener(new View.OnClickListener() {
+        View inflatePage  = inflater.inflate(R.layout.fragment_home, container, false);
+        init(inflatePage);
+        final ImageButton searchButton = inflatePage.findViewById(R.id.searchbutton);
+        searchBar = inflatePage.findViewById(R.id.searchbar);
+        searchBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
-               String temp =  searchBar.getText().toString();
-               search(temp);
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus == true)
+                    searchBar.setHint("");
+                else
+                    searchBar.setHint("");
             }
         });
-        return x;
+        searchBar.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    search(searchBar.getText().toString());
+                    return true;
+                }
+                return false;
+            }
+        });
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               String searchQuery =  searchBar.getText().toString();
+               search(searchQuery);
+            }
+        });
+        return inflatePage;
     }
+
     private void init(View x){
         String[] types = {"Fruit","Dairy & Egg","Meat","Seafood","Poultry","Vegetable"};
         //int[] colors = {Color.GREEN,Color.CYAN,Color.RED,Color.YELLOW,Color.RED,Color.YELLOW};
@@ -100,6 +115,7 @@ public class HomeFragment extends Fragment {
         };
 
     }
+
     private void vibrate()
     {
         Vibrator vibrator = (Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
@@ -110,6 +126,7 @@ public class HomeFragment extends Fragment {
         }
 
     }
+
     private void search(String q)
     {
         if(q.trim().length()==0){

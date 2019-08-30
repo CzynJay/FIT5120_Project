@@ -17,10 +17,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ScrollView;
 import android.widget.TextView;
-
 import com.example.expireddatetracker.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,13 +31,15 @@ import androidx.fragment.app.Fragment;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
-public class ResultFragment extends Fragment {
+public class ResultFragment extends Fragment{
     private TextView tx ;
-
     private ImageView bt;
     final private  String foodSource = "foodsource.json";
     private String foodname = "";
     private JSONArray foods = new JSONArray();
+    private Button trackButton ;
+    private String[] storageTypes = {"DOP_Pantry_Max","DOP_Freeze_Max","DOP_Refrigerate_Max"};
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -128,10 +129,7 @@ public class ResultFragment extends Fragment {
         LinearLayout layout = x.findViewById(R.id.result_container);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        //This line was causing subtitles missing
-        //int heightPixels = displayMetrics.heightPixels;
         int widthPixels  = displayMetrics.widthPixels;
-        //LinearLayout.LayoutParams paramsBt = new LinearLayout.LayoutParams(widthPixels, heightPixels/20);
         if (jsonArray.length()==0)
         {
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -140,13 +138,6 @@ public class ResultFragment extends Fragment {
             TextView sub = v.findViewById(R.id.subname);
             main.setText("No result");
             sub.setText("Please enter correct food name");
-            int main_height = main.getMaxHeight();
-            int sub_height = sub.getMaxHeight();
-            int total_height = main_height + sub_height;
-
-
-            LinearLayout.LayoutParams paramsBt = new LinearLayout.LayoutParams(widthPixels, total_height);
-            //v.setLayoutParams(paramsBt);
             layout.addView(v);
         }
         for(int i=0;i<jsonArray.length();i++)
@@ -170,16 +161,11 @@ public class ResultFragment extends Fragment {
                 }
             });
             main.setText(temp.getString("food_name"));
-
             sub.setText(temp.getString("food_subtitle").equals("null")?"":temp.getString("food_subtitle"));
-
             int main_height = main.getMaxHeight();
             int sub_height = sub.getMaxHeight();
             int total_height = main_height + sub_height;
-
-
                 LinearLayout.LayoutParams paramsBt = new LinearLayout.LayoutParams(widthPixels, total_height);
-
             v.setLayoutParams(paramsBt);
             layout.addView(v);
 
@@ -201,7 +187,7 @@ public class ResultFragment extends Fragment {
     }
 
     public void popup(View v) {
-        LayoutInflater layoutInflater = (LayoutInflater)getActivity().getBaseContext()
+        LayoutInflater layoutInflater = (LayoutInflater)getContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -222,6 +208,7 @@ public class ResultFragment extends Fragment {
         final LinearLayout container = popupView.findViewById(R.id.edu_container);
         final Button storagebt = popupView.findViewById(R.id.storage_button);
         final View close = popupView.findViewById(R.id.back2list);
+        trackButton = popupView.findViewById(R.id.trackingButton);
         title.setText(foodname);
         storageIndicator.getLayoutParams().width =  (int)(width/2.5);
         cookIndicator.getLayoutParams().width=(int)(width/2.5);
@@ -256,9 +243,6 @@ public class ResultFragment extends Fragment {
                 });
                 if(storageIndicator.getVisibility()==View.GONE)
                 cookIndicator.startAnimation(animSlide);
-
-
-
             }
         });
         final Button cookingbt = popupView.findViewById(R.id.cooking_button);
@@ -294,8 +278,6 @@ public class ResultFragment extends Fragment {
                 });
                 if(cookIndicator.getVisibility()==View.GONE)
                     storageIndicator.startAnimation(animSlide);
-
-
             }
         });
         storagebt.callOnClick();
@@ -327,64 +309,35 @@ public class ResultFragment extends Fragment {
         else{
             try {
                 JSONObject json = res.getJSONObject(0);
+                trackButton.setTag(json);
+                trackButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        popUpChoice((JSONObject) v.getTag());
+                    }
+                });
                 if(source.equals("foodsource.json"))
                 {
-                    String[] storageTypes = {"DOP_Pantry_Max","DOP_Freeze_Max","DOP_Refrigerate_Max"};
                     for(String item:storageTypes)
                     {
-                        View v = vi.inflate(R.layout.edu_row, null);
-                        TextView edu_info = v.findViewById(R.id.edu_info);
-                        ImageView im = v.findViewById(R.id.edu_img);
-                        TextView type = v.findViewById(R.id.edu_type);
-                        String temp = json.getString(item);
-                        String unit = unitSwitcher(item);
-                        temp = temp.equals("NaN")||temp.equals("null")?"Not Recommended":(String.valueOf((int)((double)Double.valueOf(temp)))+ " "+ json.getString(unit));
-                        im.setImageResource(imgSwithcher(item));
-                        type.setText(typeSwitcher(item));
-                        edu_info.setText(temp);
-                        im.setLayoutParams(params);
-                        edu_info.setLayoutParams(params);
+                        View v =generateRow(json,item,params);
                         popup.addView(v);
                     }
                 }
                 else if (source.equals("cook.json"))
                 {
-                    String method = "preparation_text";
                     String [] cook = {"Cooking_Temperature","Preparation_size","Cooking_time"};
                     for(int i=0;i<res.length();i++)
                     {
                         JSONObject temp = res.getJSONObject(i);
-                        TextView methodName = new TextView(getActivity().getApplicationContext());
-                        LinearLayout.LayoutParams methodParmas =
-                        new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                        methodParmas.gravity = Gravity.CENTER;
-                        methodName.setTextSize(20);
-                        methodName.setTextColor(R.color.fui_bgGitHub);
-                        methodName.setTypeface(methodName.getTypeface(), Typeface.BOLD);
-                        methodName.setGravity(Gravity.CENTER);
-                        methodName.setPaintFlags(methodName.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
-                        methodName.setText("Cooking Method: "+ temp.getString(method));
-                        popup.addView(methodName);
+                        TextView titleView = buildTextView(width,temp);
+                        popup.addView(titleView);
                         for(String item:cook){
-                            View v = vi.inflate(R.layout.edu_row, null);
-                            TextView edu_info = v.findViewById(R.id.edu_info);
-                            ImageView im = v.findViewById(R.id.edu_img);
-                            TextView type = v.findViewById(R.id.edu_type);
-                            String val = json.getString(item);
-                            val = val.equals("NaN")||val.equals("null")?"Not Recommended":val;
-                            val = item.equals("Cooking_Temperature") && !val.equals("Not Recommended")?val+" °C":val;
-                            type.setText(typeSwitcher(item));
-                            im.setImageResource(imgSwithcher(item));
-                            edu_info.setText(val);
-                            im.setLayoutParams(params);
-                            edu_info.setLayoutParams(params);
+                            View v = generateRow(temp,item,params);
                             popup.addView(v);
                         }
-
                     }
-
                 }
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -423,10 +376,63 @@ public class ResultFragment extends Fragment {
         switch (src){
             case "DOP_Pantry_Max": return "DOP_Pantry_Metric";
             case "DOP_Freeze_Max": return "DOP_Freeze_Metric";
-            default:return "DOP_Refrigerate_Metric";
-
+            case "DOP_Refrigerate_Max":return "DOP_Refrigerate_Metric";
+            default: return "null";
         }
     }
 
+    @SuppressLint("ResourceAsColor")
+    private TextView buildTextView(int width, JSONObject temp) throws JSONException {
+        String method = "preparation_text";
+        TextView methodName = new TextView(getActivity().getApplicationContext());
+        LinearLayout.LayoutParams methodParmas =
+                new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+        methodParmas.gravity = Gravity.CENTER;
+        methodName.setTextSize(20);
+        methodName.setTextColor(R.color.fui_bgGitHub);
+        methodName.setTypeface(methodName.getTypeface(), Typeface.BOLD);
+        methodName.setGravity(Gravity.CENTER);
+        methodName.setPaintFlags(methodName.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        methodName.setText("Cooking Method: "+ temp.getString(method));
+        return  methodName;
+    }
+
+    private View generateRow(JSONObject json, String item, LinearLayout.LayoutParams params) throws JSONException {
+        LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        View v = vi.inflate(R.layout.edu_row, null);
+        TextView edu_info = v.findViewById(R.id.edu_info);
+        ImageView im = v.findViewById(R.id.edu_img);
+        TextView type = v.findViewById(R.id.edu_type);
+        String val = json.getString(item);
+        val = val.equals("NaN")||val.equals("null")?"Not Recommended":val;
+        String unit = unitSwitcher(item);
+        if (!unit.equals("null")&& !val.equals("Not Recommended"))
+            val = ((int)((double)Double.valueOf(val)))+ " "+ json.getString(unit);
+        val = item.equals("Cooking_Temperature") && !val.equals("Not Recommended")?val+" °C":val;
+        type.setText(typeSwitcher(item));
+        im.setImageResource(imgSwithcher(item));
+        edu_info.setText(val);
+        im.setLayoutParams(params);
+        edu_info.setLayoutParams(params);
+        return v;
+    }
+
+    private void popUpChoice(JSONObject json)
+    {
+        LayoutInflater layoutInflater = (LayoutInflater)getContext()
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = (int)(displayMetrics.widthPixels*0.8);
+        View popupView = layoutInflater.inflate(R.layout.tracking_type, null);
+        final PopupWindow popupWindow=new PopupWindow(popupView,
+                width, LinearLayout.LayoutParams.WRAP_CONTENT,
+                true);
+        popupWindow.setTouchable(true);
+        popupWindow.setFocusable(true);
+        popupWindow.setAnimationStyle(R.style.Animation_Design_BottomSheetDialog);
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+
+    }
 
 }
