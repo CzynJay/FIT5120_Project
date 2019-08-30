@@ -109,19 +109,4 @@
 
 
 </LinearLayout>
-
-    <Button
-        android:id="@+id/trackingButton"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="center"
-        android:layout_marginBottom="36dp"
-        android:layout_marginRight="30dp"
-        android:foregroundGravity="center"
-        android:background="@drawable/round_button"
-        android:gravity="center"
-        android:layout_alignParentBottom="true"
-        android:text="Tracking"
-        android:textColor="#FFFFFF" />
 </RelativeLayout>

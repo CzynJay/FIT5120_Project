@@ -2,34 +2,46 @@ package com.example.expireddatetracker.Fragments;
 
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.expireddatetracker.R;
+import com.google.android.gms.common.util.ArrayUtils;
+import com.google.firebase.database.collection.LLRBNode;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import androidx.fragment.app.Fragment;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 public class ResultFragment extends Fragment{
     private TextView tx ;
@@ -38,6 +50,7 @@ public class ResultFragment extends Fragment{
     private String foodname = "";
     private JSONArray foods = new JSONArray();
     private Button trackButton ;
+    View previousSelectedItem;
     private String[] storageTypes = {"DOP_Pantry_Max","DOP_Freeze_Max","DOP_Refrigerate_Max"};
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -208,7 +221,6 @@ public class ResultFragment extends Fragment{
         final LinearLayout container = popupView.findViewById(R.id.edu_container);
         final Button storagebt = popupView.findViewById(R.id.storage_button);
         final View close = popupView.findViewById(R.id.back2list);
-        trackButton = popupView.findViewById(R.id.trackingButton);
         title.setText(foodname);
         storageIndicator.getLayoutParams().width =  (int)(width/2.5);
         cookIndicator.getLayoutParams().width=(int)(width/2.5);
@@ -309,13 +321,6 @@ public class ResultFragment extends Fragment{
         else{
             try {
                 JSONObject json = res.getJSONObject(0);
-                trackButton.setTag(json);
-                trackButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        popUpChoice((JSONObject) v.getTag());
-                    }
-                });
                 if(source.equals("foodsource.json"))
                 {
                     for(String item:storageTypes)
@@ -414,10 +419,19 @@ public class ResultFragment extends Fragment{
         edu_info.setText(val);
         im.setLayoutParams(params);
         edu_info.setLayoutParams(params);
+        String [] tag = {typeSwitcher(item),val};
+        if(ArrayUtils.contains( storageTypes, item ) )
+        {v.setTag(tag);
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popUpChoice( (String[])v.getTag());
+            }
+        });}
         return v;
     }
 
-    private void popUpChoice(JSONObject json)
+    private void popUpChoice(String[] tag)
     {
         LayoutInflater layoutInflater = (LayoutInflater)getContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -432,7 +446,24 @@ public class ResultFragment extends Fragment{
         popupWindow.setFocusable(true);
         popupWindow.setAnimationStyle(R.style.Animation_Design_BottomSheetDialog);
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+        final TextView title = popupView.findViewById(R.id.confirm_title);
+        final TextView duration = popupView.findViewById(R.id.duration);
+        final Button cancel = popupView.findViewById(R.id.cancel_Button);
+        final Button confirm = popupView.findViewById(R.id.confirm_Button);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+        title.setText("I will store it in "+tag[0]);
+        duration.setText("Duration: " + tag[1]);
     }
 
 }
