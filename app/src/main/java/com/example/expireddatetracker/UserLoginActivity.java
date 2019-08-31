@@ -44,9 +44,9 @@ public class UserLoginActivity extends AppCompatActivity {
     private TextView  tipsView;
     private View loginForm;
     private JSONArray tips;
-    private  TextView signUp;
-
+    private TextView signUp;
     private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -234,5 +234,7 @@ public class UserLoginActivity extends AppCompatActivity {
         }
 
     }
+
+
 
 }
