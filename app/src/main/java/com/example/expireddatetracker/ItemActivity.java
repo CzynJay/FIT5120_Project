@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.util.ArrayUtils;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,6 +58,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     private String[] storageTypes = {"DOP_Pantry_Max","DOP_Freeze_Max","DOP_Refrigerate_Max"};
     private Calendar myCalendar = Calendar.getInstance();
     private DatePickerDialog.OnDateSetListener date;
+    final private long dayInMilliseconds = 86400000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -82,11 +85,15 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         };
 
     }
-    private void updateLabel() {
+
+    private void updateLabel()
+    {
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        title.setText(sdf.format(myCalendar.getTime()));
+        Toast.makeText(getBaseContext(),sdf.format(myCalendar.getTime()) + " is selected",Toast.LENGTH_LONG).show();
+        finish();
     }
+
     private void  initUI()
     {
         title = findViewById(R.id.foodname);
@@ -153,10 +160,10 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH));
        datePickerDialog.setTitle("When did you buy it");
-       datePickerDialog.getDatePicker().setMaxDate(myCalendar.getTimeInMillis());
-       datePickerDialog.getDatePicker().setMinDate(myCalendar.getTimeInMillis()-(long)v.getTag() + 2*86400000);
+       datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+       datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-(long)v.getTag() + 2*dayInMilliseconds);
        Toast.makeText(getBaseContext(),
-               "If the date is not available, your food may have been spoiled ",Toast.LENGTH_LONG).show();
+              "If the date is not available, your food may have been spoiled ",Toast.LENGTH_LONG).show();
        datePickerDialog.show();
     }
 
@@ -419,12 +426,11 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     private long dateConversion(String date)
     {
         Map<String,Long> conversion = new HashMap<>();
-        conversion.put("Days",(long)86400000);
-        conversion.put("Weeks", (long)86400000*7 );
-        conversion.put("Months",(long)86400000*30) ;
-        conversion.put("Years",(long)86400000*365);
+        conversion.put("Days",(long)dayInMilliseconds);
+        conversion.put("Weeks", (long)dayInMilliseconds*7 );
+        conversion.put("Months",(long)dayInMilliseconds*30) ;
+        conversion.put("Years",(long)dayInMilliseconds*365);
         String[] temp = date.split( " ");
-
         return (long) (Integer.valueOf(temp[0].trim()) * conversion.get(temp[1].trim()))  ;
     }
 
