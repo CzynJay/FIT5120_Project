@@ -43,13 +43,11 @@ import java.util.Locale;
 import java.util.Map;
 
 public class ItemActivity extends AppCompatActivity implements View.OnClickListener {
-    private TextView title;
     private View cookIndicator;
     private View storageIndicator;
     private LinearLayout container;
     private Button storageBt;
     private Button cookBt;
-    private View close;
     private int height;
     private String foodID = "1";
     private int width;
@@ -96,14 +94,14 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
 
     private void  initUI()
     {
-        title = findViewById(R.id.foodname);
+        TextView title = findViewById(R.id.foodname);
         title.setText(getIntent().getStringExtra("name"));
         cookIndicator = findViewById(R.id.cook_indicator);
         storageIndicator =findViewById(R.id.storage_indicator);
         container = findViewById(R.id.edu_container);
         storageBt = findViewById(R.id.storage_button);
         cookBt = findViewById(R.id.cooking_button);
-        close = findViewById(R.id.back2list);
+        View close = findViewById(R.id.back2list);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         height = (int) (displayMetrics.heightPixels );
