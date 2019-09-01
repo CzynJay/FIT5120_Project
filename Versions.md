@@ -1,3 +1,7 @@
+# Version 1.0.25
+
+# Version 1.0.24
+
 # Version 1.0.23
 * Fixed temperature bug
 # Version 1.0.22
