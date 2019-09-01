@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.expireddatetracker.Models.CircularProgressBar;
 import com.example.expireddatetracker.R;
 
 import androidx.fragment.app.Fragment;
@@ -20,5 +21,4 @@ public class TrackFragment extends Fragment {
         // Inflate the layout for this fragment
         View x =  inflater.inflate(R.layout.fragment_track, container, false);
         return x;
-    }
-}
+}}

@@ -17,4 +17,12 @@
         <item name="colorButtonNormal">#6FFFB2</item>
         <item name="android:textColor">#FFFDFD</item>
     </style>
+    <declare-styleable name="CircleProgressBar">
+        <attr name="min" format="integer" />
+        <attr name="max" format="integer" />
+        <attr name="progress" format="integer" />
+        <attr name="progressbarColor" format="color" />
+        <attr name="progressBarThickness" format="dimension" />
+    </declare-styleable>
 </resources>
+

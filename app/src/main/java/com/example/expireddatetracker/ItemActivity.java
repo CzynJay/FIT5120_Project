@@ -373,7 +373,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    @SuppressLint("ResourceAsColor")
+
     private TextView buildTextView(int width, JSONObject temp) throws JSONException
     {
         String method = "preparation_text";
@@ -382,7 +382,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                 new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
         methodParmas.gravity = Gravity.CENTER;
         methodName.setTextSize(20);
-        methodName.setTextColor(R.color.fui_bgGitHub);
+        methodName.setTextColor(getResources().getColor(R.color.white));
         methodName.setTypeface(methodName.getTypeface(), Typeface.BOLD);
         methodName.setGravity(Gravity.CENTER);
         methodName.setPaintFlags(methodName.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
