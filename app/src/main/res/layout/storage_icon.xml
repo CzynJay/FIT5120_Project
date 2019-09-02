@@ -13,7 +13,7 @@
         android:id="@+id/storage_progressBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:progress="20"
+        app:progress="50"
         app:progressBarThickness="5dp" />
 
     <ImageButton

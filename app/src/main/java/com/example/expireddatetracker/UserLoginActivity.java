@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +47,7 @@ public class UserLoginActivity extends AppCompatActivity {
     private JSONArray tips;
     private TextView signUp;
     private FirebaseAuth mAuth;
+    private View progressForm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +68,13 @@ public class UserLoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        showProgress(true);
-        UserLoginTask u= new UserLoginTask(true);
-        u.execute();
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        if(currentUser!=null)
+//        {
+//            showProgress(true);
+//            UserLoginTask u= new UserLoginTask(true);
+//            u.execute();
+//        }
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -95,8 +101,8 @@ public class UserLoginActivity extends AppCompatActivity {
                     loginForm.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
-            tipsView.setVisibility(show?View.VISIBLE:View.GONE);
-            loginForm.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressForm.setVisibility(show?View.VISIBLE:View.GONE);
+           
             progressBar.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
                 @Override
@@ -107,9 +113,8 @@ public class UserLoginActivity extends AppCompatActivity {
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
-            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressForm.setVisibility(show ? View.VISIBLE : View.GONE);
             loginForm.setVisibility(show ? View.GONE : View.VISIBLE);
-            tipsView.setVisibility(show?View.VISIBLE:View.GONE);
         }
     }
 
@@ -172,13 +177,14 @@ public class UserLoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            showProgress(false);
+
 
             if (success) {
                 Intent toMain = new Intent(UserLoginActivity.this,MainActivity.class);
                 startActivity(toMain);
                 finish();
             } else {
+                showProgress(false);
                 passwordTV.setError(getString(R.string.error_incorrect_password));
                 passwordTV.requestFocus();
                 Toast.makeText(getApplicationContext(), "Login failed! Please try again", Toast.LENGTH_LONG).show();
@@ -199,6 +205,7 @@ public class UserLoginActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         loginForm = findViewById(R.id.email_login_form);
         signUp = findViewById(R.id.sign_up);
+        progressForm = findViewById(R.id.progress_layout);
         signUp.setPaintFlags(signUp.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override

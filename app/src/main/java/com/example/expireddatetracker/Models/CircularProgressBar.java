@@ -101,7 +101,5 @@ public class CircularProgressBar extends View {
         else
             foregroundPaint.setColor(getResources().getColor(R.color.red));
         canvas.drawArc(rectF, startAngle, angle, false, foregroundPaint);
-
     }
-
 }

@@ -46,7 +46,14 @@
        android:layout_gravity="center"/>
 
     </LinearLayout>
-
+    <TextView
+        android:id="@+id/welcome_mes"
+        android:layout_height="wrap_content" android:layout_width="match_parent"
+        android:textSize="16dp"
+        android:layout_margin="10dp"
+        android:textColor="#FFFFFF"
+        android:text="asdasd"
+        />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
