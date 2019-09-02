@@ -1,7 +1,7 @@
 # Version 1.0.25
-
+* Add confirmation window
 # Version 1.0.24
-
+* Restructure the code
 # Version 1.0.23
 * Fixed temperature bug
 # Version 1.0.22
