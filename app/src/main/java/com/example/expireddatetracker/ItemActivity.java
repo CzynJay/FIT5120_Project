@@ -16,6 +16,7 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -53,10 +54,11 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     private int width;
     private JSONArray storageJson = new JSONArray();
     private  JSONArray cookJson = new JSONArray();
-    private String[] storageTypes = {"DOP_Pantry_Max","DOP_Freeze_Max","DOP_Refrigerate_Max"};
+    final private String[] storageTypes = {"DOP_Pantry_Max","DOP_Freeze_Max","DOP_Refrigerate_Max"};
     private Calendar myCalendar = Calendar.getInstance();
     private DatePickerDialog.OnDateSetListener date;
     final private long dayInMilliseconds = 86400000;
+    private PopupWindow popupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -89,6 +91,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         Toast.makeText(getBaseContext(),sdf.format(myCalendar.getTime()) + " is selected",Toast.LENGTH_LONG).show();
+        popupWindow.dismiss();
         finish();
     }
 
@@ -222,8 +225,9 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         View v = vi.inflate(R.layout.edu_row, null);
         final TextView edu_info = v.findViewById(R.id.edu_info);
-        ImageView im = v.findViewById(R.id.edu_img);
+        final ImageView im = v.findViewById(R.id.edu_img);
         final TextView type = v.findViewById(R.id.edu_type);
+        final Button addBt = v.findViewById(R.id.add_bt);
         String val = json.getString(item);
         val = val.equals("NaN")||val.equals("null")?"Not Recommended":val;
         String unit = unitSwitcher(item);
@@ -240,19 +244,28 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         String [] tag = {typeSwitcher(item),val};
         if(ArrayUtils.contains( storageTypes, item ) )
         {
-            v.setTag(tag);
-            v.setOnClickListener(new View.OnClickListener() {
+            addBt.setTag(tag);
+            if (! edu_info.getText().toString().startsWith("Not")){
+                    addBt.setVisibility(View.VISIBLE);
+            addBt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (edu_info.getText().toString().equals("Not Recommended")) {
-                        Toast.makeText(getBaseContext(), type.getText().toString()
-                                + " storage is not recommended", Toast.LENGTH_LONG).show();
-                        vibrate();
-                    }
-                    else
-                        popUpChoice( (String[])v.getTag());
+                    popUpChoice( (String[])v.getTag());
                 }
             });}
+//            v.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (edu_info.getText().toString().equals("Not Recommended")) {
+//                        Toast.makeText(getBaseContext(), type.getText().toString()
+//                                + " storage is not recommended", Toast.LENGTH_LONG).show();
+//                        vibrate();
+//                    }
+//                    else
+//                        popUpChoice( (String[])v.getTag());
+//                }
+//            });
+        }
         return v;
 
 
@@ -334,12 +347,16 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     private void popupwindowInit(String source)
     {
         JSONArray res = source.equals("foodsource.json")?storageJson:cookJson;
-        LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         if (res.length()==0) {
-            View v = vi.inflate(R.layout.edu_row, null);
-            TextView edu_info = v.findViewById(R.id.edu_info);
-            edu_info.setText("No Recommendation");
-            container.addView(v);
+            TextView error = new TextView(getApplicationContext());
+            error.setText("No Recommendation");
+            error.setGravity(Gravity.CENTER);
+            error.setTextSize(20);
+            error.setTextColor(getResources().getColor(R.color.white));
+            error.setTypeface(error.getTypeface(), Typeface.BOLD);
+            error.setGravity(Gravity.CENTER);
+            error.setPaintFlags(error.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+            container.addView(error);
         }
         else{
             try {
@@ -373,7 +390,6 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
     private TextView buildTextView(int width, JSONObject temp) throws JSONException
     {
         String method = "preparation_text";
@@ -398,7 +414,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = (int)(displayMetrics.widthPixels*0.8);
         View popupView = layoutInflater.inflate(R.layout.tracking_type, null);
-        final PopupWindow popupWindow=new PopupWindow(popupView,
+        popupWindow=new PopupWindow(popupView,
                 width, LinearLayout.LayoutParams.WRAP_CONTENT,
                 true);
         popupWindow.setTouchable(true);

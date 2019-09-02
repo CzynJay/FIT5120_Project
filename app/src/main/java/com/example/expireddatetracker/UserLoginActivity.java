@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -48,6 +49,7 @@ public class UserLoginActivity extends AppCompatActivity {
     private TextView signUp;
     private FirebaseAuth mAuth;
     private View progressForm;
+    private  View appIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +104,7 @@ public class UserLoginActivity extends AppCompatActivity {
                 }
             });
             progressForm.setVisibility(show?View.VISIBLE:View.GONE);
-           
+
             progressBar.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
                 @Override
@@ -198,6 +200,9 @@ public class UserLoginActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = (int) (displayMetrics.widthPixels );
         emailTV = findViewById(R.id.email);
         passwordTV = findViewById(R.id.password);
         tipsView = findViewById(R.id.tipsView);
@@ -205,6 +210,9 @@ public class UserLoginActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         loginForm = findViewById(R.id.email_login_form);
         signUp = findViewById(R.id.sign_up);
+        appIcon = findViewById(R.id.app_icon);
+        appIcon.getLayoutParams().width = (int)(width*0.5);
+        appIcon.getLayoutParams().height = (int)(width*0.5);
         progressForm = findViewById(R.id.progress_layout);
         signUp.setPaintFlags(signUp.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         signUp.setOnClickListener(new View.OnClickListener() {

@@ -13,7 +13,7 @@
         android:id="@+id/storage_progressBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:progress="50"
+        app:progress="20"
         app:progressBarThickness="5dp" />
 
     <ImageButton
@@ -23,8 +23,9 @@
         android:layout_margin="5dp"
         android:layout_alignTop="@+id/storage_progressBar"
         android:layout_alignEnd="@+id/storage_progressBar"
-        android:layout_alignBottom="@+id/storage_progressBar"
         android:background="@drawable/circle_stroke"
+        android:layout_alignBottom="@+id/storage_progressBar"
+        android:scaleType="centerInside"
         android:src="@drawable/fruit" />
 </RelativeLayout>
 <TextView android:id="@+id/storage_name" android:layout_width="match_parent" android:layout_height="wrap_content"

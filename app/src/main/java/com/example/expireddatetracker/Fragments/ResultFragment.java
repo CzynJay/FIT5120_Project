@@ -1,60 +1,39 @@
 package com.example.expireddatetracker.Fragments;
 
 
-import android.annotation.SuppressLint;
+
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.ScrollView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.expireddatetracker.ItemActivity;
-import com.example.expireddatetracker.MainActivity;
 import com.example.expireddatetracker.R;
-import com.google.android.gms.common.util.ArrayUtils;
-import com.google.firebase.database.collection.LLRBNode;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.Map;
 import androidx.fragment.app.Fragment;
-
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 public class ResultFragment extends Fragment{
     private TextView tx ;
     private ImageView bt;
     final private  String foodSource = "foodsource.json";
-    private String foodname = "";
     private JSONArray foods = new JSONArray();
-    private Button trackButton ;
-    View previousSelectedItem;
-    private String[] storageTypes = {"DOP_Pantry_Max","DOP_Freeze_Max","DOP_Refrigerate_Max"};
+    Map<String,JSONArray> navi = new HashMap<>();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,7 +45,7 @@ public class ResultFragment extends Fragment{
         String querry = bundle.getString("key");
         foods = loadJsonFile(foodSource);
         JSONArray result = searchResult(foods,querry);
-        showResult(x,result);
+        showNavi(x);
         tx.setText(querry);
         bt.setOnClickListener(new View.OnClickListener() {
              @Override
@@ -120,18 +99,23 @@ public class ResultFragment extends Fragment{
                 if (!multi) {
                     if (isNumeric(query))
                     {
-                        if((int)temp.get("food_id")==Integer.parseInt(query))
+                        if((int)temp.get("food_id")==Integer.parseInt(query)){
                             result.put(temp);
+                            putInMap(temp.getString("Nav_category"),temp);
+                        }
+
                     }
                     else{
-                    if (value.contains(query))
-                        result.put(temp);}
+                    if (value.contains(query)){
+                        result.put(temp);
+                        putInMap(temp.getString("Nav_category"),temp);
+                    }}
                 }
                 else{
                     for(String s:query.split("&"))
                     {
                         if (value.contains(s.trim()))
-                        result.put(temp);break;
+                        result.put(temp);putInMap(temp.getString("Nav_category"),temp);break;
                     }
                 }
             } catch (JSONException e) {
@@ -141,6 +125,57 @@ public class ResultFragment extends Fragment{
         return result;
     }
 
+    private void showNavi(final View x){
+        LinearLayout layout = x.findViewById(R.id.result_container);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        if(navi.isEmpty())
+        {
+            final View v = vi.inflate(R.layout.search_row, null);
+            TextView main = v.findViewById(R.id.mainname);
+            TextView sub = v.findViewById(R.id.subname);
+            main.setText("No result");
+            sub.setText("Please enter correct food name");
+            layout.addView(v);
+            return;
+        }
+        for(final Object key:navi.keySet().toArray())
+        {
+            final View v = vi.inflate(R.layout.search_row, null);
+            v.setTag(key);
+            TextView main = v.findViewById(R.id.mainname);
+            main.setText((String)key);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showResult(x,navi.get((String)key));
+                }
+            });
+            layout.addView(v);
+        }
+    }
+    private void popUpWindow(String key,JSONArray jsonArray)
+    {
+        LayoutInflater layoutInflater = (LayoutInflater)getContext()
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = (int) (displayMetrics.heightPixels );
+        int width = (int)(displayMetrics.widthPixels);
+        View popupView = layoutInflater.inflate(R.layout.cate_popup, null);
+        final PopupWindow popupWindow=new PopupWindow(popupView,
+                (int) (width*0.8), ViewGroup.LayoutParams.WRAP_CONTENT ,
+                true);
+        popupWindow.setTouchable(true);
+        popupWindow.setFocusable(true);
+        popupWindow.setAnimationStyle(R.style.Animation_Design_BottomSheetDialog);
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+        TextView navi_title = popupView.findViewById(R.id.navi_title);
+        navi_title.setText(key);
+        Button viewBt = popupView.findViewById(R.id.navi_search);
+
+    }
     private void showResult(View x,JSONArray jsonArray){
         LinearLayout layout = x.findViewById(R.id.result_container);
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -205,6 +240,13 @@ public class ResultFragment extends Fragment{
         }
     }
 
+    private void putInMap(String cate,JSONObject object)
+    {
+        if(!navi.containsKey(cate))
+            navi.put(cate,new JSONArray());
+        else
+            navi.get(cate).put(object);
+    }
 //    public void popup(View v) {
 //        LayoutInflater layoutInflater = (LayoutInflater)getContext()
 //                .getSystemService(LAYOUT_INFLATER_SERVICE);

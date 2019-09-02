@@ -83,24 +83,31 @@ public class HomeFragment extends Fragment {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
-        width = (int)(width / (2.5));
-        RelativeLayout.LayoutParams paramsBt = new RelativeLayout.LayoutParams(width, width);
+        width = (int)(width / (3.5));
+        LinearLayout.LayoutParams paramsBt = new LinearLayout.LayoutParams(width, width);
         for(int temp=0;temp< types.length;temp++){
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final View v = vi.inflate(R.layout.image_button, null);
             ImageButton bt1 = v.findViewById(R.id.img1);
-            bt1.setImageResource(map.get(types[temp]));
+            ImageButton bt2 = v.findViewById(R.id.img2);
+            ImageButton bt3 = v.findViewById(R.id.img3);
             final TextView tx1  = v.findViewById(R.id.tx1);
+            final TextView tx2  = v.findViewById(R.id.tx2);
+            final TextView tx3  = v.findViewById(R.id.tx3);
+            bt1.setImageResource(map.get(types[temp]));
             tx1.setText(types[temp]);
             temp++;
-            ImageButton bt2 = v.findViewById(R.id.img2);
             bt2.setImageResource(map.get(types[temp]));
-            final TextView tx2 = v.findViewById(R.id.tx2);
             tx2.setText(types[temp]);
+            temp++;
+            bt3.setImageResource(map.get(types[temp]));
+            tx3.setText(types[temp]);
             bt1.setLayoutParams(paramsBt);
             bt2.setLayoutParams(paramsBt);
+            bt3.setLayoutParams(paramsBt);
             tx1.getLayoutParams().width = width;
             tx2.getLayoutParams().width = width;
+            tx3.getLayoutParams().width = width;
             layout.addView(v);
             bt1.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -113,6 +120,13 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     String temp = tx2.getText().toString();
+                    search(temp);
+                }
+            });
+            bt3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String temp = tx3.getText().toString();
                     search(temp);
                 }
             });
