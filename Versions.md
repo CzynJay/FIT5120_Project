@@ -1,3 +1,8 @@
+# Version 1.0.28
+# Version 1.0.27
+* Redesign user interface
+# Version 1.0.26
+* Fixed user log in bug
 # Version 1.0.25
 * Add confirmation window
 # Version 1.0.24
