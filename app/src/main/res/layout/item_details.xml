@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/edu_background"
+    android:background="@color/white"
     android:weightSum="10"
     >
 
@@ -15,7 +15,7 @@
         android:id="@+id/titleLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/stroke"
+        android:background="@color/colorPrimary"
         android:gravity="center"
         android:orientation="horizontal"
         android:weightSum="10"
@@ -26,9 +26,10 @@
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:background="#00FF0000"
+            android:scaleType="centerInside"
             android:layout_margin="20dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_return" />
+            android:src="@drawable/back" />
 
         <TextView
             android:id="@+id/foodname"
@@ -36,9 +37,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="8"
-            android:gravity="center"
             android:text="3333"
             android:textSize="20dp"
+            android:textColor="@color/white"
             android:textStyle="bold|italic" />
     </LinearLayout>
 
@@ -57,16 +58,16 @@
             android:id="@+id/storage_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            android:background="@drawable/button_change"
+            android:background="#3090DB"
             android:text="Storing"
+            android:textColor="@color/white"
             android:textAllCaps="false" />
             <View
                 android:id="@+id/storage_indicator"
                 android:layout_gravity="center"
                 android:visibility="gone"
-                android:layout_width="match_parent" android:layout_height="5dp"
-                android:background="#E4CD34"/></LinearLayout>
+                android:layout_width="match_parent" android:layout_height="3dp"
+                android:background="#14F051"/></LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_weight="1"
@@ -76,16 +77,16 @@
             android:id="@+id/cooking_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/button_change"
+            android:textColor="@color/white"
+            android:background="#3090DB"
             android:text="Cooking"
             android:textAllCaps="false" />
             <View
                 android:id="@+id/cook_indicator"
                 android:layout_gravity="center"
                 android:visibility="gone"
-                android:layout_width="match_parent" android:layout_height="5dp"
-                android:background="#E4CD34"/></LinearLayout>
+                android:layout_width="match_parent" android:layout_height="3dp"
+                android:background="#14F051"/></LinearLayout>
 
     </LinearLayout>
 
@@ -99,11 +100,11 @@
         <LinearLayout
             android:id="@+id/edu_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:divider="@drawable/img_gap"
             android:gravity="center_vertical"
             android:orientation="vertical"
-            android:showDividers="middle"></LinearLayout>
+            android:showDividers="middle"/>
     </ScrollView>
 
 

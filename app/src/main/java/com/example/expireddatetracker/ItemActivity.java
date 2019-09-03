@@ -109,8 +109,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         height = (int) (displayMetrics.heightPixels );
         width = (int)(displayMetrics.widthPixels);
-        storageIndicator.getLayoutParams().width =  (int)(width/2.5);
-        cookIndicator.getLayoutParams().width=(int)(width/2.5);
+
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -352,7 +351,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
             error.setText("No Recommendation");
             error.setGravity(Gravity.CENTER);
             error.setTextSize(20);
-            error.setTextColor(getResources().getColor(R.color.white));
+            error.setTextColor(getResources().getColor(R.color.black));
             error.setTypeface(error.getTypeface(), Typeface.BOLD);
             error.setGravity(Gravity.CENTER);
             error.setPaintFlags(error.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
@@ -408,6 +407,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
 
     private void popUpChoice(String[] tag)
     {
+        container.setVisibility(View.GONE);
         LayoutInflater layoutInflater = (LayoutInflater)getBaseContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -435,6 +435,12 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         title.setText("I will store it in "+tag[0]);
         duration.setText("Duration: " + tag[1]);
         confirm.setTag(dateConversion(tag[1]));
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                container.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private long dateConversion(String date)

@@ -5,6 +5,7 @@ package com.example.expireddatetracker.Fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,9 +44,10 @@ public class ResultFragment extends Fragment{
         tx = x.findViewById(R.id.query);
         bt = x.findViewById(R.id.back);
         String querry = bundle.getString("key");
+        Log.e("check",querry);
         foods = loadJsonFile(foodSource);
         JSONArray result = searchResult(foods,querry);
-        showNavi(x);
+        showNavigation(x);
         tx.setText(querry);
         bt.setOnClickListener(new View.OnClickListener() {
              @Override
@@ -88,7 +90,7 @@ public class ResultFragment extends Fragment{
         boolean multi = false;
         if (query.split("&").length>1)
             multi=true;
-        JSONArray result= new JSONArray();
+        //JSONArray result= new JSONArray();
 
         for(int i =0;i<source.length();i++)
         {
@@ -100,32 +102,34 @@ public class ResultFragment extends Fragment{
                     if (isNumeric(query))
                     {
                         if((int)temp.get("food_id")==Integer.parseInt(query)){
-                            result.put(temp);
+                            //result.put(temp);
                             putInMap(temp.getString("Nav_category"),temp);
                         }
 
                     }
                     else{
                     if (value.contains(query)){
-                        result.put(temp);
+                        //result.put(temp);
                         putInMap(temp.getString("Nav_category"),temp);
                     }}
                 }
                 else{
                     for(String s:query.split("&"))
                     {
-                        if (value.contains(s.trim()))
-                        result.put(temp);putInMap(temp.getString("Nav_category"),temp);break;
-                    }
+                        if (value.contains(s.trim())){
+                        //result.put(temp);
+                        putInMap(temp.getString("Nav_category"),temp);
+                        break;
+                    }}
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        return result;
+        return null;
     }
 
-    private void showNavi(final View x){
+    private void showNavigation(final View x){
         LinearLayout layout = x.findViewById(R.id.result_container);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -140,8 +144,9 @@ public class ResultFragment extends Fragment{
             layout.addView(v);
             return;
         }
-        for(final Object key:navi.keySet().toArray())
+        for(Object key:navi.keySet().toArray())
         {
+            if (navi.get(key).length() !=0){
             final View v = vi.inflate(R.layout.search_row, null);
             v.setTag(key);
             TextView main = v.findViewById(R.id.mainname);
@@ -149,11 +154,11 @@ public class ResultFragment extends Fragment{
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showResult(x,navi.get((String)key));
+                    showResult(x,navi.get(v.getTag().toString()));
                 }
             });
             layout.addView(v);
-        }
+        }}
     }
     private void popUpWindow(String key,JSONArray jsonArray)
     {
