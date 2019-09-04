@@ -1,49 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:background="#FFFFFF"
+    android:background="@drawable/pure_stroke"
     android:layout_height="match_parent">
 <LinearLayout
     android:layout_margin="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/up_down_stroke"
     android:orientation="horizontal"
     >
-    <ImageButton
+    <ImageView
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:layout_marginLeft="20dp"
         android:background="@drawable/circle_stroke"
         android:src="@drawable/fruit"
         android:scaleType="fitCenter"
+        android:layout_marginBottom="10dp"
         android:id="@+id/navi_img"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
         android:textSize="18dp"
+        android:textColor="@color/black"
         android:textStyle="bold"
         android:id="@+id/navi_title"
         android:layout_marginLeft="20dp"
         android:text="Navi_Category"
         />
 </LinearLayout>
-    <RadioGroup
-        android:layout_margin="20dp"
-        android:id="@+id/navi_selection"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:orientation="vertical"
-/>
-<Button
-    android:layout_width="wrap_content"
-    android:layout_height="30dp"
-    android:layout_margin="30dp"
-    android:id="@+id/navi_search"
-    android:layout_gravity="right"
-    android:text="View"
-    android:textSize="16dp"
-    android:background="@drawable/round_button"
-    android:textColor="#FFFFFF"
-    />
+ <ScrollView
+     android:layout_width="match_parent"
+     android:layout_height="400dp"
+     >
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+        android:id="@+id/cate_container"
+         android:orientation="vertical"/>
+
+ </ScrollView>
 </LinearLayout>

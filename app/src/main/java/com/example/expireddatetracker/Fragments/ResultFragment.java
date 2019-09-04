@@ -10,6 +10,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,6 +35,7 @@ public class ResultFragment extends Fragment{
     private TextView tx ;
     private ImageView bt;
     final private  String foodSource = "foodsource.json";
+    private LinearLayout viewContainer;
     private JSONArray foods = new JSONArray();
     Map<String,JSONArray> navi = new HashMap<>();
 
@@ -42,6 +45,7 @@ public class ResultFragment extends Fragment{
         View x =  inflater.inflate(R.layout.fragment_result, container, false);
         Bundle bundle =  this.getArguments();
         tx = x.findViewById(R.id.query);
+        viewContainer = x.findViewById(R.id.result_container);
         bt = x.findViewById(R.id.back);
         String querry = bundle.getString("key");
         Log.e("check",querry);
@@ -130,7 +134,7 @@ public class ResultFragment extends Fragment{
     }
 
     private void showNavigation(final View x){
-        LinearLayout layout = x.findViewById(R.id.result_container);
+        //LinearLayout layout = x.findViewById(R.id.result_container);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -139,7 +143,7 @@ public class ResultFragment extends Fragment{
             final View v = vi.inflate(R.layout.subtype_layout, null);
             TextView main = v.findViewById(R.id.subcateText);
             main.setText("No result, Please enter correct food name!");
-            layout.addView(v);
+            viewContainer.addView(v);
             return;
         }
         for(Object key:navi.keySet().toArray())
@@ -152,14 +156,15 @@ public class ResultFragment extends Fragment{
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showResult(x,navi.get(v.getTag().toString()));
+                    popUpWindow(v.getTag().toString(),navi.get(v.getTag().toString()));
                 }
             });
-            layout.addView(v);
+                viewContainer.addView(v);
         }}
     }
     private void popUpWindow(String key,JSONArray jsonArray)
     {
+        viewContainer.setVisibility(View.GONE);
         LayoutInflater layoutInflater = (LayoutInflater)getContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -168,7 +173,7 @@ public class ResultFragment extends Fragment{
         int width = (int)(displayMetrics.widthPixels);
         View popupView = layoutInflater.inflate(R.layout.cate_popup, null);
         final PopupWindow popupWindow=new PopupWindow(popupView,
-                (int) (width*0.8), ViewGroup.LayoutParams.WRAP_CONTENT ,
+                (int) (width*0.9), ViewGroup.LayoutParams.WRAP_CONTENT ,
                 true);
         popupWindow.setTouchable(true);
         popupWindow.setFocusable(true);
@@ -176,11 +181,17 @@ public class ResultFragment extends Fragment{
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
         TextView navi_title = popupView.findViewById(R.id.navi_title);
         navi_title.setText(key);
-        Button viewBt = popupView.findViewById(R.id.navi_search);
+        showResult(popupView,jsonArray);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                viewContainer.setVisibility(View.VISIBLE);
+            }
+        });
 
     }
     private void showResult(View x,JSONArray jsonArray){
-        LinearLayout layout = x.findViewById(R.id.result_container);
+        LinearLayout layout = x.findViewById(R.id.cate_container);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int widthPixels  = displayMetrics.widthPixels;
