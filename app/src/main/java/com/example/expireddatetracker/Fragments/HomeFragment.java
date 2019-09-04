@@ -6,24 +6,17 @@ import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.example.expireddatetracker.MainActivity;
 import com.example.expireddatetracker.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +36,7 @@ public class HomeFragment extends Fragment {
         init(inflatePage);
         final ImageButton searchButton = inflatePage.findViewById(R.id.searchbutton);
         searchBar = inflatePage.findViewById(R.id.searchbar);
-//        TextView welcome = inflatePage.findViewById(R.id.welcome_mes);
+//  todo      TextView welcome = inflatePage.findViewById(R.id.welcome_mes);
 //        welcome.setText("Welcome "+ FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         searchBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -157,7 +150,6 @@ public class HomeFragment extends Fragment {
 
     private void search(String q)
     {
-//        Log.e("TEST", MainActivity.food_source.toString());
         if(q.trim().length()==0){
             searchBar.setText("");
             searchBar.clearFocus();

@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,8 +23,6 @@ import com.example.expireddatetracker.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,8 +32,7 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class ResultFragment extends Fragment{
     private LinearLayout viewContainer;
-//    private JSONArray foods = new JSONArray();
-    private Map<String,JSONArray> navi = new HashMap<>();
+    private Map<String,JSONArray> navigation = new HashMap<>();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -46,12 +42,10 @@ public class ResultFragment extends Fragment{
         TextView tx = x.findViewById(R.id.query);
         viewContainer = x.findViewById(R.id.result_container);
         ImageView bt = x.findViewById(R.id.back);
-        String querry = bundle.getString("key");
-        Log.e("check",querry);
-//        foods = loadJsonFile(foodSource);
-        searchResult(MainActivity.food_source,querry);
+        String query = bundle.getString("key");
+        searchResult(MainActivity.food_source,query);
         showNavigation();
-        tx.setText(querry);
+        tx.setText(query);
         bt.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
@@ -65,27 +59,6 @@ public class ResultFragment extends Fragment{
              }
          });
         return x;
-    }
-
-    private JSONArray loadJsonFile(String source)
-    {
-        String json ;
-            JSONArray jarry = new JSONArray();
-            try {
-                InputStream is = getActivity().getAssets().open(source);
-                int size = is.available();
-                byte[] buffer = new byte[size];
-                is.read(buffer);
-                is.close();
-                json = new String(buffer,"UTF-8");
-                jarry = new JSONArray(json);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-    }
-        return  jarry;
     }
 
     private void searchResult(JSONArray source, String query)
@@ -131,7 +104,7 @@ public class ResultFragment extends Fragment{
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-        if(navi.keySet().toArray().length==0)
+        if(navigation.keySet().toArray().length==0)
         {
             final View v = vi.inflate(R.layout.subtype_layout, null);
             View right = v.findViewById(R.id.right_arrow);
@@ -142,9 +115,9 @@ public class ResultFragment extends Fragment{
             viewContainer.addView(v);
             return;
         }
-        for(Object key:navi.keySet().toArray())
+        for(Object key:navigation.keySet().toArray())
         {
-            if (navi.get(key).length() !=0){
+            if (navigation.get(key).length() !=0){
             final View v = vi.inflate(R.layout.subtype_layout, null);
             v.setTag(key);
             TextView main = v.findViewById(R.id.subcateText);
@@ -152,7 +125,7 @@ public class ResultFragment extends Fragment{
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    popUpWindow(v.getTag().toString(),navi.get(v.getTag().toString()));
+                    popUpWindow(v.getTag().toString(),navigation.get(v.getTag().toString()));
                 }
             });
                 viewContainer.addView(v);
@@ -268,10 +241,10 @@ public class ResultFragment extends Fragment{
 
     private void putInMap(String cate,JSONObject object)
     {
-        if(!navi.containsKey(cate))
-            navi.put(cate,new JSONArray());
+        if(!navigation.containsKey(cate))
+            navigation.put(cate,new JSONArray());
         else
-            navi.get(cate).put(object);
+            navigation.get(cate).put(object);
     }
 
     public static void applyDim(@NonNull ViewGroup parent, float dimAmount){
