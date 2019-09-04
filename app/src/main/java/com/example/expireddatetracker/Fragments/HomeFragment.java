@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,6 +19,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.example.expireddatetracker.MainActivity;
 import com.example.expireddatetracker.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,6 +28,8 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import static android.content.Context.VIBRATOR_SERVICE;
@@ -67,6 +72,11 @@ public class HomeFragment extends Fragment {
             }
         });
         return inflatePage;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     private void init(View x){
@@ -147,6 +157,7 @@ public class HomeFragment extends Fragment {
 
     private void search(String q)
     {
+//        Log.e("TEST", MainActivity.food_source.toString());
         if(q.trim().length()==0){
             searchBar.setText("");
             searchBar.clearFocus();

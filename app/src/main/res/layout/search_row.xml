@@ -3,6 +3,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center_vertical"
+    android:background="@drawable/up_down_stroke"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <TextView
         android:id="@+id/mainname"

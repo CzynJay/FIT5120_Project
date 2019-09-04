@@ -20,7 +20,7 @@
             android:layout_height="@dimen/imagebutton_height"
             android:adjustViewBounds="true"
             android:background="@color/colorPrimary"
-            android:scaleType="fitCenter"
+            android:scaleType="centerInside"
             android:src="@drawable/fruit" />
 
         <TextView
@@ -52,7 +52,7 @@
             android:adjustViewBounds="true"
             android:background="@color/colorPrimary"
             android:src="@drawable/milk"
-            android:scaleType="fitCenter" />
+            android:scaleType="centerInside" />
 
         <TextView
             android:layout_width="@dimen/imagebutton_height"
@@ -83,7 +83,7 @@
             android:src="@drawable/meat"
             android:adjustViewBounds="true"
             android:background="@color/colorPrimary"
-            android:scaleType="fitCenter" />
+            android:scaleType="centerInside" />
 
         <TextView
             android:layout_width="@dimen/imagebutton_height"

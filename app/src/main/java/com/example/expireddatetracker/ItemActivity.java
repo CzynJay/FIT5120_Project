@@ -13,6 +13,7 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.text.Layout;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.expireddatetracker.Fragments.ResultFragment;
 import com.google.android.gms.common.util.ArrayUtils;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -36,6 +38,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -44,16 +47,13 @@ import java.util.Locale;
 import java.util.Map;
 
 public class ItemActivity extends AppCompatActivity implements View.OnClickListener {
-    private View cookIndicator;
-    private View storageIndicator;
+    private View cookIndicator,storageIndicator;
     private LinearLayout container;
-    private Button storageBt;
-    private Button cookBt;
-    private int height;
-    private String foodID = "1";
-    private int width;
-    private JSONArray storageJson = new JSONArray();
-    private  JSONArray cookJson = new JSONArray();
+    private Button storageBt,cookBt;
+    private int height,width;
+    private String foodID,mainTitle,subtitleText= "1";
+    private JSONArray storageJson= new JSONArray();
+    private JSONArray cookJson = new JSONArray();
     final private String[] storageTypes = {"DOP_Pantry_Max","DOP_Freeze_Max","DOP_Refrigerate_Max"};
     private Calendar myCalendar = Calendar.getInstance();
     private DatePickerDialog.OnDateSetListener date;
@@ -65,11 +65,12 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.item_details);
-        foodID = getIntent().getStringExtra("id");
+        readIntent();
         initUI();
-        LoadJson load = new LoadJson();
-        load.execute("foodsource.json","cook.json");
         InitButton();
+        LoadJson load = new LoadJson();
+        load.execute("cook.json");
+
          date = new DatePickerDialog.OnDateSetListener() {
 
             @Override
@@ -86,6 +87,18 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private void readIntent()
+    {
+        try {
+            storageJson.put(new JSONObject(getIntent().getStringExtra("jsonObject")));
+            foodID = storageJson.getJSONObject(0).getString("food_id");
+            mainTitle =storageJson.getJSONObject(0).getString("food_name");
+            subtitleText = storageJson.getJSONObject(0).getString("food_subtitle");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void updateLabel()
     {
         String myFormat = "MM/dd/yy"; //In which you need put here
@@ -98,13 +111,17 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     private void  initUI()
     {
         TextView title = findViewById(R.id.foodname);
-        title.setText(getIntent().getStringExtra("name"));
+        TextView subTitle = findViewById(R.id.subname_label);
         cookIndicator = findViewById(R.id.cook_indicator);
         storageIndicator =findViewById(R.id.storage_indicator);
         container = findViewById(R.id.edu_container);
         storageBt = findViewById(R.id.storage_button);
         cookBt = findViewById(R.id.cooking_button);
         View close = findViewById(R.id.back2list);
+        title.setText(mainTitle);
+        if(subtitleText.equals("null"))
+            subTitle.setVisibility(View.GONE);
+        else subTitle.setText(subtitleText);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         height = (int) (displayMetrics.heightPixels );
@@ -128,12 +145,10 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
             byte[] buffer = new byte[size];
             is.read(buffer);
             is.close();
-            json = new String(buffer,"UTF-8");
+            json = new String(buffer, StandardCharsets.UTF_8);
             jarry = new JSONArray(json);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
         return  jarry;
@@ -171,8 +186,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     {
         @Override
         protected Void doInBackground(String... strings) {
-            storageJson = searchResult(getJson(strings[0]),foodID);
-            cookJson = searchResult(getJson(strings[1]),foodID);
+            cookJson = searchResult(getJson(strings[0]),foodID);
             return null;
         }
 
@@ -205,7 +219,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private int imgSwithcher(String src)
+    private int imageSwitcher(String src)
     {
         switch (src)
         {
@@ -234,10 +248,10 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
             val = ((int)((double)Double.valueOf(val)))+ " "+ json.getString(unit);
         val = item.equals("Cooking_Temperature") && !val.equals("Not Recommended")?val+" °C":val;
         type.setText(typeSwitcher(item));
-        im.setImageResource(imgSwithcher(item));
+        im.setImageResource(imageSwitcher(item));
         edu_info.setText(val);
         im.getLayoutParams().height = height/7;
-        im.getLayoutParams().width = (int) (width/2.5);
+        im.getLayoutParams().width = height/7;
         edu_info.getLayoutParams().height = height/7;
         edu_info.getLayoutParams().width = (int) (width/2.5);
         String [] tag = {typeSwitcher(item),val};
@@ -286,7 +300,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                                 R.anim.fui_slide_in_right);
                         animSlide.setDuration(500);
                         container.removeAllViews();
-                        popupwindowInit("foodsource.json");
+                        showResult("foodsource.json");
                         storageIndicator.startAnimation(animSlide);
                         container.startAnimation(animSlide);
                     }
@@ -319,7 +333,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                                 R.anim.anim_slide_in_right);
                         animSlide.setDuration(500);
                         container.removeAllViews();
-                        popupwindowInit("cook.json");
+                        showResult("cook.json");
                         cookIndicator.startAnimation(animSlide);
                         container.startAnimation(animSlide);
                     }
@@ -343,12 +357,12 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void popupwindowInit(String source)
+    private void showResult(String source)
     {
         JSONArray res = source.equals("foodsource.json")?storageJson:cookJson;
         if (res.length()==0) {
             TextView error = new TextView(getApplicationContext());
-            error.setText("No Recommendation");
+            error.setText(R.string.no_recommend);
             error.setGravity(Gravity.CENTER);
             error.setTextSize(20);
             error.setTextColor(getResources().getColor(R.color.black));
@@ -359,12 +373,11 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         }
         else{
             try {
-                JSONObject json = res.getJSONObject(0);
                 if(source.equals("foodsource.json"))
                 {
                     for(String item:storageTypes)
                     {
-                        View v =displayResult(json,item);
+                        View v =displayResult(storageJson.getJSONObject(0),item);
                         container.addView(v);
                     }
                 }
@@ -397,7 +410,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                 new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
         methodParmas.gravity = Gravity.CENTER;
         methodName.setTextSize(20);
-        methodName.setTextColor(getResources().getColor(R.color.white));
+        methodName.setTextColor(getResources().getColor(R.color.black));
         methodName.setTypeface(methodName.getTypeface(), Typeface.BOLD);
         methodName.setGravity(Gravity.CENTER);
         methodName.setPaintFlags(methodName.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
@@ -421,6 +434,8 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         popupWindow.setFocusable(true);
         popupWindow.setAnimationStyle(R.style.Animation_Design_BottomSheetDialog);
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+        final ViewGroup root = (ViewGroup) getWindow().getDecorView().getRootView();
+        ResultFragment.applyDim(root,0.5f);
         final TextView title = popupView.findViewById(R.id.confirm_title);
         final TextView duration = popupView.findViewById(R.id.duration);
         final Button cancel = popupView.findViewById(R.id.cancel_Button);
@@ -439,6 +454,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onDismiss() {
                 container.setVisibility(View.VISIBLE);
+                ResultFragment.clearDim(root);
             }
         });
     }
@@ -454,15 +470,5 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         return (long) (Integer.valueOf(temp[0].trim()) * conversion.get(temp[1].trim()))  ;
     }
 
-    private void vibrate()
-    {
-        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-        if (Build.VERSION.SDK_INT >= 26) {
-            vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
-        } else {
-            vibrator.vibrate(200);
-        }
-
-    }
 
 }

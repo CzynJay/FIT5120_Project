@@ -3,37 +3,50 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:background="@drawable/pure_stroke"
     android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_margin="2dp"
+        android:background="#12022E"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 <LinearLayout
-    android:layout_margin="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/up_down_stroke"
+    android:id="@+id/popupBar"
     android:orientation="horizontal"
     >
     <ImageView
         android:layout_width="55dp"
         android:layout_height="55dp"
-        android:layout_marginLeft="20dp"
         android:background="@drawable/circle_stroke"
         android:src="@drawable/fruit"
         android:scaleType="fitCenter"
-        android:layout_marginBottom="10dp"
+        android:layout_margin="20dp"
         android:id="@+id/navi_img"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:textSize="18dp"
-        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textColor="@color/white"
         android:textStyle="bold"
         android:id="@+id/navi_title"
-        android:layout_marginLeft="20dp"
         android:text="Navi_Category"
         />
 </LinearLayout>
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/cate_close"
+        android:src="@drawable/close"
+        android:layout_centerInParent="true"
+        android:layout_alignEnd="@id/popupBar"
+        android:layout_marginEnd="20dp"
+        />
+    </RelativeLayout>
  <ScrollView
      android:id="@+id/subcate_scroll"
      android:layout_width="match_parent"
+     android:layout_marginHorizontal="10dp"
      android:layout_height="400dp"
      >
      <LinearLayout
