@@ -87,7 +87,6 @@
                 android:visibility="gone"
                 android:layout_width="match_parent" android:layout_height="3dp"
                 android:background="#14F051"/></LinearLayout>
-
     </LinearLayout>
 
     <ScrollView
@@ -106,8 +105,5 @@
             android:orientation="vertical"
             android:showDividers="middle"/>
     </ScrollView>
-
-
-
 </LinearLayout>
 </RelativeLayout>

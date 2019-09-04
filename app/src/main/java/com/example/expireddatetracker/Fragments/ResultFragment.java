@@ -136,20 +136,18 @@ public class ResultFragment extends Fragment{
         LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         if(navi.isEmpty())
         {
-            final View v = vi.inflate(R.layout.search_row, null);
-            TextView main = v.findViewById(R.id.mainname);
-            TextView sub = v.findViewById(R.id.subname);
-            main.setText("No result");
-            sub.setText("Please enter correct food name");
+            final View v = vi.inflate(R.layout.subtype_layout, null);
+            TextView main = v.findViewById(R.id.subcateText);
+            main.setText("No result, Please enter correct food name!");
             layout.addView(v);
             return;
         }
         for(Object key:navi.keySet().toArray())
         {
             if (navi.get(key).length() !=0){
-            final View v = vi.inflate(R.layout.search_row, null);
+            final View v = vi.inflate(R.layout.subtype_layout, null);
             v.setTag(key);
-            TextView main = v.findViewById(R.id.mainname);
+            TextView main = v.findViewById(R.id.subcateText);
             main.setText((String)key);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
