@@ -32,6 +32,7 @@
         />
 </LinearLayout>
  <ScrollView
+     android:id="@+id/subcate_scroll"
      android:layout_width="match_parent"
      android:layout_height="400dp"
      >

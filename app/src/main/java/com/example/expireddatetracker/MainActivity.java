@@ -37,12 +37,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                     fragment = new HomeFragment();
                     break;
-                case R.id.navigation_dashboard:
-                    fragment = new TrackFragment();
-                    break;
-                case R.id.navigation_notifications:
-                    fragment = new NotificationFragment();
-                    break;
+//  TODO              case R.id.navigation_dashboard:
+//                    fragment = new TrackFragment();
+//                    break;
+//                case R.id.navigation_notifications:
+//                    fragment = new NotificationFragment();
+//                    break;
             }
             return loadFragment(fragment);
         }

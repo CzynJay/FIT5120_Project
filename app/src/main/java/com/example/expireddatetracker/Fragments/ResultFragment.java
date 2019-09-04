@@ -175,6 +175,8 @@ public class ResultFragment extends Fragment{
         final PopupWindow popupWindow=new PopupWindow(popupView,
                 (int) (width*0.9), ViewGroup.LayoutParams.WRAP_CONTENT ,
                 true);
+        View scrollView = popupView.findViewById(R.id.subcate_scroll);
+        scrollView.getLayoutParams().height = (int)(height*0.5);
         popupWindow.setTouchable(true);
         popupWindow.setFocusable(true);
         popupWindow.setAnimationStyle(R.style.Animation_Design_BottomSheetDialog);
