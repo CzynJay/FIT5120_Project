@@ -1,4 +1,8 @@
+# Version 1.0.29
+* Restructure code
+* Optimize user interface performance
 # Version 1.0.28
+* Redesign search result user interface
 # Version 1.0.27
 * Redesign user interface
 # Version 1.0.26
