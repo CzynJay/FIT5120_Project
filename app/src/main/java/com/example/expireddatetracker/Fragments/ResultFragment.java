@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,6 +64,7 @@ public class ResultFragment extends Fragment{
 
     private void searchResult(JSONArray source, String query)
     {
+        Log.e("check",query);
         boolean multi = false;
         if (query.split("&").length>1)
             multi=true;
@@ -71,9 +73,9 @@ public class ResultFragment extends Fragment{
         for(int i =0;i<source.length();i++)
         {
             try {
-                JSONObject temp = (JSONObject) source.get(i);
+                JSONObject temp = source.getJSONObject(i);
                 String value = temp.toString().toLowerCase();
-                query = query.toLowerCase();
+                query = query.trim().toLowerCase();
                 if (!multi) {
                     if (isNumeric(query))
                     {
@@ -117,6 +119,7 @@ public class ResultFragment extends Fragment{
         }
         for(Object key:navigation.keySet().toArray())
         {
+            Log.e("abc",navigation.get(key).toString());
             if (navigation.get(key).length() !=0){
             final View v = vi.inflate(R.layout.subtype_layout, null);
             v.setTag(key);
@@ -243,8 +246,7 @@ public class ResultFragment extends Fragment{
     {
         if(!navigation.containsKey(cate))
             navigation.put(cate,new JSONArray());
-        else
-            navigation.get(cate).put(object);
+        navigation.get(cate).put(object);
     }
 
     public static void applyDim(@NonNull ViewGroup parent, float dimAmount){
