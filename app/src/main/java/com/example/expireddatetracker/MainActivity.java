@@ -2,7 +2,6 @@ package com.example.expireddatetracker;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 import com.example.expireddatetracker.Fragments.HomeFragment;
@@ -14,6 +13,7 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,8 +23,8 @@ import androidx.fragment.app.FragmentManager;
 
 public class MainActivity extends AppCompatActivity {
     boolean doubleBackToExitPressedOnce = false;
-    FirebaseFirestore db;
-    public static JSONArray food_source;
+    public FirebaseFirestore db;
+    public JSONArray food_source;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 

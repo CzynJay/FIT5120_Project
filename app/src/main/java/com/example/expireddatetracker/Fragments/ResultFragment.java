@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +33,7 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 public class ResultFragment extends Fragment{
     private LinearLayout viewContainer;
     private Map<String,JSONArray> navigation = new HashMap<>();
+    private MainActivity mainActivity;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,8 +43,9 @@ public class ResultFragment extends Fragment{
         TextView tx = x.findViewById(R.id.query);
         viewContainer = x.findViewById(R.id.result_container);
         ImageView bt = x.findViewById(R.id.back);
+        mainActivity = (MainActivity) getActivity();
         String query = bundle.getString("key");
-        searchResult(MainActivity.food_source,query);
+        searchResult(mainActivity.food_source,query);
         showNavigation();
         tx.setText(query);
         bt.setOnClickListener(new View.OnClickListener() {
@@ -64,17 +65,14 @@ public class ResultFragment extends Fragment{
 
     private void searchResult(JSONArray source, String query)
     {
-        Log.e("check",query);
         boolean multi = false;
         if (query.split("&").length>1)
             multi=true;
-        //JSONArray result= new JSONArray();
-
         for(int i =0;i<source.length();i++)
         {
             try {
                 JSONObject temp = source.getJSONObject(i);
-                String value = temp.toString().toLowerCase();
+                String value = temp.toString().trim().toLowerCase();
                 query = query.trim().toLowerCase();
                 if (!multi) {
                     if (isNumeric(query))
@@ -83,11 +81,9 @@ public class ResultFragment extends Fragment{
                             putInMap(temp.getString("Nav_category"),temp);
                         }
                     }
-                    else{
-                    if (value.contains(query)){
+                    else if (value.contains(query)){
                         putInMap(temp.getString("Nav_category"),temp);
                     }}
-                }
                 else{
                     for(String s:query.split("&"))
                     {
@@ -119,7 +115,6 @@ public class ResultFragment extends Fragment{
         }
         for(Object key:navigation.keySet().toArray())
         {
-            Log.e("abc",navigation.get(key).toString());
             if (navigation.get(key).length() !=0){
             final View v = vi.inflate(R.layout.subtype_layout, null);
             v.setTag(key);
