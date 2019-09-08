@@ -9,7 +9,7 @@
         >
 <TextView android:layout_width="match_parent"
     android:layout_marginStart="20dp"
-    android:layout_marginTop="20dp"
+    android:layout_marginTop="10dp"
     android:layout_height="wrap_content"
     android:id="@+id/record_name"
     android:textSize="25sp"
@@ -69,7 +69,7 @@
             android:layout_width="0dp"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:background="#ff00"
+            android:background="@color/red"
             android:textSize="18sp"
             android:text="@string/discard"
             />

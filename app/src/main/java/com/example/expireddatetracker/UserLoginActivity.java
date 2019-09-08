@@ -70,13 +70,13 @@ public class UserLoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if(currentUser!=null)
-//        {
-//            showProgress(true);
-//            UserLoginTask u= new UserLoginTask(true);
-//            u.execute();
-//        }
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser!=null)
+        {
+            showProgress(true);
+            UserLoginTask u= new UserLoginTask(true);
+            u.execute();
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)

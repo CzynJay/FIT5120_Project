@@ -475,9 +475,10 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         record.put("EXPIRE_DATE",endDate);
         record.put("FOOD_ID",foodID);
         record.put("DISPLAY_NAME",mainTitle);
+        record.put("SUB_NAME",subtitleText);
         String userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
         db.collection("tracker").document(userKey)
-                .collection("records").document().set(record)
+                .collection(where).document().set(record)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

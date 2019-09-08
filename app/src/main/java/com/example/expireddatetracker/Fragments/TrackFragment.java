@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import com.example.expireddatetracker.Models.CircularProgressBar;
 import com.example.expireddatetracker.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -45,7 +47,7 @@ import androidx.fragment.app.Fragment;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
-public class TrackFragment extends Fragment implements View.OnClickListener {
+public class TrackFragment extends Fragment implements View.OnClickListener, TabLayout.BaseOnTabSelectedListener {
     private GridLayout container;
     private MainActivity activity;
     private String uid;
@@ -54,6 +56,8 @@ public class TrackFragment extends Fragment implements View.OnClickListener {
     final private String EXPIRE = "EXPIRE_DATE";
     final private String STARTDATE = "PURCHASE_DATE";
     final private String DISPLAY = "DISPLAY_NAME";
+    private TabLayout tabs;
+    private View progressing,errorTx,scrollView ;
     private Button quickDiscardBt,quickConsumeBt;
     private ArrayList<Map<String,Object>> freeze = new ArrayList<>();
     private ArrayList<Map<String,Object>> refrigerate = new ArrayList<>();
@@ -69,6 +73,8 @@ public class TrackFragment extends Fragment implements View.OnClickListener {
 }
 
     private void init(View x){
+        scrollView = x.findViewById(R.id.scroll_container);
+        tabs = x.findViewById(R.id.tabLayout);
         quickDiscardBt = x.findViewById(R.id.quick_discard_bt);
         quickConsumeBt = x.findViewById(R.id.quick_consume_bt);
         quickDiscardBt.setTag(quickDiscardBt.getText());
@@ -76,51 +82,85 @@ public class TrackFragment extends Fragment implements View.OnClickListener {
         quickConsumeBt.setOnDragListener(new MyDragListener());
         quickDiscardBt.setOnDragListener(new MyDragListener());
         container = x.findViewById(R.id.storage_container);
+        errorTx = x.findViewById(R.id.no_record);
         activity = (MainActivity) getActivity();
-        final ProgressBar progressing = x.findViewById(R.id.progressing);
+        progressing = x.findViewById(R.id.progressing);
         progressing.setVisibility(View.VISIBLE);
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        activity.db.collection("tracker").document(uid)
-                .collection("records").get().
-                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-                    for(DocumentSnapshot item:task.getResult().getDocuments()){
-                        placeToArrayList(item.getData(),item.getId());
-                    }
-                    progressing.setVisibility(View.GONE);
-                    displayStatus(refrigerate);
-                }
-            }
-        });
+        tabs.addOnTabSelectedListener(this);
+        fetchData("Refrigerate");
+    }
 
+    private ArrayList<Map<String,Object>> typeSwitch(String type)
+    {
+        switch (type)
+        {
+            case "Freeze": return freeze;
+            case "Pantry": return pantry;
+            case "Refrigerate": return refrigerate;
+        }
+         return new ArrayList<>();
+    }
+    private int imageSwitch(String type){
+        switch (type)
+        {
+            //case "Freeze": return R.drawable.refrigerator;
+            case "Pantry": return R.drawable.empty_pantry;
+            case "Refrigerate": return R.drawable.refrigerator;
+        }
+        return R.drawable.refrigerator;
+
+    }
+    private void fetchData(final String type)
+    {
+        final ArrayList<Map<String,Object>> temp = typeSwitch(type);
+        if (temp.size()==0){
+        progressing.setVisibility(View.VISIBLE);
+        activity.db.collection("tracker").document(uid)
+                .collection(type).get().
+                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            for(DocumentSnapshot item:task.getResult().getDocuments()){
+                                placeToArrayList(item.getData(),item.getId());
+                            }
+                            progressing.setVisibility(View.GONE);
+                            displayStatus(temp);
+                        }
+                    }
+                });}
+        else
+            displayStatus(temp);
     }
 
     private void displayStatus( ArrayList<Map<String,Object>> lists){
+        container.removeAllViews();
+        errorTx.setVisibility(View.GONE);
+        if(lists.size()==0){
+            errorTx.setVisibility(View.VISIBLE);
+                        return;}
         LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width =(int) (displayMetrics.widthPixels / 6.5);
-
         for(Map<String,Object> item:lists)
         {
-            Animation animSlide = AnimationUtils.loadAnimation(getContext(),
-                    R.anim.fade_in);
+            Animation animSlide = AnimationUtils.loadAnimation(getContext(),R.anim.fade_in);
             animSlide.setDuration(1100);
             try {
-                View v = vi.inflate(R.layout.storage_icon, null);
+            View v = vi.inflate(R.layout.storage_icon, null);
             RelativeLayout layout = v.findViewById(R.id.circle_container);
             TextView name = v.findViewById(R.id.storage_name);
             name.setText(item.get(DISPLAY).toString());
-                ImageButton img = v.findViewById(R.id.storage_button);
+            ImageButton img = v.findViewById(R.id.storage_button);
             CircularProgressBar progressBar = v.findViewById(R.id.storage_progressBar);
             View warning = v.findViewById(R.id.warning);
             calculateProgress(progressBar,item.get(EXPIRE).toString(),item.get(STARTDATE).toString(),warning);
             layout.getLayoutParams().width = width;
             layout.getLayoutParams().height = width;
-                warning.getLayoutParams().width = layout.getLayoutParams().width /3;
-                warning.getLayoutParams().height = layout.getLayoutParams().height /3;
+            warning.getLayoutParams().width = layout.getLayoutParams().width /3;
+            warning.getLayoutParams().height = layout.getLayoutParams().height /3;
             v.startAnimation(animSlide);
             img.setTag(item);
             img.setOnClickListener(this);
@@ -215,6 +255,23 @@ public class TrackFragment extends Fragment implements View.OnClickListener {
         overlay.clear();
     }
 
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        errorTx.setVisibility(View.GONE);
+        //scrollView.setBackgroundResource(imageSwitch(tab.getText().toString()));
+        fetchData(tab.getText().toString());
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+
     private final class MyTouchListener implements View.OnTouchListener {
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
@@ -234,13 +291,18 @@ public class TrackFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public boolean onDrag(View v, DragEvent event) {
+            Button bt = (Button) v;
+            int color = bt.getText().toString().equals("Discard")?R.color.red:R.color.green;
             switch (event.getAction()) {
                 case DragEvent.ACTION_DRAG_STARTED:
                     // do nothing
                     break;
                 case DragEvent.ACTION_DRAG_ENTERED:
+                    v.setBackgroundResource(R.drawable.drag_enter);
                     break;
                 case DragEvent.ACTION_DRAG_EXITED:
+                case DragEvent.ACTION_DRAG_ENDED:
+                    v.setBackgroundResource(color);
                     break;
                 case DragEvent.ACTION_DROP:
                     // Dropped, reassign View to ViewGroup
@@ -250,7 +312,6 @@ public class TrackFragment extends Fragment implements View.OnClickListener {
                     view.setVisibility(View.GONE);
                     Toast.makeText(getContext(),v.getTag().toString() + " Successfully",Toast.LENGTH_LONG).show();
                     break;
-                case DragEvent.ACTION_DRAG_ENDED:
                 default:
                     break;
             }

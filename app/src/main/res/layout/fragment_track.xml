@@ -3,9 +3,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#FFFFFF"
-    tools:context=".Fragments.TrackFragment"
-    >
+    tools:context=".Fragments.TrackFragment">
+ <TextView android:id="@+id/no_record"
+     android:gravity="center"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:layout_centerHorizontal="true"
+     android:layout_centerVertical="true"
+     android:text="@string/no_record"
+     android:visibility="gone"
+     android:textSize="@dimen/labelSize"
+     />
+<com.google.android.material.tabs.TabLayout
+    android:id="@+id/tabLayout"
+    android:layout_width="match_parent"
+    android:background="#12022E"
+    app:tabIndicatorColor="@color/green"
+    app:tabIndicatorHeight="3dp"
+    app:tabTextColor="@color/white"
+    android:layout_height="wrap_content" >
+    <com.google.android.material.tabs.TabItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/refrigerate" />
+    <com.google.android.material.tabs.TabItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/freeze"
+         />
+    <com.google.android.material.tabs.TabItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/pantry"/>
+</com.google.android.material.tabs.TabLayout>
 <ProgressBar
     android:id="@+id/progressing"
     android:layout_width="70dp"
@@ -13,20 +45,9 @@
     android:layout_centerHorizontal="true"
     android:layout_centerVertical="true"
     android:visibility="gone"/>
-<TextView
-    android:id="@+id/refrigerate"
-    android:layout_width="match_parent"
-    android:layout_marginLeft="20dp"
-    android:layout_marginTop="20dp"
-    android:layout_alignParentTop="true"
-    android:layout_height="wrap_content"
-    android:text="Refrigerate"
-    android:textSize="20sp"
-    android:textStyle="bold"
-    />
  <ScrollView
      android:id="@+id/scroll_container"
-     android:layout_below="@id/refrigerate"
+     android:layout_below="@id/tabLayout"
      android:layout_width="match_parent"
      android:layout_height="match_parent"
      android:layout_above="@id/buttonLayout"

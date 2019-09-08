@@ -28,4 +28,8 @@
     <string name= "dynamic_text"> Dynamic text</string>
     <string name = "discard">Discard</string>
     <string name = "consume">Consume</string>
+    <string name = "no_record">No record yet</string>
+    <string name="freeze">Freeze</string>
+    <string name= "pantry">Pantry</string>
+    <string name = "refrigerate">Refrigerate</string>
 </resources>
