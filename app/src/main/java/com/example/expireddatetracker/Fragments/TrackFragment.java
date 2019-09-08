@@ -1,17 +1,28 @@
 package com.example.expireddatetracker.Fragments;
 
+import android.content.ClipData;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.DragEvent;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroupOverlay;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -36,6 +47,8 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+
 public class TrackFragment extends Fragment implements View.OnClickListener {
     private GridLayout container;
     private MainActivity activity;
@@ -45,6 +58,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener {
     final private String EXPIRE = "EXPIRE_DATE";
     final private String STARTDATE = "PURCHASE_DATE";
     final private String DISPLAY = "DISPLAY_NAME";
+    private Button quickDiscardBt,quickConsumeBt;
     private ArrayList<Map<String,Object>> freeze = new ArrayList<>();
     private ArrayList<Map<String,Object>> refrigerate = new ArrayList<>();
     private ArrayList<Map<String,Object>> pantry = new ArrayList<>();
@@ -55,10 +69,14 @@ public class TrackFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View layout =  inflater.inflate(R.layout.fragment_track, container, false);
         init(layout);
-
         return layout;
 }
+
     private void init(View x){
+        quickDiscardBt = x.findViewById(R.id.quick_discard_bt);
+        quickConsumeBt = x.findViewById(R.id.quick_consume_bt);
+        quickConsumeBt.setOnDragListener(new MyDragListener());
+        quickDiscardBt.setOnDragListener(new MyDragListener());
         container = x.findViewById(R.id.storage_container);
         activity = (MainActivity) getActivity();
         final ProgressBar progressing = x.findViewById(R.id.progressing);
@@ -82,7 +100,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener {
     }
 
     private void displayStatus( ArrayList<Map<String,Object>> lists){
-        LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width =(int) (displayMetrics.widthPixels / 6.5);
@@ -97,6 +115,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener {
             RelativeLayout layout = v.findViewById(R.id.circle_container);
             TextView name = v.findViewById(R.id.storage_name);
             name.setText(item.get(DISPLAY).toString());
+                ImageButton img = v.findViewById(R.id.storage_button);
             CircularProgressBar progressBar = v.findViewById(R.id.storage_progressBar);
             View warning = v.findViewById(R.id.warning);
             calculateProgress(progressBar,item.get(EXPIRE).toString(),item.get(STARTDATE).toString(),warning);
@@ -105,8 +124,9 @@ public class TrackFragment extends Fragment implements View.OnClickListener {
                 warning.getLayoutParams().width = layout.getLayoutParams().width /3;
                 warning.getLayoutParams().height = layout.getLayoutParams().height /3;
             v.startAnimation(animSlide);
-            v.setTag(item);
-            v.setOnClickListener(this);
+            img.setTag(item);
+                img.setOnClickListener(this);
+                v.setOnTouchListener(new MyTouchListener());
             container.addView(v);
             ((GridLayout.LayoutParams) v.getLayoutParams()).columnSpec =
                     GridLayout.spec(GridLayout.UNDEFINED, 1f);
@@ -143,10 +163,101 @@ public class TrackFragment extends Fragment implements View.OnClickListener {
             }
     }
 
-
     @Override
     public void onClick(View v) {
-        
+        popUpWindow(v);
+    }
+
+    private void  popUpWindow(View v)
+    {
+        final ViewGroup root = (ViewGroup) getActivity().getWindow().getDecorView().getRootView();
+        Map<String,Object> map = (Map<String, Object>) v.getTag();
+        LayoutInflater layoutInflater = (LayoutInflater)getContext()
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = (int)(displayMetrics.widthPixels*0.8);
+        View popupView = layoutInflater.inflate(R.layout.record_info, null);
+        PopupWindow popupWindow=new PopupWindow(popupView,
+                width, LinearLayout.LayoutParams.WRAP_CONTENT,
+                true);
+        popupWindow.setTouchable(true);
+        popupWindow.setFocusable(true);
+        applyDim(root,0.5f);
+        popupWindow.setAnimationStyle(R.style.Animation_Design_BottomSheetDialog);
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+         TextView detail_name = popupView.findViewById(R.id.record_name);
+         TextView detail_subname = popupView.findViewById(R.id.record_subname);
+         TextView purchaseTx = popupView.findViewById(R.id.purchase_date);
+         TextView expireTx = popupView.findViewById(R.id.expire_date);
+         TextView storageTx = popupView.findViewById(R.id.storage_type);
+         detail_name.setText(map.get(DISPLAY).toString());
+         purchaseTx.setText("Purchase Date: " + map.get(STARTDATE).toString());
+         expireTx.setText("Expire Date: " + map.get(EXPIRE).toString());
+         storageTx.setText("Storage Type: "+ map.get(METHOD).toString());
+         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+             @Override
+             public void onDismiss() {
+                 clearDim(root);
+             }
+         });
+    }
+
+    public static void applyDim(@NonNull ViewGroup parent, float dimAmount){
+        Drawable dim = new ColorDrawable(Color.BLACK);
+        dim.setBounds(0, 0, parent.getWidth(), parent.getHeight());
+        dim.setAlpha((int) (255 * dimAmount));
+
+        ViewGroupOverlay overlay = parent.getOverlay();
+        overlay.add(dim);
+    }
+
+    public static void clearDim(@NonNull ViewGroup parent) {
+        ViewGroupOverlay overlay = parent.getOverlay();
+        overlay.clear();
+    }
+
+    private final class MyTouchListener implements View.OnTouchListener {
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                ClipData data = ClipData.newPlainText("", "");
+                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
+                        view);
+                view.startDrag(data, shadowBuilder, view, 0);
+                //view.setVisibility(View.INVISIBLE);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    class MyDragListener implements View.OnDragListener {
+
+        @Override
+        public boolean onDrag(View v, DragEvent event) {
+            int action = event.getAction();
+            switch (event.getAction()) {
+                case DragEvent.ACTION_DRAG_STARTED:
+                    // do nothing
+                    break;
+                case DragEvent.ACTION_DRAG_ENTERED:
+                    break;
+                case DragEvent.ACTION_DRAG_EXITED:
+                    break;
+                case DragEvent.ACTION_DROP:
+                    // Dropped, reassign View to ViewGroup
+                    View view = (View) event.getLocalState();
+                    ViewGroup owner = (ViewGroup) view.getParent();
+                    owner.removeView(view);
+                    view.setVisibility(View.GONE);
+                    break;
+                case DragEvent.ACTION_DRAG_ENDED:
+                default:
+                    break;
+            }
+            return true;
+        }
     }
 }
 
