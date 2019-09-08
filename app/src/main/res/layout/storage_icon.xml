@@ -5,7 +5,9 @@
     android:gravity="center"
     xmlns:android="http://schemas.android.com/apk/res/android">
 <RelativeLayout
+    android:id="@+id/circle_container"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
      android:layout_width="100dp"
     android:layout_height="100dp">
 
@@ -27,11 +29,21 @@
         android:layout_alignBottom="@+id/storage_progressBar"
         android:scaleType="centerInside"
         android:src="@drawable/fruit" />
+    <ImageView
+        android:id="@+id/warning"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/warning"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        />
 </RelativeLayout>
-<TextView android:id="@+id/storage_name" android:layout_width="match_parent" android:layout_height="wrap_content"
+<TextView android:id="@+id/storage_name"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:text="food name here"
     android:textSize="20dp"
-    android:layout_margin="20dp"
     android:gravity="center"
     />
 </LinearLayout>

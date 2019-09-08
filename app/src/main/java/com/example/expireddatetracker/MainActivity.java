@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import com.example.expireddatetracker.Fragments.HomeFragment;
 import com.example.expireddatetracker.Fragments.ResultFragment;
+import com.example.expireddatetracker.Fragments.TrackFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import org.json.JSONArray;
@@ -13,8 +14,6 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -40,9 +39,9 @@ public class MainActivity extends AppCompatActivity {
 
                     fragment = new HomeFragment();
                     break;
-//  TODO              case R.id.navigation_dashboard:
-//                    fragment = new TrackFragment();
-//                    break;
+                    case R.id.navigation_dashboard:
+                    fragment = new TrackFragment();
+                    break;
 //                case R.id.navigation_notifications:
 //                    fragment = new NotificationFragment();
 //                    break;

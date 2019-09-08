@@ -108,7 +108,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         startDate = sdf.format(myCalendar.getTime());
-        endDate = sdf.format(new Date(myCalendar.getTimeInMillis()+dateConversion(timeSpan)));
+        endDate = sdf.format(new Date(myCalendar.getTime().getTime()+dateConversion(timeSpan)));
         Post upDateRecord =new Post();
         upDateRecord.execute();
         popupWindow.dismiss();
@@ -474,6 +474,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         record.put("STORAGE_METHOD",where);
         record.put("EXPIRE_DATE",endDate);
         record.put("FOOD_ID",foodID);
+        record.put("DISPLAY_NAME",mainTitle);
         String userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
         db.collection("tracker").document(userKey)
                 .collection("records").document().set(record)
