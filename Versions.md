@@ -1,3 +1,7 @@
+# Version 1.0.30
+* Added gradient line for bottom navigation bar
+* Added on select item on navigation bar highlight
+* Reduce text size for category
 # Version 1.0.29
 * Restructure code
 * Optimize user interface performance
