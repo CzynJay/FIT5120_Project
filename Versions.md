@@ -1,7 +1,11 @@
-# Version 1.0.30
+# Version 1.0.31
 * Added gradient line for bottom navigation bar
 * Added on select item on navigation bar highlight
 * Reduce text size for category
+* Added shadows for category buttons
+# Version 1.0.30
+* Enable drag operation
+* Enable display for records
 # Version 1.0.29
 * Restructure code
 * Optimize user interface performance
