@@ -1,23 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#FFFFFF"
     tools:context=".Fragments.TrackFragment"
     >
-    <com.example.expireddatetracker.Models.CircularProgressBar
-        android:id="@+id/custom_progressBar"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_margin="10dp"
-        app:progress="20"
-        app:progressBarThickness="5dp"/>
+<ProgressBar
+    android:id="@+id/progressing"
+    android:layout_width="70dp"
+    android:layout_height="70dp"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:visibility="gone"/>
+<TextView
+    android:id="@+id/refrigerate"
+    android:layout_width="match_parent"
+    android:layout_marginLeft="20dp"
+    android:layout_marginTop="20dp"
+    android:layout_alignParentTop="true"
+    android:layout_height="wrap_content"
+    android:text="Refrigerate"
+    android:textSize="20sp"
+    android:textStyle="bold"
+    />
+ <ScrollView
+     android:id="@+id/scroll_container"
+     android:layout_below="@id/refrigerate"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:layout_above="@id/buttonLayout"
+     >
+ <GridLayout
 
-    <Button android:layout_width="wrap_content"
-        android:text="click"
-        android:id="@+id/test"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+     android:layout_margin="20dp"
+     android:id="@+id/storage_container"
+     android:layout_width="match_parent"
+     android:useDefaultMargins="true"
+     android:layout_height="wrap_content"
+     android:columnCount="4"
+     /></ScrollView>
+ <LinearLayout
+     android:id="@+id/buttonLayout"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:layout_marginTop="10dp"
+     android:layout_alignParentBottom="true"
+     android:weightSum="2"
+     android:orientation="horizontal">
+  <Button
+      android:id="@+id/quick_discard_bt"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:layout_width="0dp"
+      android:textColor="@color/white"
+      android:textStyle="bold"
+      android:background="#ff00"
+      android:textSize="18sp"
+      android:text="@string/discard"
+      />
+  <Button
+      android:id="@+id/quick_consume_bt"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:textColor="@color/white"
+      android:background="@color/green"
+      android:textStyle="bold"
+      android:textSize="18sp"
+      android:layout_width="0dp"
+      android:text="@string/consume"
+      />
+ </LinearLayout>
+</RelativeLayout>

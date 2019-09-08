@@ -2,11 +2,11 @@ package com.example.expireddatetracker;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 import com.example.expireddatetracker.Fragments.HomeFragment;
 import com.example.expireddatetracker.Fragments.ResultFragment;
+import com.example.expireddatetracker.Fragments.TrackFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import org.json.JSONArray;
@@ -14,7 +14,6 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -23,8 +22,8 @@ import androidx.fragment.app.FragmentManager;
 
 public class MainActivity extends AppCompatActivity {
     boolean doubleBackToExitPressedOnce = false;
-    FirebaseFirestore db;
-    public static JSONArray food_source;
+    public FirebaseFirestore db;
+    public JSONArray food_source;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -40,9 +39,9 @@ public class MainActivity extends AppCompatActivity {
 
                     fragment = new HomeFragment();
                     break;
-//  TODO              case R.id.navigation_dashboard:
-//                    fragment = new TrackFragment();
-//                    break;
+                    case R.id.navigation_dashboard:
+                    fragment = new TrackFragment();
+                    break;
 //                case R.id.navigation_notifications:
 //                    fragment = new NotificationFragment();
 //                    break;

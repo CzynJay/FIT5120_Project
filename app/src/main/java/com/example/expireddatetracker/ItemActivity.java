@@ -1,5 +1,6 @@
 package com.example.expireddatetracker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -9,10 +10,12 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -24,6 +27,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.expireddatetracker.Fragments.ResultFragment;
 import com.google.android.gms.common.util.ArrayUtils;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +41,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -49,12 +59,15 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     private DatePickerDialog.OnDateSetListener date;
     final private long dayInMilliseconds = 86400000;
     private PopupWindow popupWindow;
+    private FirebaseFirestore db;
+    private String startDate,endDate,where,timeSpan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.item_details);
+        db = FirebaseFirestore.getInstance();
         readIntent();
         initUI();
         InitButton();
@@ -91,9 +104,13 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
 
     private void updateLabel()
     {
+        //myCalendar.getTimeInMillis()+dateConversion(duration)
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        Toast.makeText(getBaseContext(),sdf.format(myCalendar.getTime()) + " is selected",Toast.LENGTH_LONG).show();
+        startDate = sdf.format(myCalendar.getTime());
+        endDate = sdf.format(new Date(myCalendar.getTime().getTime()+dateConversion(timeSpan)));
+        Post upDateRecord =new Post();
+        upDateRecord.execute();
         popupWindow.dismiss();
         finish();
     }
@@ -164,7 +181,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
        DatePickerDialog datePickerDialog = new DatePickerDialog(ItemActivity.this, date, myCalendar
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH));
-       datePickerDialog.setTitle("When did you buy it");
+        datePickerDialog.setTitle("When did you buy it");
        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-(long)v.getTag() + 2*dayInMilliseconds);
        Toast.makeText(getBaseContext(),
@@ -256,18 +273,6 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                     popUpChoice( (String[])v.getTag());
                 }
             });}
-//            v.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (edu_info.getText().toString().equals("Not Recommended")) {
-//                        Toast.makeText(getBaseContext(), type.getText().toString()
-//                                + " storage is not recommended", Toast.LENGTH_LONG).show();
-//                        vibrate();
-//                    }
-//                    else
-//                        popUpChoice( (String[])v.getTag());
-//                }
-//            });
         }
         return v;
 
@@ -439,6 +444,8 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         });
         title.setText("I will store it in "+tag[0]);
         duration.setText("Duration: " + tag[1]);
+        where = tag[0];
+        timeSpan = tag[1];
         confirm.setTag(dateConversion(tag[1]));
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -460,5 +467,38 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         return (long) (Integer.valueOf(temp[0].trim()) * conversion.get(temp[1].trim()))  ;
     }
 
+    private void postRecord()
+    {
+        Map<String, Object>  record = new HashMap<>();
+        record.put("PURCHASE_DATE", startDate);
+        record.put("STORAGE_METHOD",where);
+        record.put("EXPIRE_DATE",endDate);
+        record.put("FOOD_ID",foodID);
+        record.put("DISPLAY_NAME",mainTitle);
+        String userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        db.collection("tracker").document(userKey)
+                .collection("records").document().set(record)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(ItemActivity.this, "Update successfully",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(ItemActivity.this, "ERROR" +e.toString(),
+                        Toast.LENGTH_SHORT).show();
+                Log.d("TAG", e.toString());
+            }
+        });
+    }
 
+    class Post extends AsyncTask<Void,Void,Void>{
+        @Override
+        protected Void doInBackground(Void... voids) {
+            postRecord();
+            return null;
+        }
+    }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.example.expireddatetracker.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 import java.util.HashMap;
@@ -29,11 +32,16 @@ import static android.content.Context.VIBRATOR_SERVICE;
 
 public class HomeFragment extends Fragment {
     private EditText searchBar;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View inflatePage  = inflater.inflate(R.layout.fragment_home, container, false);
         init(inflatePage);
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+        Log.e("UID",mUser.getUid());
         final ImageButton searchButton = inflatePage.findViewById(R.id.searchbutton);
         searchBar = inflatePage.findViewById(R.id.searchbar);
 //  todo      TextView welcome = inflatePage.findViewById(R.id.welcome_mes);
@@ -163,8 +171,8 @@ public class HomeFragment extends Fragment {
         fragment.setArguments(bundle);
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .setCustomAnimations(android.R.anim.fade_in,android.R.anim.fade_out,
-                        android.R.anim.fade_in, android.R.anim.fade_out
+                .setCustomAnimations(R.anim.anim_slide_in_right,R.anim.anim_slide_out_right,
+                        R.anim.anim_slide_in_left,R.anim.anim_slide_out_left
                 ).addToBackStack(null)
                 .replace(R.id.fragment_container,fragment)
                 .commit();
