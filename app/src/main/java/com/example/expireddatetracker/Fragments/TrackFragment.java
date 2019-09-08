@@ -1,13 +1,11 @@
 package com.example.expireddatetracker.Fragments;
 
 import android.content.ClipData;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,12 +18,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.expireddatetracker.MainActivity;
 import com.example.expireddatetracker.Models.CircularProgressBar;
@@ -35,12 +33,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -75,6 +71,8 @@ public class TrackFragment extends Fragment implements View.OnClickListener {
     private void init(View x){
         quickDiscardBt = x.findViewById(R.id.quick_discard_bt);
         quickConsumeBt = x.findViewById(R.id.quick_consume_bt);
+        quickDiscardBt.setTag(quickDiscardBt.getText());
+        quickConsumeBt.setTag(quickConsumeBt.getText());
         quickConsumeBt.setOnDragListener(new MyDragListener());
         quickDiscardBt.setOnDragListener(new MyDragListener());
         container = x.findViewById(R.id.storage_container);
@@ -111,7 +109,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener {
                     R.anim.fade_in);
             animSlide.setDuration(1100);
             try {
-            final View v = vi.inflate(R.layout.storage_icon, null);
+                View v = vi.inflate(R.layout.storage_icon, null);
             RelativeLayout layout = v.findViewById(R.id.circle_container);
             TextView name = v.findViewById(R.id.storage_name);
             name.setText(item.get(DISPLAY).toString());
@@ -125,8 +123,8 @@ public class TrackFragment extends Fragment implements View.OnClickListener {
                 warning.getLayoutParams().height = layout.getLayoutParams().height /3;
             v.startAnimation(animSlide);
             img.setTag(item);
-                img.setOnClickListener(this);
-                v.setOnTouchListener(new MyTouchListener());
+            img.setOnClickListener(this);
+            v.setOnTouchListener(new MyTouchListener());
             container.addView(v);
             ((GridLayout.LayoutParams) v.getLayoutParams()).columnSpec =
                     GridLayout.spec(GridLayout.UNDEFINED, 1f);
@@ -236,7 +234,6 @@ public class TrackFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public boolean onDrag(View v, DragEvent event) {
-            int action = event.getAction();
             switch (event.getAction()) {
                 case DragEvent.ACTION_DRAG_STARTED:
                     // do nothing
@@ -251,11 +248,13 @@ public class TrackFragment extends Fragment implements View.OnClickListener {
                     ViewGroup owner = (ViewGroup) view.getParent();
                     owner.removeView(view);
                     view.setVisibility(View.GONE);
+                    Toast.makeText(getContext(),v.getTag().toString() + " Successfully",Toast.LENGTH_LONG).show();
                     break;
                 case DragEvent.ACTION_DRAG_ENDED:
                 default:
                     break;
             }
+
             return true;
         }
     }
