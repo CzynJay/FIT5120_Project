@@ -6,10 +6,10 @@
     <LinearLayout android:layout_width="match_parent"
         android:layout_height="wrap_content"
        android:orientation="horizontal"
-        android:background="@color/colorPrimary"
         >
     <ImageButton
         android:id="@+id/back"
+        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#00FF0000"
@@ -21,13 +21,14 @@
         android:layout_width="fill_parent"
             android:layout_gravity="center"
             android:textSize="@dimen/labelSize"
+            android:textStyle="bold"
             android:layout_marginStart="20dp"
             android:textColor="@color/white"
             android:text="@string/dynamic_text"
         android:layout_height="wrap_content"/>
     </LinearLayout>
 <ScrollView
-    android:layout_marginTop="5dp"
+    android:layout_marginTop="10dp"
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
     android:layout_width="match_parent" android:layout_height="wrap_content"

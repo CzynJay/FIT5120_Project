@@ -20,7 +20,7 @@
             android:layout_height="@dimen/imagebutton_height"
             android:adjustViewBounds="true"
             android:background="@color/colorPrimary"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
             android:src="@drawable/fruit"
             android:elevation="5dp"/>
 

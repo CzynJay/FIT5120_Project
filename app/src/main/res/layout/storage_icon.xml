@@ -17,7 +17,6 @@
         android:layout_height="match_parent"
         app:progress="20"
         app:progressBarThickness="5dp" />
-
     <ImageButton
         android:id="@id/storage_button"
         android:layout_width="match_parent"
