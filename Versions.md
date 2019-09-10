@@ -1,3 +1,5 @@
+# Version 1.0.32
+* Redesign user interface of result page
 # Version 1.0.31
 * Added gradient line for bottom navigation bar
 * Added on select item on navigation bar highlight
