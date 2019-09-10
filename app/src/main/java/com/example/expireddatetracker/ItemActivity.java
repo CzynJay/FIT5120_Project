@@ -183,7 +183,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                 myCalendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.setTitle("When did you buy it");
        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-       datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-(long)v.getTag() + 2*dayInMilliseconds);
+       datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-(long)v.getTag() + dayInMilliseconds);
        Toast.makeText(getBaseContext(),
               "If the date is not available, your food may have been spoiled ",Toast.LENGTH_LONG).show();
        datePickerDialog.show();

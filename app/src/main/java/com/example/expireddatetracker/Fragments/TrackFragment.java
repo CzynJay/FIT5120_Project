@@ -41,8 +41,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
@@ -51,7 +53,6 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
     private GridLayout container;
     private MainActivity activity;
     private String uid;
-    final private String FOODID = "FOOD_ID";
     final private String METHOD = "STORAGE_METHOD";
     final private String EXPIRE = "EXPIRE_DATE";
     final private String STARTDATE = "PURCHASE_DATE";
@@ -101,6 +102,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         }
          return new ArrayList<>();
     }
+
     private int imageSwitch(String type){
         switch (type)
         {
@@ -111,6 +113,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         return R.drawable.refrigerator;
 
     }
+
     private void fetchData(final String type)
     {
         final ArrayList<Map<String,Object>> temp = typeSwitch(type);
@@ -135,14 +138,14 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
     }
 
     private void displayStatus( ArrayList<Map<String,Object>> lists){
-        container.removeAllViews();
+
         errorTx.setVisibility(View.GONE);
         if(lists.size()==0){
             errorTx.setVisibility(View.VISIBLE);
                         return;}
-        LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        LayoutInflater vi = (LayoutInflater) Objects.requireNonNull(getContext()).getSystemService(LAYOUT_INFLATER_SERVICE);
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width =(int) (displayMetrics.widthPixels / 6.5);
         for(Map<String,Object> item:lists)
         {
@@ -162,6 +165,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
             warning.getLayoutParams().width = layout.getLayoutParams().width /3;
             warning.getLayoutParams().height = layout.getLayoutParams().height /3;
             v.startAnimation(animSlide);
+            v.setTag(item);
             img.setTag(item);
             img.setOnClickListener(this);
             v.setOnTouchListener(new MyTouchListener());
@@ -257,6 +261,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
+        container.removeAllViews();
         errorTx.setVisibility(View.GONE);
         //scrollView.setBackgroundResource(imageSwitch(tab.getText().toString()));
         fetchData(tab.getText().toString());
@@ -308,16 +313,33 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                     // Dropped, reassign View to ViewGroup
                     View view = (View) event.getLocalState();
                     ViewGroup owner = (ViewGroup) view.getParent();
+                    String type_temp =tabs.getTabAt(tabs.getSelectedTabPosition()).getText().toString();
+                    Map<String,Object> temp = (Map<String, Object>) view.getTag();
+                    temp.put("OPERATION_DATE",date_to_str(new Date()));
+                    String id = (String) temp.get("id");
+                    activity.db.collection("tracker").document(uid)
+                            .collection(v.getTag().toString()).add(temp);
+                    activity.db.collection("tracker").document(uid)
+                            .collection(type_temp).document(id).delete();
                     owner.removeView(view);
+                    freeze = new ArrayList<>();
+                    refrigerate = new ArrayList<>();
+                    pantry = new ArrayList<>();
                     view.setVisibility(View.GONE);
                     Toast.makeText(getContext(),v.getTag().toString() + " Successfully",Toast.LENGTH_LONG).show();
                     break;
                 default:
                     break;
             }
-
             return true;
         }
+    }
+
+    private String date_to_str(Date date)
+    {
+        String myFormat = "MM/dd/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        return  sdf.format(date);
     }
 }
 

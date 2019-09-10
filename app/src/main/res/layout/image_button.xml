@@ -28,12 +28,10 @@
             android:id="@+id/tx1"
             android:layout_width="@dimen/imagebutton_height"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/img1"
             android:layout_marginTop="10dp"
             android:gravity="center_horizontal"
             android:text="@string/title_home"
-            android:textStyle="bold"
-            android:textSize="20dp" />
+            android:textSize="18sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -59,13 +57,11 @@
         <TextView
             android:layout_width="@dimen/imagebutton_height"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/img2"
             android:layout_marginTop="10dp"
-            android:textStyle="bold"
             android:id="@+id/tx2"
             android:gravity="center_horizontal"
             android:text="@string/title_home"
-            android:textSize="20dp" />
+            android:textSize="18sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -91,12 +87,10 @@
         <TextView
             android:layout_width="@dimen/imagebutton_height"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/img3"
             android:layout_marginTop="10dp"
             android:id="@+id/tx3"
-            android:textStyle="bold"
             android:gravity="center_horizontal"
             android:text="@string/title_home"
-            android:textSize="20dp" />
+            android:textSize="18sp" />
     </LinearLayout>
 </LinearLayout>

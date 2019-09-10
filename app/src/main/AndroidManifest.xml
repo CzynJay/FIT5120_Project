@@ -9,22 +9,30 @@
         android:roundIcon="@mipmap/ic_launcher_orange_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar.Bridge">
-        <activity android:name=".ItemActivity"/>
+        <activity android:name=".FeedbackActivity"></activity>
+        <activity android:name=".TipsActivity" />
+        <activity
+            android:name=".Account_Activity"
+            android:label="@string/title_activity_account_"
+            android:theme="@style/NoActionBar" />
+        <activity android:name=".ItemActivity" />
         <activity android:name=".UserLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegistrationActivity"/>
+        <activity android:name=".RegistrationActivity" />
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name">
-        </activity>
+            android:label="@string/app_name" />
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
+
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
+
 </manifest>

@@ -7,16 +7,28 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-    <style name ="signupTheme">
+
+    <style name="signupTheme">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowCloseOnTouchOutside">true</item>
         <item name="android:windowActionBar">false</item>
 
     </style>
+
     <style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">#6FFFB2</item>
         <item name="android:textColor">#FFFDFD</item>
     </style>
+
+    <style name="NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
     <declare-styleable name="CircleProgressBar">
         <attr name="min" format="integer" />
         <attr name="max" format="integer" />

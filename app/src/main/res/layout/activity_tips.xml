@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TipsActivity">
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="@color/colorPrimary"
+        >
+        <ImageButton
+            android:id="@+id/tips_back"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00FF0000"
+            android:layout_margin="20dp"
+            android:src="@drawable/back"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:text="@string/tips"
+            android:textColor="@color/white"
+            android:layout_marginStart= "30dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/labelSize"
+            />
+    </LinearLayout>
+</RelativeLayout>

@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import com.example.expireddatetracker.Fragments.HomeFragment;
 import com.example.expireddatetracker.Fragments.ResultFragment;
+import com.example.expireddatetracker.Fragments.SettingFragment;
 import com.example.expireddatetracker.Fragments.TrackFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -36,15 +37,14 @@ public class MainActivity extends AppCompatActivity {
                     for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
                         fm.popBackStack();
                     }
-
                     fragment = new HomeFragment();
                     break;
                     case R.id.navigation_dashboard:
                     fragment = new TrackFragment();
                     break;
-//                case R.id.navigation_notifications:
-//                    fragment = new NotificationFragment();
-//                    break;
+                case R.id.navigation_setting:
+                    fragment = new SettingFragment();
+                    break;
             }
             return loadFragment(fragment);
         }

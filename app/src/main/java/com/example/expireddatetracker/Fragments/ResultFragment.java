@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -100,9 +101,9 @@ public class ResultFragment extends Fragment{
 
     private void showNavigation(){
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-        if(navigation.keySet().toArray().length==0)
+        Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        LayoutInflater vi = (LayoutInflater) Objects.requireNonNull(getContext()).getSystemService(LAYOUT_INFLATER_SERVICE);
+        if(Objects.requireNonNull(navigation.keySet().toArray()).length==0)
         {
             final View v = vi.inflate(R.layout.subtype_layout, null);
             View right = v.findViewById(R.id.right_arrow);
@@ -113,7 +114,7 @@ public class ResultFragment extends Fragment{
             viewContainer.addView(v);
             return;
         }
-        for(Object key:navigation.keySet().toArray())
+        for(Object key: Objects.requireNonNull(navigation.keySet().toArray()))
         {
             if (navigation.get(key).length() !=0){
             final View v = vi.inflate(R.layout.subtype_layout, null);
@@ -133,10 +134,10 @@ public class ResultFragment extends Fragment{
     private void popUpWindow(String key,JSONArray jsonArray)
     {
         viewContainer.setVisibility(View.GONE);
-        LayoutInflater layoutInflater = (LayoutInflater)getContext()
+        LayoutInflater layoutInflater = (LayoutInflater) Objects.requireNonNull(getContext())
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = (int) (displayMetrics.heightPixels );
         int width = (int)(displayMetrics.widthPixels);
         View popupView = layoutInflater.inflate(R.layout.cate_popup, null);
@@ -160,7 +161,7 @@ public class ResultFragment extends Fragment{
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
         TextView navi_title = popupView.findViewById(R.id.navi_title);
         navi_title.setText(key);
-        showResult(popupView,jsonArray);
+        showResult(popupView,jsonArray,popupWindow);
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -171,7 +172,7 @@ public class ResultFragment extends Fragment{
 
     }
 
-    private void showResult(View x,JSONArray jsonArray){
+    private void showResult(View x, JSONArray jsonArray, final PopupWindow window){
         LinearLayout layout = x.findViewById(R.id.cate_container);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -205,6 +206,7 @@ public class ResultFragment extends Fragment{
                         intent.putExtra("name",temp.get("food_name").toString());
                         intent.putExtra("sub",temp.get("food_subtitle").toString());
                         intent.putExtra("jsonObject",temp.toString());
+                        window.dismiss();
                         startActivity(intent);
                     } catch (JSONException e) {
                         e.printStackTrace();
