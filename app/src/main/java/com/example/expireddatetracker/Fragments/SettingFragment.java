@@ -39,8 +39,12 @@ public class SettingFragment extends Fragment {
         accountLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final View androidRobotView = v.findViewById(R.id.account_label);
                 Intent intent = new Intent(getContext(), Account_Activity.class);
-                startActivity(intent);
+                ActivityOptions options = ActivityOptions
+                        .makeSceneTransitionAnimation(getActivity(), androidRobotView,
+                                getResources().getString(R.string.account));
+                startActivity(intent,options.toBundle());
             }
         });
         tipsLayout.setOnClickListener(new View.OnClickListener() {

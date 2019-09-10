@@ -8,8 +8,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_orange_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MaterialComponents.Light.NoActionBar.Bridge">
-        <activity android:name=".FeedbackActivity"></activity>
+        android:theme="@style/AppTheme">
+        <activity android:name=".FeedbackActivity"/>
         <activity android:name=".TipsActivity" />
         <activity
             android:name=".Account_Activity"
