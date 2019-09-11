@@ -1,3 +1,5 @@
+# Version 1.0.35
+* Added manual push notification using Google Cloud Messaging
 # Version 1.0.34
 * Added feedback option in settings
 * Added show tips option in settings
