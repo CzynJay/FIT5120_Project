@@ -39,4 +39,9 @@
     <string name="feedback">Feedback</string>
     <string name="title_activity_account_">Account_Activity</string>
     <string name="log_out">Log Out</string>
+    <string name="submit">submit</string>
+    <string name="what_is_your_feedback_about">What is your feedback about?</string>
+    <string name="general_inquiry">General Inquiry</string>
+    <string name="error_report">Error Report</string>
+    <string name="suggestion">Suggestion</string>
 </resources>

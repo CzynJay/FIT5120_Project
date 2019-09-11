@@ -81,8 +81,9 @@
         <TextView
             android:id="@+id/tips_label"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_marginTop="20dp"
+            android:transitionName="@string/tips"
             android:layout_alignStart="@id/tips_img"
             android:layout_marginStart="40dp"
             android:layout_marginBottom="20dp"
@@ -119,8 +120,9 @@
         <TextView
             android:id="@+id/feedback_label"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_marginTop="20dp"
+            android:transitionName="@string/feedback"
             android:layout_alignStart="@id/feedback_img"
             android:layout_marginStart="40dp"
             android:layout_marginBottom="20dp"

@@ -13,6 +13,7 @@ import android.transition.Explode;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.example.expireddatetracker.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,12 +23,23 @@ public class Account_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // inside your activity (if you did not enable transitions in your theme)
-        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        // set an exit transition
-        getWindow().setExitTransition(new Explode());
+//        // inside your activity (if you did not enable transitions in your theme)
+//        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+//        // set an exit transition
+//        getWindow().setExitTransition(new Explode());
         setContentView(R.layout.activity_account_);
+        initUI();
+
+    }
+    private void initUI(){
         Button logoutBt = findViewById(R.id.logout_bt);
+        ImageButton back = findViewById(R.id.account_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         logoutBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -37,6 +49,7 @@ public class Account_Activity extends AppCompatActivity {
                 finishAffinity();
             }
         });
+
 
     }
 

@@ -183,6 +183,7 @@ public class UserLoginActivity extends AppCompatActivity {
 
             if (success) {
                 Intent toMain = new Intent(UserLoginActivity.this,MainActivity.class);
+                toMain.putExtra("tips",tips.toString());
                 startActivity(toMain);
                 finish();
             } else {
@@ -242,14 +243,10 @@ public class UserLoginActivity extends AppCompatActivity {
             is.close();
             json = new String(buffer,"UTF-8");
             tips = new JSONArray(json);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
 
     }
-
-
 
 }

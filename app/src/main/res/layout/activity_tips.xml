@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".TipsActivity">
     <LinearLayout android:layout_width="match_parent"
         android:layout_height="65dp"
@@ -22,11 +23,28 @@
             android:layout_width="wrap_content"
             android:layout_height="65dp"
             android:text="@string/tips"
-            android:textColor="@color/white"
+            android:transitionName="@string/tips"
+            android:textColor="#21E9CA"
             android:layout_marginStart= "30dp"
             android:gravity="center"
             android:textStyle="bold"
             android:textSize="@dimen/labelSize"
             />
     </LinearLayout>
-</RelativeLayout>
+    <ScrollView
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <LinearLayout
+            android:id="@+id/tips_container"
+            android:showDividers="middle"
+            android:divider="@drawable/tips_divider"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            />
+    </ScrollView>
+
+</LinearLayout>

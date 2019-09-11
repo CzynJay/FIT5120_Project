@@ -48,5 +48,9 @@
         <attr name="progressbarColor" format="color" />
         <attr name="progressBarThickness" format="dimension" />
     </declare-styleable>
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">#9B9999</item>
+        <item name="colorControlActivated">#FFD12E</item>
+    </style>
 </resources>
 

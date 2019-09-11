@@ -58,8 +58,9 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
     final private String STARTDATE = "PURCHASE_DATE";
     final private String DISPLAY = "DISPLAY_NAME";
     private TabLayout tabs;
-    private View progressing,errorTx,scrollView ;
-    private Button quickDiscardBt,quickConsumeBt;
+    private View progressing;
+    private View errorTx;
+
     private ArrayList<Map<String,Object>> freeze = new ArrayList<>();
     private ArrayList<Map<String,Object>> refrigerate = new ArrayList<>();
     private ArrayList<Map<String,Object>> pantry = new ArrayList<>();
@@ -74,10 +75,9 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
 }
 
     private void init(View x){
-        scrollView = x.findViewById(R.id.scroll_container);
         tabs = x.findViewById(R.id.tabLayout);
-        quickDiscardBt = x.findViewById(R.id.quick_discard_bt);
-        quickConsumeBt = x.findViewById(R.id.quick_consume_bt);
+        Button quickDiscardBt = x.findViewById(R.id.quick_discard_bt);
+        Button quickConsumeBt = x.findViewById(R.id.quick_consume_bt);
         quickDiscardBt.setTag(quickDiscardBt.getText());
         quickConsumeBt.setTag(quickConsumeBt.getText());
         quickConsumeBt.setOnDragListener(new MyDragListener());
@@ -143,15 +143,16 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         if(lists.size()==0){
             errorTx.setVisibility(View.VISIBLE);
                         return;}
-        LayoutInflater vi = (LayoutInflater) Objects.requireNonNull(getContext()).getSystemService(LAYOUT_INFLATER_SERVICE);
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int width =(int) (displayMetrics.widthPixels / 6.5);
+
         for(Map<String,Object> item:lists)
-        {
-            Animation animSlide = AnimationUtils.loadAnimation(getContext(),R.anim.fade_in);
-            animSlide.setDuration(1100);
+     {
+//            Animation animSlide = AnimationUtils.loadAnimation(getContext(),R.anim.fade_in);
+//            animSlide.setDuration(1100);
             try {
+            LayoutInflater vi = (LayoutInflater) Objects.requireNonNull(getContext()).getSystemService(LAYOUT_INFLATER_SERVICE);
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            int width =(int) (displayMetrics.widthPixels / 6.5);
             View v = vi.inflate(R.layout.storage_icon, null);
             RelativeLayout layout = v.findViewById(R.id.circle_container);
             TextView name = v.findViewById(R.id.storage_name);
@@ -164,7 +165,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
             layout.getLayoutParams().height = width;
             warning.getLayoutParams().width = layout.getLayoutParams().width /3;
             warning.getLayoutParams().height = layout.getLayoutParams().height /3;
-            v.startAnimation(animSlide);
+//            v.startAnimation(animSlide);
             v.setTag(item);
             img.setTag(item);
             img.setOnClickListener(this);
@@ -311,8 +312,8 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                     break;
                 case DragEvent.ACTION_DROP:
                     // Dropped, reassign View to ViewGroup
-                    View view = (View) event.getLocalState();
-                    ViewGroup owner = (ViewGroup) view.getParent();
+                    final View view = (View) event.getLocalState();
+                    final ViewGroup owner = (ViewGroup) view.getParent();
                     String type_temp =tabs.getTabAt(tabs.getSelectedTabPosition()).getText().toString();
                     Map<String,Object> temp = (Map<String, Object>) view.getTag();
                     temp.put("OPERATION_DATE",date_to_str(new Date()));
@@ -321,11 +322,29 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                             .collection(v.getTag().toString()).add(temp);
                     activity.db.collection("tracker").document(uid)
                             .collection(type_temp).document(id).delete();
-                    owner.removeView(view);
+
                     freeze = new ArrayList<>();
                     refrigerate = new ArrayList<>();
                     pantry = new ArrayList<>();
-                    view.setVisibility(View.GONE);
+                    Animation animSlide = AnimationUtils.loadAnimation(getContext(),R.anim.fade_out);
+                    animSlide.setDuration(600);
+                    animSlide.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            view.setVisibility(View.GONE);
+                            owner.removeView(view);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+                        }
+                    });
+                    view.startAnimation(animSlide);
                     Toast.makeText(getContext(),v.getTag().toString() + " Successfully",Toast.LENGTH_LONG).show();
                     break;
                 default:
@@ -335,7 +354,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         }
     }
 
-    private String date_to_str(Date date)
+    public static String date_to_str(Date date)
     {
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);

@@ -7,10 +7,11 @@
     tools:context=".FeedbackActivity">
     <LinearLayout android:layout_width="match_parent"
         android:layout_height="65dp"
+        android:id="@+id/feedback_layout"
         android:background="@color/colorPrimary"
         >
         <ImageButton
-            android:id="@+id/account_back"
+            android:id="@+id/feedback_back"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -22,11 +23,81 @@
             android:layout_width="wrap_content"
             android:layout_height="65dp"
             android:text="@string/feedback"
-            android:textColor="@color/white"
+            android:transitionName="@string/feedback"
+            android:textColor="#3DFFCE"
             android:layout_marginStart= "30dp"
             android:gravity="center"
             android:textStyle="bold"
             android:textSize="@dimen/labelSize"
             />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginBottom="60dp"
+        android:layout_below="@id/feedback_layout">
+        <TextView android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_margin="10dp"
+            android:text="@string/what_is_your_feedback_about"/>
+        <RadioGroup
+            android:id="@+id/feedback_radio"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:checkedButton="@id/inquiryBt"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/inquiryBt"
+                android:text="@string/general_inquiry"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <RadioButton
+                android:id="@+id/reportBt"
+                android:text="@string/error_report"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <RadioButton
+                android:id="@+id/suggestBt"
+                android:text="@string/suggestion"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RadioGroup>
+    <EditText
+        android:id="@+id/feedback_tx"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:padding="30dp"
+        android:gravity="top|start"
+        android:layout_height="500dp"
+        android:background="@drawable/round_corners"
+        />
+        <RatingBar
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:saveEnabled="true"
+            android:stepSize="1"
+            android:numStars="5"
+            android:theme="@style/RatingBar"
+            />
+    <Button
+        android:id="@+id/submit_bt"
+        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:text="@string/submit"
+        android:textColor="@color/white"
+        android:background="@drawable/round_button"/>
     </LinearLayout>
 </RelativeLayout>
