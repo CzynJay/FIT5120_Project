@@ -1,3 +1,6 @@
+# Version 1.0.34
+* Added feedback option in settings
+* Added show tips option in settings
 # Version 1.0.33
 * Added setting page
 # Version 1.0.32
