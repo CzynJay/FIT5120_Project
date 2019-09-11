@@ -22,6 +22,7 @@
         android:layout_width="fill_parent"
             android:layout_gravity="center"
             android:textSize="@dimen/labelSize"
+            android:transitionName="query"
             android:textStyle="bold"
             android:layout_marginStart="20dp"
             android:textColor="@color/white"

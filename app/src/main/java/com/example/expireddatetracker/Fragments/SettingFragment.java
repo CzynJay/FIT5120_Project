@@ -3,6 +3,7 @@ package com.example.expireddatetracker.Fragments;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class SettingFragment extends Fragment {
         accountLayout = parent.findViewById(R.id.account_layout);
         tipsLayout = parent.findViewById(R.id.tips_layout);
         feedbackLayout = parent.findViewById(R.id.feedback_layout);
+
         clickButtonListener();
     }
 
@@ -39,22 +41,35 @@ public class SettingFragment extends Fragment {
         accountLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final View androidRobotView = v.findViewById(R.id.account_label);
                 Intent intent = new Intent(getContext(), Account_Activity.class);
-                startActivity(intent);
+                ActivityOptions options = ActivityOptions
+                        .makeSceneTransitionAnimation(getActivity(), androidRobotView,
+                                androidRobotView.getTransitionName());
+                startActivity(intent,options.toBundle());
             }
         });
         tipsLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final View androidRobotView = v.findViewById(R.id.tips_label);
                 Intent intent = new Intent(getContext(), TipsActivity.class);
-                startActivity(intent);
+                intent.putExtra("tips",getActivity().getIntent().getStringExtra("tips"));
+                ActivityOptions options = ActivityOptions
+                        .makeSceneTransitionAnimation(getActivity(), androidRobotView,
+                                androidRobotView.getTransitionName());
+                startActivity(intent,options.toBundle());
             }
         });
         feedbackLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final View androidRobotView = v.findViewById(R.id.feedback_label);
                 Intent intent = new Intent(getContext(), FeedbackActivity.class);
-                startActivity(intent);
+                ActivityOptions options = ActivityOptions
+                        .makeSceneTransitionAnimation(getActivity(), androidRobotView,
+                                androidRobotView.getTransitionName());
+                startActivity(intent,options.toBundle());
             }
         });
 

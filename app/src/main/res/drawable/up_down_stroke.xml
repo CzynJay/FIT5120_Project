@@ -14,5 +14,16 @@
                 android:color="#BFCCCCCC" />
         </shape>
     </item>
-
+    <item>
+        <inset android:insetBottom="2dp">
+            <selector>
+                <item android:state_pressed="true">
+                    <shape android:shape="rectangle">
+                        <corners android:radius="3dp"/>
+                        <solid android:color="#7D807D" />
+                    </shape>
+                </item>
+            </selector>
+        </inset>
+    </item>
 </layer-list>

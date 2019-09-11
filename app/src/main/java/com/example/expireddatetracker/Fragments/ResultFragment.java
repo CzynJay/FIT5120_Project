@@ -2,6 +2,7 @@ package com.example.expireddatetracker.Fragments;
 
 
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -207,7 +208,9 @@ public class ResultFragment extends Fragment{
                         intent.putExtra("sub",temp.get("food_subtitle").toString());
                         intent.putExtra("jsonObject",temp.toString());
                         window.dismiss();
-                        startActivity(intent);
+                        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity());
+                        startActivity(intent,options.toBundle())
+                        ;
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
