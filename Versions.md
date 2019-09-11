@@ -1,3 +1,5 @@
+# Version 1.0.33
+* Added setting page
 # Version 1.0.32
 * Redesign user interface of result page
 # Version 1.0.31
