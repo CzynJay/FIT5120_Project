@@ -2,16 +2,17 @@ package com.example.expireddatetracker;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.transition.Explode;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.Toast;
 import com.example.expireddatetracker.Fragments.HomeFragment;
 import com.example.expireddatetracker.Fragments.ResultFragment;
 import com.example.expireddatetracker.Fragments.SettingFragment;
 import com.example.expireddatetracker.Fragments.TrackFragment;
+import com.example.expireddatetracker.Service.GettingDeviceToken;
+import com.example.expireddatetracker.Service.MyFirebaseMessagingService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import java.io.IOException;
@@ -36,12 +37,12 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     FragmentManager fm = getSupportFragmentManager();
-                    for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+                    for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
                         fm.popBackStack();
                     }
                     fragment = new HomeFragment();
                     break;
-                    case R.id.navigation_dashboard:
+                case R.id.navigation_dashboard:
                     fragment = new TrackFragment();
                     break;
                 case R.id.navigation_setting:
@@ -75,6 +76,12 @@ public class MainActivity extends AppCompatActivity {
         loadFragment(new HomeFragment());
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        GettingDeviceToken gettingDeviceToken = new GettingDeviceToken();
+        gettingDeviceToken.onTokenRefresh();
+
+        MyFirebaseMessagingService myFirebaseMessagingService = new MyFirebaseMessagingService();
+
     }
 
     //double click to exit
@@ -92,13 +99,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
     }
 
-    private JSONArray loadJsonFile()
-    {
+    private JSONArray loadJsonFile() {
         String json;
         JSONArray res = new JSONArray();
         try {
@@ -112,16 +118,15 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
-        return  res;
+        return res;
     }
 
-    class LoadJson extends AsyncTask<Void,Void,Void>{
+    class LoadJson extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
             food_source = loadJsonFile();
             return null;
         }
-
 
     }
 }

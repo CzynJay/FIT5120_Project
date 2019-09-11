@@ -44,4 +44,8 @@
     <string name="general_inquiry">General Inquiry</string>
     <string name="error_report">Error Report</string>
     <string name="suggestion">Suggestion</string>
+
+    <string name="msg_subscribed">Suggestion</string>
+    <string name="msg_subscribe_failed">Suggestion</string>
+    <string name="msg_token_fmt"></string>
 </resources>
