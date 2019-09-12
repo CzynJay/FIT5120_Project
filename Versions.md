@@ -1,4 +1,6 @@
-# Version 1.0.35
+# Version 1.0.38
+* Added return token of app instance (view through Logcat)
+# Version 1.0.37
 * Added sub-category image
 # Version 1.0.36
 * Result from categories are alphabetically sorted
