@@ -24,6 +24,10 @@ import com.example.expireddatetracker.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.sql.Array;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -111,11 +115,17 @@ public class ResultFragment extends Fragment{
             right.setVisibility(View.GONE);
             TextView main = v.findViewById(R.id.subcateText);
             main.setText(R.string.no_result);
-
             viewContainer.addView(v);
             return;
         }
-        for(Object key: Objects.requireNonNull(navigation.keySet().toArray()))
+        Object [] cates = Objects.requireNonNull(navigation.keySet().toArray());
+        Arrays.sort(cates, new Comparator<Object>() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                return o1.toString().substring(0,1).compareTo(o2.toString().substring(0,1));
+            }
+        });
+        for(Object key:cates )
         {
             if (navigation.get(key).length() !=0){
             final View v = vi.inflate(R.layout.subtype_layout, null);

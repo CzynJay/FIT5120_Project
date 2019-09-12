@@ -58,9 +58,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
     final private String STARTDATE = "PURCHASE_DATE";
     final private String DISPLAY = "DISPLAY_NAME";
     private TabLayout tabs;
-    private View progressing;
-    private View errorTx;
-
+    private View progressing,errorTx;
     private ArrayList<Map<String,Object>> freeze = new ArrayList<>();
     private ArrayList<Map<String,Object>> refrigerate = new ArrayList<>();
     private ArrayList<Map<String,Object>> pantry = new ArrayList<>();
@@ -146,8 +144,6 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
 
         for(Map<String,Object> item:lists)
      {
-//            Animation animSlide = AnimationUtils.loadAnimation(getContext(),R.anim.fade_in);
-//            animSlide.setDuration(1100);
             try {
             LayoutInflater vi = (LayoutInflater) Objects.requireNonNull(getContext()).getSystemService(LAYOUT_INFLATER_SERVICE);
             DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -235,6 +231,9 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
          TextView expireTx = popupView.findViewById(R.id.expire_date);
          TextView storageTx = popupView.findViewById(R.id.storage_type);
          detail_name.setText(map.get(DISPLAY).toString());
+         String subname = map.get("SUB_NAME").toString();
+         subname = subname.equals("null")?"":subname;
+         detail_subname.setText(subname);
          purchaseTx.setText("Purchase Date: " + map.get(STARTDATE).toString());
          expireTx.setText("Expire Date: " + map.get(EXPIRE).toString());
          storageTx.setText("Storage Type: "+ map.get(METHOD).toString());
@@ -285,9 +284,9 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                 View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
                         view);
                 view.startDrag(data, shadowBuilder, view, 0);
-                //view.setVisibility(View.INVISIBLE);
                 return true;
-            } else {
+            }
+            else {
                 return false;
             }
         }
@@ -331,15 +330,12 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                     animSlide.setAnimationListener(new Animation.AnimationListener() {
                         @Override
                         public void onAnimationStart(Animation animation) {
-
                         }
-
                         @Override
                         public void onAnimationEnd(Animation animation) {
                             view.setVisibility(View.GONE);
                             owner.removeView(view);
                         }
-
                         @Override
                         public void onAnimationRepeat(Animation animation) {
                         }
