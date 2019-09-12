@@ -1,4 +1,8 @@
 # Version 1.0.35
+* Added sub-category image
+# Version 1.0.36
+* Result from categories are alphabetically sorted
+# Version 1.0.35
 * Added manual push notification using Google Cloud Messaging
 # Version 1.0.34
 * Added feedback option in settings
