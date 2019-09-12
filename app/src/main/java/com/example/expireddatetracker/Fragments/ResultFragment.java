@@ -21,9 +21,13 @@ import android.widget.TextView;
 import com.example.expireddatetracker.ItemActivity;
 import com.example.expireddatetracker.MainActivity;
 import com.example.expireddatetracker.R;
+import com.google.android.gms.common.util.ArrayUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -111,25 +115,45 @@ public class ResultFragment extends Fragment{
             right.setVisibility(View.GONE);
             TextView main = v.findViewById(R.id.subcateText);
             main.setText(R.string.no_result);
-
             viewContainer.addView(v);
             return;
         }
-        for(Object key: Objects.requireNonNull(navigation.keySet().toArray()))
+        Object [] cates = Objects.requireNonNull(navigation.keySet().toArray());
+        Arrays.sort(cates, new Comparator<Object>() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                return o1.toString().substring(0,1).compareTo(o2.toString().substring(0,1));
+            }
+        });
+        boolean othersIn = false;
+        for(Object key:cates )
         {
+            if (key.toString().equals("Others")){
+                othersIn = true;
+                continue;
+            }
             if (navigation.get(key).length() !=0){
-            final View v = vi.inflate(R.layout.subtype_layout, null);
-            v.setTag(key);
-            TextView main = v.findViewById(R.id.subcateText);
-            main.setText((String)key);
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    popUpWindow(v.getTag().toString(),navigation.get(v.getTag().toString()));
-                }
-            });
-                viewContainer.addView(v);
-        }}
+                viewContainer.addView(initalSingleBlock(vi,key));
+        }
+        }
+        if (othersIn)
+            viewContainer.addView(initalSingleBlock(vi,"Others"));
+    }
+
+    private View initalSingleBlock(LayoutInflater vi,Object key){
+        final View v = vi.inflate(R.layout.subtype_layout, null);
+        v.setTag(key);
+        ImageView img = v.findViewById(R.id.image_display);
+        img.setImageResource(MainActivity.String_to_img((String)key));
+        TextView main = v.findViewById(R.id.subcateText);
+        main.setText((String)key);
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popUpWindow(v.getTag().toString(),navigation.get(v.getTag().toString()));
+            }
+        });
+        return v;
     }
 
     private void popUpWindow(String key,JSONArray jsonArray)
@@ -161,6 +185,8 @@ public class ResultFragment extends Fragment{
         popupWindow.setAnimationStyle(R.style.Animation_Design_BottomSheetDialog);
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
         TextView navi_title = popupView.findViewById(R.id.navi_title);
+        ImageView imgView = popupView.findViewById(R.id.navi_img);
+        imgView.setImageResource(MainActivity.String_to_img(key));
         navi_title.setText(key);
         showResult(popupView,jsonArray,popupWindow);
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {

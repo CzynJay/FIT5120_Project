@@ -80,7 +80,7 @@ public class CircularProgressBar extends View {
     }
 
     public void setProgress(float progress) {
-        this.progress = progress;
+        this.progress = progress>100.0f?100.0f:progress;
         invalidate();// Notify the view to redraw it self (the onDraw method is called)
     }
 

@@ -47,6 +47,6 @@
 
     <string name="msg_subscribed">Suggestion</string>
     <string name="msg_subscribe_failed">Suggestion</string>
-    <string name="msg_token_fmt"></string>
     <string name="fcm_token">FCM: %s</string>
+    <string name="msg_token_fmt"></string>
 </resources>
