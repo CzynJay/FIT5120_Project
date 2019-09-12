@@ -85,7 +85,7 @@ public class HomeFragment extends Fragment {
         //int[] colors = {Color.GREEN,Color.CYAN,Color.RED,Color.YELLOW,Color.RED,Color.YELLOW};
         Map<String, Integer> map = new HashMap<String,Integer>();
         map.put("Fruits",R.drawable.fruit);
-        map.put("Dairy & Egg",R.drawable.milk);
+        map.put("Dairy & Egg",R.drawable.milk_eggs);
         map.put("Meat",R.drawable.meat);
         map.put("Seafood",R.drawable.seafood);
         map.put("Poultry",R.drawable.poultry);

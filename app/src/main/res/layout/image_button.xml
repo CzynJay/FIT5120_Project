@@ -50,7 +50,7 @@
             android:layout_height="@dimen/imagebutton_height"
             android:adjustViewBounds="true"
             android:background="@color/colorPrimary"
-            android:src="@drawable/milk"
+            android:src="@drawable/milk_eggs"
             android:scaleType="centerInside"
             android:elevation="5dp"/>
 

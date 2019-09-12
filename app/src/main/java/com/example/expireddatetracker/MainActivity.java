@@ -122,4 +122,36 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    public static int String_to_img(String category)
+    {
+        switch (category)
+        {
+            case "Allium": return R.drawable.allium;
+            case "Apples and Pears": return R.drawable.apples_pears;
+            case "Beef": return R.drawable.beef;
+            case "Berries":return R.drawable.berries;
+            case "Cheese":return R.drawable.cheese;
+            case "Chicken":return R.drawable.chicken;
+            case "Citrus":return R.drawable.citrus;
+            case "Cruciferous": return R.drawable.cruciferous;
+            case "Edible Plant Stem": return R.drawable.edible_plant_stem;
+            case "Eggs":return R.drawable.eggs;
+            case "Fish": return R.drawable.fish;
+            case "Goat": return R.drawable.goat;
+            case "Lamb": return R.drawable.lamb;
+            case "Leafy Green":return R.drawable.leafy_green;
+            case "Marrow": return R.drawable.marrow;
+            case "Melons": return R.drawable.melons;
+            case "Milk": return R.drawable.milk;
+            case "Pork": return R.drawable.pork;
+            case "Root": return R.drawable.root;
+            case "Shellfish": return R.drawable.shellfish;
+            case "Tropical and Exotic": return R.drawable.tropical;
+            case "Turkey": return R.drawable.turkey;
+            case "Veal": return R.drawable.veal;
+            default: return R.drawable.app_icon;
+        }
+
+    }
 }
