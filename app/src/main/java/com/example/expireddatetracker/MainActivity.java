@@ -2,6 +2,7 @@ package com.example.expireddatetracker;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 import com.example.expireddatetracker.Fragments.HomeFragment;
@@ -10,8 +11,12 @@ import com.example.expireddatetracker.Fragments.SettingFragment;
 import com.example.expireddatetracker.Fragments.TrackFragment;
 import com.example.expireddatetracker.Service.GettingDeviceToken;
 import com.example.expireddatetracker.Service.MyFirebaseMessagingService;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     boolean doubleBackToExitPressedOnce = false;
     public FirebaseFirestore db;
     public JSONArray food_source;
+    private static final String TAG = "MainActivity";
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -77,12 +84,29 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        GettingDeviceToken gettingDeviceToken = new GettingDeviceToken();
-        gettingDeviceToken.onTokenRefresh();
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+
+                            return;
+                        }
+
+
+                        String token = task.getResult().getToken();
+
+                        String msg = getString(R.string.fcm_token, token);
+                        Log.d(TAG, msg);
+
+                    }
+                });
 
         MyFirebaseMessagingService myFirebaseMessagingService = new MyFirebaseMessagingService();
 
     }
+
+
 
     //double click to exit
     @Override
