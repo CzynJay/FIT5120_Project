@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "610858907535-ju0jidsk6vfhuobid5ms1ot0p9hb2mbk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.expireddatetracker",
+            "certificate_hash": "1b292fd0a5dcffd0f152b4c5670a87a437560f2a"
+          }
+        },
+        {
           "client_id": "610858907535-n3n2vd2miavaoadbidi8q989mglni8fi.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
