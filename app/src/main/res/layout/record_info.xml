@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:id="@+id/popupWindowLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:background="#FFFFFF"
+    android:showDividers="middle"
+    android:divider="@drawable/empty_tall_divider"
     android:layout_height="wrap_content">
     <RelativeLayout android:layout_width="match_parent"
         android:layout_height="wrap_content"

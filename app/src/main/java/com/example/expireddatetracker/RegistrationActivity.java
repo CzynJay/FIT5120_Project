@@ -43,15 +43,7 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
     }
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        Intent intent = new Intent(RegistrationActivity.this, UserLoginActivity.class);
-//        startActivity(intent);
-//        finish();
-    }
+
 
     private void registerNewUser() {
         String email, password;

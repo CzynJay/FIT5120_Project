@@ -101,17 +101,6 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
          return new ArrayList<>();
     }
 
-    private int imageSwitch(String type){
-        switch (type)
-        {
-            //case "Freeze": return R.drawable.refrigerator;
-            case "Pantry": return R.drawable.empty_pantry;
-            case "Refrigerate": return R.drawable.refrigerator;
-        }
-        return R.drawable.refrigerator;
-
-    }
-
     private void fetchData(final String type)
     {
         final ArrayList<Map<String,Object>> temp = typeSwitch(type);

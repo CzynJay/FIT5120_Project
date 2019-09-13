@@ -1,13 +1,18 @@
 package com.example.expireddatetracker;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 import com.example.expireddatetracker.Fragments.HomeFragment;
 import com.example.expireddatetracker.Fragments.ResultFragment;
 import com.example.expireddatetracker.Fragments.SettingFragment;
 import com.example.expireddatetracker.Fragments.TrackFragment;
+import com.example.expireddatetracker.Service.NotificationService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import org.json.JSONArray;
@@ -15,6 +20,8 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Calendar;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -67,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        startAlertAtParticularTime();
         db = FirebaseFirestore.getInstance();
         LoadJson asynTask = new LoadJson();
         asynTask.execute();
@@ -153,5 +161,21 @@ public class MainActivity extends AppCompatActivity {
             default: return R.drawable.app_icon;
         }
 
+    }
+
+    public void startAlertAtParticularTime() {
+        Intent intent = new Intent(this, NotificationService.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this.getApplicationContext(), 0, intent,  PendingIntent.FLAG_UPDATE_CURRENT);
+        int interval = 1000 * 60 * 60 * 12;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 17);
+        calendar.set(Calendar.SECOND, 0 );
+        calendar.set(Calendar.MILLISECOND,0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                interval, pendingIntent);
     }
 }

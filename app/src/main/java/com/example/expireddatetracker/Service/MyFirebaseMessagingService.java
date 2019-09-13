@@ -31,7 +31,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        Notification notification = new NotificationCompat.Builder(this, channelID)
+        Notification notification = new NotificationCompat.Builder(getApplicationContext(), channelID)
                 .setContentTitle(remoteMessage.getNotification().getTitle())
                 .setContentText(remoteMessage.getNotification().getBody())
                 .setSmallIcon(R.mipmap.ic_launcher)

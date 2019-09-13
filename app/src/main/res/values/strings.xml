@@ -49,4 +49,7 @@
     <string name="msg_subscribe_failed">Suggestion</string>
     <string name="fcm_token">FCM: %s</string>
     <string name="msg_token_fmt"></string>
+    <string name="display_name">Display Name</string>
+    <string name="group_id">Group Id</string>
+    <string name="change_password">Change password</string>
 </resources>
