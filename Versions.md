@@ -1,3 +1,5 @@
+# Version 1.0.41
+* Added image for each navigation
 # Version 1.0.40
 * Updated tips.json with the correct texts and symbols
 * Added 3 more tips from dataset
