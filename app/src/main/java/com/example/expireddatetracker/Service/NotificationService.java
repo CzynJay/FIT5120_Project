@@ -111,6 +111,7 @@ public class NotificationService extends BroadcastReceiver {
         if(map.get("Expire soon")>0){
             Notification builder = new NotificationCompat.Builder(myContext,"my_channel_01")
                     .setSmallIcon(R.mipmap.ic_launcher)
+                    .setColor(myContext.getResources().getColor(R.color.white))
                     .setContentTitle("Items expire soon")
                     .setContentText("You have " +map.get("Expire soon")+" items Expire soon" )
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT).build();

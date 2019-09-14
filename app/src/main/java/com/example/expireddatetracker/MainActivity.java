@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 import com.example.expireddatetracker.Fragments.HomeFragment;
@@ -143,9 +142,9 @@ public class MainActivity extends AppCompatActivity {
             case "Chicken":return R.drawable.chicken;
             case "Citrus":return R.drawable.citrus;
             case "Cruciferous": return R.drawable.cruciferous;
-            case "Edible Plant Stem": return R.drawable.edible_plant_stem;
+            case "Edible Plant Stem": return R.drawable.edibleplantstem;
             case "Eggs":return R.drawable.eggs;
-            case "Fish": return R.drawable.fish;
+            case "Fish": return R.drawable.fattyfish;
             case "Goat": return R.drawable.goat;
             case "Lamb": return R.drawable.lamb;
             case "Leafy Green":return R.drawable.leafy_green;
@@ -158,6 +157,10 @@ public class MainActivity extends AppCompatActivity {
             case "Tropical and Exotic": return R.drawable.tropical;
             case "Turkey": return R.drawable.turkey;
             case "Veal": return R.drawable.veal;
+            case "Other Poultries": return R.drawable.poultry_others;
+            case "Other Fruits": return R.drawable.fruit_others;
+            case "Other Meats": return R.drawable.meat_others;
+            case "Other Vegetables": return R.drawable.vegetables_others;
             default: return R.drawable.app_icon;
         }
 
@@ -170,12 +173,12 @@ public class MainActivity extends AppCompatActivity {
         int interval = 1000 * 60 * 60 * 12;
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 17);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 21);
         calendar.set(Calendar.SECOND, 0 );
         calendar.set(Calendar.MILLISECOND,0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                interval, pendingIntent);
+                100, pendingIntent);
     }
 }

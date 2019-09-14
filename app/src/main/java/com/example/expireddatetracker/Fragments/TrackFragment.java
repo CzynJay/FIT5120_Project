@@ -142,7 +142,11 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
             RelativeLayout layout = v.findViewById(R.id.circle_container);
             TextView name = v.findViewById(R.id.storage_name);
             name.setText(item.get(DISPLAY).toString());
+            int imgResource = R.drawable.app_icon;
+              if(item.get("NAV_TITLE")!=null)
+                  imgResource = MainActivity.String_to_img(item.get("NAV_TITLE").toString());
             ImageButton img = v.findViewById(R.id.storage_button);
+            img.setImageResource(imgResource);
             CircularProgressBar progressBar = v.findViewById(R.id.storage_progressBar);
             View warning = v.findViewById(R.id.warning);
             calculateProgress(progressBar,item.get(EXPIRE).toString(),item.get(STARTDATE).toString(),warning);
@@ -150,7 +154,6 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
             layout.getLayoutParams().height = width;
             warning.getLayoutParams().width = layout.getLayoutParams().width /3;
             warning.getLayoutParams().height = layout.getLayoutParams().height /3;
-//            v.startAnimation(animSlide);
             v.setTag(item);
             img.setTag(item);
             img.setOnClickListener(this);
@@ -196,17 +199,17 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         popUpWindow(v);
     }
 
-    private void  popUpWindow(View v)
+    private void  popUpWindow(final View itemView)
     {
         final ViewGroup root = (ViewGroup) getActivity().getWindow().getDecorView().getRootView();
-        Map<String,Object> map = (Map<String, Object>) v.getTag();
+        Map<String,Object> map = (Map<String, Object>) itemView.getTag();
         LayoutInflater layoutInflater = (LayoutInflater)getContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = (int)(displayMetrics.widthPixels*0.8);
         View popupView = layoutInflater.inflate(R.layout.record_info, null);
-        PopupWindow popupWindow=new PopupWindow(popupView,
+        final PopupWindow popupWindow=new PopupWindow(popupView,
                 width, LinearLayout.LayoutParams.WRAP_CONTENT,
                 true);
         popupWindow.setTouchable(true);
@@ -219,6 +222,10 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
          TextView purchaseTx = popupView.findViewById(R.id.purchase_date);
          TextView expireTx = popupView.findViewById(R.id.expire_date);
          TextView storageTx = popupView.findViewById(R.id.storage_type);
+         Button discardBt = popupView.findViewById(R.id.discard_bt);
+         Button consumeBt = popupView.findViewById(R.id.consume_bt);
+        discardBt.setTag(discardBt.getText().toString());
+        consumeBt.setTag(consumeBt.getText().toString());
          detail_name.setText(map.get(DISPLAY).toString());
          String subname = map.get("SUB_NAME").toString();
          subname = subname.equals("null")?"":subname;
@@ -230,6 +237,20 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
              @Override
              public void onDismiss() {
                  clearDim(root);
+             }
+         });
+         discardBt.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 removeView((View) itemView.getParent().getParent(),v.getTag().toString());
+                 popupWindow.dismiss();
+             }
+         });
+         consumeBt.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 removeView((View) itemView.getParent().getParent(),v.getTag().toString());
+                 popupWindow.dismiss();
              }
          });
     }
@@ -301,36 +322,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                 case DragEvent.ACTION_DROP:
                     // Dropped, reassign View to ViewGroup
                     final View view = (View) event.getLocalState();
-                    final ViewGroup owner = (ViewGroup) view.getParent();
-                    String type_temp =tabs.getTabAt(tabs.getSelectedTabPosition()).getText().toString();
-                    Map<String,Object> temp = (Map<String, Object>) view.getTag();
-                    temp.put("OPERATION_DATE",date_to_str(new Date()));
-                    String id = (String) temp.get("id");
-                    activity.db.collection("tracker").document(uid)
-                            .collection(v.getTag().toString()).add(temp);
-                    activity.db.collection("tracker").document(uid)
-                            .collection(type_temp).document(id).delete();
-
-                    freeze = new ArrayList<>();
-                    refrigerate = new ArrayList<>();
-                    pantry = new ArrayList<>();
-                    Animation animSlide = AnimationUtils.loadAnimation(getContext(),R.anim.fade_out);
-                    animSlide.setDuration(600);
-                    animSlide.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-                        }
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            view.setVisibility(View.GONE);
-                            owner.removeView(view);
-                        }
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-                        }
-                    });
-                    view.startAnimation(animSlide);
-                    Toast.makeText(getContext(),v.getTag().toString() + " Successfully",Toast.LENGTH_LONG).show();
+                    removeView(view, v.getTag().toString());
                     break;
                 default:
                     break;
@@ -344,6 +336,39 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         return  sdf.format(date);
+    }
+
+    private void removeView(final View view,String finishType){
+        final ViewGroup owner = (ViewGroup) view.getParent();
+        String type_temp =tabs.getTabAt(tabs.getSelectedTabPosition()).getText().toString();
+        Map<String,Object> temp = (Map<String, Object>) view.getTag();
+        temp.put("OPERATION_DATE",date_to_str(new Date()));
+        String id = (String) temp.get("id");
+        activity.db.collection("tracker").document(uid)
+                .collection(finishType).add(temp);
+        activity.db.collection("tracker").document(uid)
+                .collection(type_temp).document(id).delete();
+        freeze = new ArrayList<>();
+        refrigerate = new ArrayList<>();
+        pantry = new ArrayList<>();
+//        Animation animSlide = AnimationUtils.loadAnimation(getContext(),R.anim.fade_out);
+//        animSlide.setDuration(600);
+//        animSlide.setAnimationListener(new Animation.AnimationListener() {
+//            @Override
+//            public void onAnimationStart(Animation animation) {
+//            }
+//            @Override
+//            public void onAnimationEnd(Animation animation) {
+//
+//            }
+//            @Override
+//            public void onAnimationRepeat(Animation animation) {
+//            }
+//        });
+//        view.startAnimation(animSlide);
+        view.setVisibility(View.GONE);
+        owner.removeView(view);
+        Toast.makeText(getContext(),finishType + " Successfully",Toast.LENGTH_LONG).show();
     }
 }
 

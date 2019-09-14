@@ -126,10 +126,12 @@ public class ResultFragment extends Fragment{
             }
         });
         boolean othersIn = false;
+        String otherKey = "";
         for(Object key:cates )
         {
-            if (key.toString().equals("Others")){
+            if (key.toString().startsWith("Other")){
                 othersIn = true;
+                otherKey = key.toString();
                 continue;
             }
             if (navigation.get(key).length() !=0){
@@ -137,7 +139,7 @@ public class ResultFragment extends Fragment{
         }
         }
         if (othersIn)
-            viewContainer.addView(initalSingleBlock(vi,"Others"));
+            viewContainer.addView(initalSingleBlock(vi,otherKey));
     }
 
     private View initalSingleBlock(LayoutInflater vi,Object key){

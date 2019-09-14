@@ -60,7 +60,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     final private long dayInMilliseconds = 86400000;
     private PopupWindow popupWindow;
     private FirebaseFirestore db;
-    private String startDate,endDate,where,timeSpan;
+    private String startDate,endDate,where,timeSpan,navigation_title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -97,6 +97,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
             foodID = storageJson.getJSONObject(0).getString("food_id");
             mainTitle =storageJson.getJSONObject(0).getString("food_name");
             subtitleText = storageJson.getJSONObject(0).getString("food_subtitle");
+            navigation_title = storageJson.getJSONObject(0).getString("Nav_category");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -253,6 +254,8 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         String unit = unitSwitcher(item);
         if (!unit.equals("null")&& !val.equals("Not Recommended"))
             val = ((int)((double)Double.valueOf(val)))+ " "+ json.getString(unit);
+        else
+            edu_info.setTextColor(getApplicationContext().getResources().getColor(R.color.red));
         val = item.equals("Cooking_Temperature") && !val.equals("Not Recommended")?val+" °C":val;
         type.setText(typeSwitcher(item));
         im.setImageResource(imageSwitcher(item));
@@ -476,6 +479,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         record.put("FOOD_ID",foodID);
         record.put("DISPLAY_NAME",mainTitle);
         record.put("SUB_NAME",subtitleText);
+        record.put("NAV_TITLE",navigation_title);
         String userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
         db.collection("tracker").document(userKey)
                 .collection(where).document().set(record)
