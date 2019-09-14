@@ -40,11 +40,10 @@ public class HomeFragment extends Fragment {
         init(inflatePage);
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser mUser = mAuth.getCurrentUser();
-        Log.e("UID", mUser.getUid());
         final ImageButton searchButton = inflatePage.findViewById(R.id.searchbutton);
         searchBar = inflatePage.findViewById(R.id.searchbar);
        TextView welcome = inflatePage.findViewById(R.id.welcome_mes);
-        welcome.setText("Hello "+ FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        welcome.setText("Hello "+ mUser.getDisplayName());
         searchBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {

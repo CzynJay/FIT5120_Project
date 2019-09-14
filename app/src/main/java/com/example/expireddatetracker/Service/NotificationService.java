@@ -6,10 +6,6 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.util.Log;
-
 import com.example.expireddatetracker.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,7 +24,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-
 public class NotificationService extends BroadcastReceiver {
     private FirebaseFirestore db;
     private Map<String,Integer> map;
@@ -42,12 +37,10 @@ public class NotificationService extends BroadcastReceiver {
         map.put("Expire soon",0);
         map.put("Expire already",0);
         loadData();
-
     }
 
     private void loadData()
     {
-        Log.e("uid",FirebaseAuth.getInstance().getCurrentUser().getUid());
         String [] types = {"Freeze","Pantry","Refrigerate"};
         for(String type: types)
         {
@@ -70,14 +63,13 @@ public class NotificationService extends BroadcastReceiver {
     {
         Date expireDate = string_to_Date(Objects.requireNonNull(data.get("EXPIRE_DATE")).toString());
         long timeDifference =  expireDate.getTime() - new Date().getTime();
-        Log.e("time",String.valueOf(timeDifference));
         if (timeDifference<=0){
             map.put("Expire already",map.get("Expire already")+1);
         return;}
         long dayInMilliseconds = 86400000;
         if(timeDifference < dayInMilliseconds *2 ){
             map.put("Expire soon",map.get("Expire soon")+1);
-        Log.e("check",map.toString());}
+       }
     }
 
     private Date string_to_Date(String dateStr)

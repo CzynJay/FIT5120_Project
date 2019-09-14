@@ -23,6 +23,9 @@
     app:tabIndicatorColor="@color/green"
     app:tabIndicatorHeight="3dp"
     app:tabTextColor="@color/white"
+    app:tabMaxWidth="0dp"
+    app:tabGravity="fill"
+    app:tabMode="fixed"
     android:layout_height="wrap_content" >
     <com.google.android.material.tabs.TabItem
         android:layout_width="match_parent"
@@ -77,6 +80,7 @@
       android:textColor="@color/white"
       android:textStyle="bold"
       android:background="#ff00"
+      android:gravity="center"
       android:textSize="18sp"
       android:text="@string/discard"
       />
@@ -85,6 +89,7 @@
       android:layout_height="wrap_content"
       android:layout_weight="1"
       android:textColor="@color/white"
+
       android:background="@color/green"
       android:textStyle="bold"
       android:textSize="18sp"
