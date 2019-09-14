@@ -97,7 +97,7 @@ public class NotificationService extends BroadcastReceiver {
         NotificationManager manager = (NotificationManager)myContext.
                 getSystemService(Context.NOTIFICATION_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            String CHANNEL_ID = "my_channel_01";
+            String CHANNEL_ID = "Foodtyro";
             CharSequence name = "my_channel";
             String Description = "This is my channel";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
@@ -111,7 +111,7 @@ public class NotificationService extends BroadcastReceiver {
         if(map.get("Expire soon")>0){
             String subcontent = map.get("Expire soon") ==1?
                     map.get("Expire soon")+" item":map.get("Expire soon") + " items";
-            Notification builder = new NotificationCompat.Builder(myContext,"my_channel_01")
+            Notification builder = new NotificationCompat.Builder(myContext,"Foodtyro")
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setColor(myContext.getResources().getColor(R.color.white))
                     .setContentTitle("Items expire soon")
@@ -123,7 +123,7 @@ public class NotificationService extends BroadcastReceiver {
         if(map.get("Expire already")>0){
             String subcontent = map.get("Expire already") ==1?
                     map.get("Expire already") +" item":map.get("Expire already") + " items";
-            Notification builder = new NotificationCompat.Builder(myContext, "my_channel_01")
+            Notification builder = new NotificationCompat.Builder(myContext, "Foodtyro")
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setContentTitle("Items expire already")
                     .setContentText("You have " +subcontent+" expire already" )

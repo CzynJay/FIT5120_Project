@@ -59,7 +59,7 @@
      android:layout_width="match_parent"
      android:useDefaultMargins="true"
      android:layout_height="wrap_content"
-     android:columnCount="4"
+     android:columnCount="3"
      /></ScrollView>
  <LinearLayout
      android:id="@+id/buttonLayout"

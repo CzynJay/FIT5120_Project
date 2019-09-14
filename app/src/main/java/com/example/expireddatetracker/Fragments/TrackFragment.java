@@ -139,7 +139,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
             LayoutInflater vi = (LayoutInflater) Objects.requireNonNull(getContext()).getSystemService(LAYOUT_INFLATER_SERVICE);
             DisplayMetrics displayMetrics = new DisplayMetrics();
             Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            int width =(int) (displayMetrics.widthPixels / 6.5);
+            int width =(int) (displayMetrics.widthPixels / 5.5);
             View v = vi.inflate(R.layout.storage_icon, null);
             RelativeLayout layout = v.findViewById(R.id.circle_container);
             TextView name = v.findViewById(R.id.storage_name);
@@ -230,6 +230,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
          TextView purchaseTx = popupView.findViewById(R.id.purchase_date);
          TextView expireTx = popupView.findViewById(R.id.expire_date);
          TextView storageTx = popupView.findViewById(R.id.storage_type);
+         ImageView imgView = popupView.findViewById(R.id.record_closeBt);
          Button discardBt = popupView.findViewById(R.id.discard_bt);
          Button consumeBt = popupView.findViewById(R.id.consume_bt);
         discardBt.setTag(discardBt.getText().toString());
@@ -247,6 +248,12 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                  clearDim(root);
              }
          });
+        imgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
          discardBt.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
