@@ -1,3 +1,5 @@
+# Version 1.0.39
+* Added notification function
 # Version 1.0.38
 * Added return token of app instance (view through Logcat)
 # Version 1.0.37
