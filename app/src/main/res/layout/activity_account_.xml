@@ -22,7 +22,7 @@
             android:layout_height="65dp"
             android:text="@string/account"
             android:transitionName="@string/account"
-            android:textColor="#FF9800"
+            android:textColor="#FFFFFF"
             android:layout_marginStart= "30dp"
             android:gravity="center"
             android:textStyle="bold"

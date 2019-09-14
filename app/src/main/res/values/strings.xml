@@ -53,4 +53,6 @@
     <string name="group_id">Group Id</string>
     <string name="change_password">Change password</string>
     <string name="visit_our_website">Visit Our Website</string>
+    <string name="freezer">Freezer</string>
+    <string name="refrigerator">Refrigerator</string>
 </resources>

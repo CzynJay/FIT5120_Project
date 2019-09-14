@@ -53,46 +53,49 @@
         android:layout_alignParentBottom="true"
         android:orientation="vertical"
         >
-    <LinearLayout android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="25dp"
-        android:weightSum="10"
-        >
 
-        <EditText
-            android:id="@+id/searchbar"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="41dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="20dp"
-            android:layout_weight="9"
-            android:textColor="@color/colorPrimary"
-            android:background="@drawable/round_corners"
-            android:gravity="center"
-            android:hint="Search for food item here!"
-            android:includeFontPadding="false"
-            android:inputType="text"
-            android:paddingLeft="5dp"
-            android:textColorHint="@color/colorPrimary"
-
-            />
-        <ImageButton
-
-            android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/searchbutton"
-            android:src="@drawable/ic_magnifying_glass"
-            android:layout_marginRight="20dp"
-            android:background="#00FF0000"
-            android:layout_gravity="center"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:weightSum="10">
 
-    </LinearLayout>
-    <TextView
+            <EditText
+                android:id="@+id/searchbar"
+                android:layout_width="match_parent"
+                android:layout_height="41dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="20dp"
+                android:layout_weight="9"
+                android:background="@drawable/round_corners"
+                android:gravity="center"
+                android:hint="Search for food item here!"
+                android:includeFontPadding="false"
+                android:inputType="text"
+                android:paddingLeft="5dp"
+                android:textColor="@color/colorPrimary"
+                android:textColorHint="@color/colorPrimary"
+
+                />
+
+            <ImageButton
+
+                android:id="@+id/searchbutton"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:background="#00FF0000"
+                android:src="@drawable/ic_magnifying_glass" />
+
+        </LinearLayout>
+
+        <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"

@@ -22,7 +22,7 @@
             android:background="@color/colorPrimary"
             android:scaleType="fitCenter"
             android:src="@drawable/fruit"
-            android:elevation="5dp"/>
+            android:elevation="10dp"/>
 
         <TextView
             android:id="@+id/tx1"
@@ -52,7 +52,7 @@
             android:background="@color/colorPrimary"
             android:src="@drawable/milk_eggs"
             android:scaleType="centerInside"
-            android:elevation="5dp"/>
+            android:elevation="10dp"/>
 
         <TextView
             android:layout_width="@dimen/imagebutton_height"
@@ -82,7 +82,7 @@
             android:adjustViewBounds="true"
             android:background="@color/colorPrimary"
             android:scaleType="centerInside"
-            android:elevation="5dp"/>
+            android:elevation="10dp"/>
 
         <TextView
             android:layout_width="@dimen/imagebutton_height"

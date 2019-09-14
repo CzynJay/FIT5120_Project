@@ -218,11 +218,11 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     {
         switch (src){
             case "DOP_Pantry_Max": return "Pantry";
-            case "DOP_Freeze_Max": return "Freeze";
+            case "DOP_Freeze_Max": return "Freezer";
             case "Cooking_Temperature": return "Temperature";
             case "Preparation_size": return "Size";
             case "Cooking_time": return "Duration";
-            default:return "Refrigerate";
+            default:return "Refrigerator";
         }
 
     }
