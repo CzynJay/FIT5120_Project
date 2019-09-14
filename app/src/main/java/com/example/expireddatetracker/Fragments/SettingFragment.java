@@ -2,6 +2,7 @@ package com.example.expireddatetracker.Fragments;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +18,7 @@ import com.example.expireddatetracker.TipsActivity;
 import androidx.fragment.app.Fragment;
 
 public class SettingFragment extends Fragment {
-    private View accountLayout,tipsLayout,feedbackLayout;
+    private View accountLayout,tipsLayout,feedbackLayout,websiteLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,7 +33,7 @@ public class SettingFragment extends Fragment {
         accountLayout = parent.findViewById(R.id.account_layout);
         tipsLayout = parent.findViewById(R.id.tips_layout);
         feedbackLayout = parent.findViewById(R.id.feedback_layout);
-
+        websiteLayout = parent.findViewById(R.id.ourwebsite_layout);
         clickButtonListener();
     }
 
@@ -70,6 +71,15 @@ public class SettingFragment extends Fragment {
                         .makeSceneTransitionAnimation(getActivity(), androidRobotView,
                                 androidRobotView.getTransitionName());
                 startActivity(intent,options.toBundle());
+            }
+        });
+        websiteLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "http://www.foodtyro.tk";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
             }
         });
 

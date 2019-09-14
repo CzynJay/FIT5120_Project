@@ -32,24 +32,23 @@ import static android.content.Context.VIBRATOR_SERVICE;
 
 public class HomeFragment extends Fragment {
     private EditText searchBar;
-    private FirebaseAuth mAuth;
-    private FirebaseUser mUser;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View inflatePage  = inflater.inflate(R.layout.fragment_home, container, false);
         init(inflatePage);
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
-        Log.e("UID",mUser.getUid());
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser mUser = mAuth.getCurrentUser();
+        Log.e("UID", mUser.getUid());
         final ImageButton searchButton = inflatePage.findViewById(R.id.searchbutton);
         searchBar = inflatePage.findViewById(R.id.searchbar);
        TextView welcome = inflatePage.findViewById(R.id.welcome_mes);
-        welcome.setText("Welcome "+ FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        welcome.setText("Hello "+ FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         searchBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus == true)
+                if(hasFocus)
                     searchBar.setHint("");
                 else
                     searchBar.setHint("");

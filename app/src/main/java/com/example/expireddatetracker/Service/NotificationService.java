@@ -109,20 +109,24 @@ public class NotificationService extends BroadcastReceiver {
             manager.createNotificationChannel(mChannel);
         }
         if(map.get("Expire soon")>0){
+            String subcontent = map.get("Expire soon") ==1?
+                    map.get("Expire soon")+" item":map.get("Expire soon") + " items";
             Notification builder = new NotificationCompat.Builder(myContext,"my_channel_01")
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setColor(myContext.getResources().getColor(R.color.white))
                     .setContentTitle("Items expire soon")
-                    .setContentText("You have " +map.get("Expire soon")+" items Expire soon" )
+                    .setContentText("You have " +subcontent+" expire soon" )
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT).build();
 
             manager.notify(1,builder);
         }
         if(map.get("Expire already")>0){
+            String subcontent = map.get("Expire already") ==1?
+                    map.get("Expire already") +" item":map.get("Expire already") + " items";
             Notification builder = new NotificationCompat.Builder(myContext, "my_channel_01")
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setContentTitle("Items expire already")
-                    .setContentText("You have " +map.get("Expire already")+" items Expire already" )
+                    .setContentText("You have " +subcontent+" expire already" )
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT).build();
             manager.notify(2,builder);
         }

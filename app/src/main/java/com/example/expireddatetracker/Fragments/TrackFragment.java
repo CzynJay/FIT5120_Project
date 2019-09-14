@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -172,7 +174,13 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
             Date start_date =  new SimpleDateFormat("MM/dd/yy", Locale.US).parse(start);
             float percent= ( System.currentTimeMillis() -start_date.getTime() )*100/(end_date.getTime() - start_date.getTime());
             circle.setProgress(percent);
-            if (percent >70f)
+            long dayInMilliseconds = 86400000;
+            if (percent >=100f)
+            {
+                warning.setVisibility(View.VISIBLE);
+                ((ImageView)warning).setImageResource(R.drawable.dead_expire);
+            }
+            else if (end_date.getTime()-System.currentTimeMillis()<dayInMilliseconds*2)
                 warning.setVisibility(View.VISIBLE);
             else
                 warning.setVisibility(View.GONE);
@@ -351,21 +359,6 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         freeze = new ArrayList<>();
         refrigerate = new ArrayList<>();
         pantry = new ArrayList<>();
-//        Animation animSlide = AnimationUtils.loadAnimation(getContext(),R.anim.fade_out);
-//        animSlide.setDuration(600);
-//        animSlide.setAnimationListener(new Animation.AnimationListener() {
-//            @Override
-//            public void onAnimationStart(Animation animation) {
-//            }
-//            @Override
-//            public void onAnimationEnd(Animation animation) {
-//
-//            }
-//            @Override
-//            public void onAnimationRepeat(Animation animation) {
-//            }
-//        });
-//        view.startAnimation(animSlide);
         view.setVisibility(View.GONE);
         owner.removeView(view);
         Toast.makeText(getContext(),finishType + " Successfully",Toast.LENGTH_LONG).show();
