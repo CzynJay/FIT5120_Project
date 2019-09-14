@@ -1,3 +1,6 @@
+# Version 1.0.42
+* Updated minor UI changes
+* Change texts from verbs to nouns
 # Version 1.0.41
 * Added image for each navigation
 # Version 1.0.40
