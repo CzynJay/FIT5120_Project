@@ -1,3 +1,6 @@
+# Version 1.0.40
+* Updated tips.json with the correct texts and symbols
+* Added 3 more tips from dataset
 # Version 1.0.39
 * Added notification function
 # Version 1.0.38
