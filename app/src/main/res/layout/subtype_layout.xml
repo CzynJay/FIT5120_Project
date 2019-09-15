@@ -10,16 +10,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     >
-<LinearLayout
-    android:id="@+id/subcate_row"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
 <ImageView
     android:id="@+id/image_display"
     android:layout_width="70dp"
     android:layout_height="70dp"
     android:transitionName="type_img"
+    android:layout_alignParentStart="true"
     android:layout_marginStart="10dp"
     android:layout_marginTop="10dp"
     android:layout_marginBottom="10dp"
@@ -29,18 +25,17 @@
     />
     <TextView
         android:id="@+id/subcateText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:textSize="20sp"
-        android:gravity="center"
         android:transitionName="type_name"
         android:text="@string/dynamic_text"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/image_display"
         android:textStyle="bold"
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         />
-
-</LinearLayout>
 
     <ImageView
         android:layout_width="30dp"

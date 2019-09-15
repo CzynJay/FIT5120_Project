@@ -96,6 +96,7 @@ public class UserLoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
             loginForm.setVisibility(show ? View.GONE : View.VISIBLE);
@@ -144,7 +145,6 @@ public class UserLoginActivity extends AppCompatActivity {
             return;
         }
         showProgress(true);
-        hideKeyboard(this);
         UserLoginTask u = new UserLoginTask(false);
         u.execute(email,password);
 
@@ -249,16 +249,4 @@ public class UserLoginActivity extends AppCompatActivity {
         }
 
     }
-
-    public static void hideKeyboard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        //Find the currently focused view, so we can grab the correct window token from it.
-        View view = activity.getCurrentFocus();
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
-        if (view == null) {
-            view = new View(activity);
-        }
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
 }

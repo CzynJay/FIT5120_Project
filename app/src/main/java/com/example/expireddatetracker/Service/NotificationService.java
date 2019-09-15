@@ -102,7 +102,7 @@ public class NotificationService extends BroadcastReceiver {
                 getSystemService(Context.NOTIFICATION_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             String CHANNEL_ID = "Foodtyro";
-            CharSequence name = "my_channel";
+            CharSequence name = "Foodtyro";
             String Description = "This is my channel";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
