@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
     public void startAlertAtParticularTime() {
         Intent intent = new Intent(this, NotificationService.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                this.getApplicationContext(), 0, intent,  PendingIntent.FLAG_UPDATE_CURRENT);
+                this.getApplicationContext(), 0, intent,  0);
         int interval = 1000 * 60 * 60 * 12;
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());

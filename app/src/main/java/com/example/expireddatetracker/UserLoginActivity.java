@@ -3,6 +3,7 @@ package com.example.expireddatetracker;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.AsyncTask;
@@ -14,6 +15,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -31,6 +33,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -141,6 +144,7 @@ public class UserLoginActivity extends AppCompatActivity {
             return;
         }
         showProgress(true);
+        hideKeyboard(this);
         UserLoginTask u = new UserLoginTask(false);
         u.execute(email,password);
 
@@ -179,8 +183,6 @@ public class UserLoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-
-
             if (success) {
                 Intent toMain = new Intent(UserLoginActivity.this,MainActivity.class);
                 toMain.putExtra("tips",tips.toString());
@@ -193,7 +195,6 @@ public class UserLoginActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Login failed! Please try again", Toast.LENGTH_LONG).show();
             }
         }
-
         @Override
         protected void onCancelled() {
             showProgress(false);
@@ -241,12 +242,23 @@ public class UserLoginActivity extends AppCompatActivity {
             byte[] buffer = new byte[size];
             is.read(buffer);
             is.close();
-            json = new String(buffer,"UTF-8");
+            json = new String(buffer, StandardCharsets.UTF_8);
             tips = new JSONArray(json);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
 }

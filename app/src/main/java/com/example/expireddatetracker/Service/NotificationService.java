@@ -1,11 +1,16 @@
 package com.example.expireddatetracker.Service;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+import android.widget.Toast;
+
 import com.example.expireddatetracker.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -31,12 +36,19 @@ public class NotificationService extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context, 0, intent,  0);
+        AlarmManager manager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        manager.cancel(pendingIntent);
+        Log.e("Cancel","yes");}
+        else{
         db = FirebaseFirestore.getInstance();
         myContext = context;
         map = new HashMap<>();
         map.put("Expire soon",0);
         map.put("Expire already",0);
-        loadData();
+        loadData();}
     }
 
     private void loadData()

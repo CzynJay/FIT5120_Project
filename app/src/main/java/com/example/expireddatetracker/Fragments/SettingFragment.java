@@ -42,35 +42,23 @@ public class SettingFragment extends Fragment {
         accountLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final View androidRobotView = v.findViewById(R.id.account_label);
                 Intent intent = new Intent(getContext(), Account_Activity.class);
-                ActivityOptions options = ActivityOptions
-                        .makeSceneTransitionAnimation(getActivity(), androidRobotView,
-                                androidRobotView.getTransitionName());
-                startActivity(intent,options.toBundle());
+                startActivity(intent);
             }
         });
         tipsLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final View androidRobotView = v.findViewById(R.id.tips_label);
                 Intent intent = new Intent(getContext(), TipsActivity.class);
                 intent.putExtra("tips",getActivity().getIntent().getStringExtra("tips"));
-                ActivityOptions options = ActivityOptions
-                        .makeSceneTransitionAnimation(getActivity(), androidRobotView,
-                                androidRobotView.getTransitionName());
-                startActivity(intent,options.toBundle());
+                startActivity(intent);
             }
         });
         feedbackLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final View androidRobotView = v.findViewById(R.id.feedback_label);
                 Intent intent = new Intent(getContext(), FeedbackActivity.class);
-                ActivityOptions options = ActivityOptions
-                        .makeSceneTransitionAnimation(getActivity(), androidRobotView,
-                                androidRobotView.getTransitionName());
-                startActivity(intent,options.toBundle());
+                startActivity(intent);
             }
         });
         websiteLayout.setOnClickListener(new View.OnClickListener() {

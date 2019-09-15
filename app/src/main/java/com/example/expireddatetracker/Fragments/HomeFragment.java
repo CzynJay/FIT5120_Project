@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,7 +44,9 @@ public class HomeFragment extends Fragment {
         final ImageButton searchButton = inflatePage.findViewById(R.id.searchbutton);
         searchBar = inflatePage.findViewById(R.id.searchbar);
        TextView welcome = inflatePage.findViewById(R.id.welcome_mes);
-        welcome.setText("Hello "+ mUser.getDisplayName());
+        assert mUser != null;
+        String displayInfo = "Hello "+  mUser.getDisplayName();
+        welcome.setText(displayInfo);
         searchBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -90,12 +93,13 @@ public class HomeFragment extends Fragment {
         map.put("Vegetable",R.drawable.vegetable);
         LinearLayout layout = x.findViewById(R.id.home_contain);
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
         width = (int)(width / (3.5));
         LinearLayout.LayoutParams paramsBt = new LinearLayout.LayoutParams(width, width);
         for(int temp=0;temp< types.length;temp++){
-            LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater vi = (LayoutInflater) Objects.requireNonNull(getContext())
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final View v = vi.inflate(R.layout.image_button, null);
             ImageButton bt1 = v.findViewById(R.id.img1);
             ImageButton bt2 = v.findViewById(R.id.img2);

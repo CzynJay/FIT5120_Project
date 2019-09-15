@@ -168,8 +168,6 @@ public class ResultFragment extends Fragment{
         return v;
     }
 
-
-
     private void popUpWindow(String key,JSONArray jsonArray)
     {
         viewContainer.setVisibility(View.GONE);

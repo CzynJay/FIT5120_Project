@@ -53,4 +53,5 @@
     <string name="group_id">Group Id</string>
     <string name="change_password">Change password</string>
     <string name="visit_our_website">Visit Our Website</string>
+    <string name="register_new_account">Register new account</string>
 </resources>
