@@ -59,7 +59,7 @@ public class RegistrationActivity extends AppCompatActivity {
             return;
         }
         if (!UserLoginActivity.isEmailValid(email)){
-            Toast.makeText(getApplicationContext(), "Please enter invalid email...", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Please enter valid email...", Toast.LENGTH_LONG).show();
             return;
         }
         if (TextUtils.isEmpty(password)) {

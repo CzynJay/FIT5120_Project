@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Pair;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import com.example.expireddatetracker.ItemActivity;
+import com.example.expireddatetracker.List_item_activity;
 import com.example.expireddatetracker.MainActivity;
 import com.example.expireddatetracker.R;
 import com.google.android.gms.common.util.ArrayUtils;
@@ -145,14 +147,22 @@ public class ResultFragment extends Fragment{
     private View initalSingleBlock(LayoutInflater vi,Object key){
         final View v = vi.inflate(R.layout.subtype_layout, null);
         v.setTag(key);
-        ImageView img = v.findViewById(R.id.image_display);
+        final ImageView img = v.findViewById(R.id.image_display);
         img.setImageResource(MainActivity.String_to_img((String)key));
-        TextView main = v.findViewById(R.id.subcateText);
+        final TextView main = v.findViewById(R.id.subcateText);
         main.setText((String)key);
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popUpWindow(v.getTag().toString(),navigation.get(v.getTag().toString()));
+                Intent it = new Intent(getContext(), List_item_activity.class);
+                it.putExtra("jsonArray",navigation.get(v.getTag().toString()).toString());
+                it.putExtra("Title",v.getTag().toString());
+                ActivityOptions options = ActivityOptions
+                        .makeSceneTransitionAnimation(getActivity(), Pair.create((View)img, "type_img"),
+                        Pair.create((View)main,"type_name")
+                        );
+                startActivity(it,options.toBundle());
+//                popUpWindow(v.getTag().toString(),navigation.get(v.getTag().toString()));
             }
         });
         return v;
@@ -238,8 +248,8 @@ public class ResultFragment extends Fragment{
                         intent.putExtra("sub",temp.get("food_subtitle").toString());
                         intent.putExtra("jsonObject",temp.toString());
                         window.dismiss();
-                        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity());
-                        startActivity(intent,options.toBundle())
+//                        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity());
+                        startActivity(intent)
                         ;
                     } catch (JSONException e) {
                         e.printStackTrace();

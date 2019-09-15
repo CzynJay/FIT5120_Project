@@ -24,7 +24,7 @@
             android:layout_height="65dp"
             android:text="@string/tips"
             android:transitionName="@string/tips"
-            android:textColor="#21E9CA"
+            android:textColor="@color/white"
             android:layout_marginStart= "30dp"
             android:gravity="center"
             android:textStyle="bold"

@@ -81,7 +81,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         progressing.setVisibility(View.VISIBLE);
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         tabs.addOnTabSelectedListener(this);
-        fetchData("Refrigerate");
+        fetchData("Pantry");
     }
 
     private ArrayList<Map<String,Object>> typeSwitch(String type)

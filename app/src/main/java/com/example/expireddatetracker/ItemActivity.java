@@ -486,7 +486,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(ItemActivity.this, "Update successfully",
+                Toast.makeText(ItemActivity.this, "Added to storage successfully",
                         Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {

@@ -88,8 +88,11 @@ public class Account_Activity extends AppCompatActivity implements View.OnClickL
         popupView.findViewById(R.id.purchase_date).setVisibility(View.GONE);
         popupView.findViewById(R.id.expire_date).setVisibility(View.GONE);
         popupView.findViewById(R.id.storage_type).setVisibility(View.GONE);
+        popupView.findViewById(R.id.record_closeBt).setVisibility(View.GONE);
         Button confirmBt = popupView.findViewById(R.id.consume_bt);
+        confirmBt.setText("Confirm");
         Button discardBt = popupView.findViewById(R.id.discard_bt);
+        discardBt.setText("Cancel");
         discardBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
