@@ -1,3 +1,5 @@
+# Version 1.0.43
+* Redesign UI after category selection
 # Version 1.0.42
 * Updated minor UI changes
 * Change texts from verbs to nouns
