@@ -82,11 +82,11 @@ public class HomeFragment extends Fragment {
     }
 
     private void init(View x){
-        String[] types = {"Fruits","Dairy & Egg","Meat","Seafood","Poultry","Vegetable"};
+        String[] types = {"Fruits","Dairy & Eggs","Meat","Seafood","Poultry","Vegetable"};
         //int[] colors = {Color.GREEN,Color.CYAN,Color.RED,Color.YELLOW,Color.RED,Color.YELLOW};
         Map<String, Integer> map = new HashMap<String,Integer>();
         map.put("Fruits",R.drawable.fruit);
-        map.put("Dairy & Egg",R.drawable.milk_eggs);
+        map.put("Dairy & Eggs",R.drawable.milk_eggs);
         map.put("Meat",R.drawable.meat);
         map.put("Seafood",R.drawable.seafood);
         map.put("Poultry",R.drawable.poultry);

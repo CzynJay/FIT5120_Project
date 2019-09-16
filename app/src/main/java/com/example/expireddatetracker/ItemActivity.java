@@ -106,7 +106,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     private void updateLabel()
     {
         //myCalendar.getTimeInMillis()+dateConversion(duration)
-        String myFormat = "MM/dd/yy"; //In which you need put here
+        String myFormat = "dd/MM/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         startDate = sdf.format(myCalendar.getTime());
         endDate = sdf.format(new Date(myCalendar.getTime().getTime()+dateConversion(timeSpan)));

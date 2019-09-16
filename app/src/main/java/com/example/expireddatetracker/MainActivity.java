@@ -144,7 +144,8 @@ public class MainActivity extends AppCompatActivity {
             case "Cruciferous": return R.drawable.cruciferous;
             case "Edible Plant Stem": return R.drawable.edibleplantstem;
             case "Eggs":return R.drawable.eggs;
-            case "Fish": return R.drawable.fattyfish;
+            case "Fatty fish": return R.drawable.fattyfish;
+            case "Lean fish": return R.drawable.leanfish;
             case "Goat": return R.drawable.goat;
             case "Lamb": return R.drawable.lamb;
             case "Leafy Green":return R.drawable.leafy_green;

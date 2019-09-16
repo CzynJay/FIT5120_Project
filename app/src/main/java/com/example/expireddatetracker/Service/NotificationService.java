@@ -88,7 +88,7 @@ public class NotificationService extends BroadcastReceiver {
     {
         Date returnDate = new Date();
         try {
-            returnDate = new SimpleDateFormat("MM/dd/yy", Locale.US).parse(dateStr);
+            returnDate = new SimpleDateFormat("dd/MM/yy", Locale.US).parse(dateStr);
         } catch (ParseException e) {
             e.printStackTrace();
         }

@@ -143,11 +143,13 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
             img.setImageResource(imgResource);
             CircularProgressBar progressBar = v.findViewById(R.id.storage_progressBar);
             View warning = v.findViewById(R.id.warning);
-            calculateProgress(progressBar,item.get(EXPIRE).toString(),item.get(STARTDATE).toString(),warning);
+            int dayDifference = calculateProgress(progressBar,item.get(EXPIRE).toString()
+                                    ,item.get(STARTDATE).toString(),warning);
             layout.getLayoutParams().width = width;
             layout.getLayoutParams().height = width;
             warning.getLayoutParams().width = layout.getLayoutParams().width /3;
             warning.getLayoutParams().height = layout.getLayoutParams().height /3;
+            item.put("DayDifference",dayDifference);
             v.setTag(item);
             img.setTag(item);
             img.setOnClickListener(this);
@@ -159,14 +161,17 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         }
     }
 
-    private void calculateProgress(CircularProgressBar circle,String end,String start,View warning)
+    private int calculateProgress(CircularProgressBar circle,String end,String start,View warning)
     {
+        int dayDifference =  0 ;
         try {
-            Date end_date= new SimpleDateFormat("MM/dd/yy",Locale.US).parse(end);
-            Date start_date =  new SimpleDateFormat("MM/dd/yy", Locale.US).parse(start);
+            Date end_date= new SimpleDateFormat("dd/MM/yy",Locale.US).parse(end);
+            Date start_date =  new SimpleDateFormat("dd/MM/yy", Locale.US).parse(start);
+            long dayInMilliseconds = 86400000;
+
             float percent= ( System.currentTimeMillis() -start_date.getTime() )*100/(end_date.getTime() - start_date.getTime());
             circle.setProgress(percent);
-            long dayInMilliseconds = 86400000;
+            dayDifference = (int)((end_date.getTime() - System.currentTimeMillis())/dayInMilliseconds);
             if (percent >=100f)
             {
                 warning.setVisibility(View.VISIBLE);
@@ -180,6 +185,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
             circle.setProgress(50.0f);
             e.printStackTrace();
         }
+        return dayDifference;
     }
 
     private void placeToArrayList(Map<String,Object> item,String id){
@@ -340,7 +346,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
 
     public static String date_to_str(Date date)
     {
-        String myFormat = "MM/dd/yy"; //In which you need put here
+        String myFormat = "dd/MM/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         return  sdf.format(date);
     }
