@@ -1,3 +1,5 @@
+# Version 1.0.44
+* Added new sub-category for shellfish
 # Version 1.0.43
 * Redesign UI after category selection
 # Version 1.0.42
