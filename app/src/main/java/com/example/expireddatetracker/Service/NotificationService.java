@@ -11,7 +11,9 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.expireddatetracker.MainActivity;
 import com.example.expireddatetracker.R;
+import com.example.expireddatetracker.UserLoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -112,6 +114,9 @@ public class NotificationService extends BroadcastReceiver {
             mChannel.setShowBadge(false);
             manager.createNotificationChannel(mChannel);
         }
+        Intent notificationIntent = new Intent(myContext, UserLoginActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(myContext, 0,
+                notificationIntent, 0);
         if(map.get("Expire soon")>0){
             String subcontent = map.get("Expire soon") ==1?
                     map.get("Expire soon")+" item":map.get("Expire soon") + " items";
@@ -119,9 +124,9 @@ public class NotificationService extends BroadcastReceiver {
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setColor(myContext.getResources().getColor(R.color.white))
                     .setContentTitle("Items expire soon")
+                    .setContentIntent(pendingIntent)
                     .setContentText("You have " +subcontent+" expire soon" )
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT).build();
-
             manager.notify(1,builder);
         }
         if(map.get("Expire already")>0){
@@ -130,6 +135,7 @@ public class NotificationService extends BroadcastReceiver {
             Notification builder = new NotificationCompat.Builder(myContext, "Foodtyro")
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setContentTitle("Items expire already")
+                    .setContentIntent(pendingIntent)
                     .setContentText("You have " +subcontent+" expire already" )
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT).build();
             manager.notify(2,builder);

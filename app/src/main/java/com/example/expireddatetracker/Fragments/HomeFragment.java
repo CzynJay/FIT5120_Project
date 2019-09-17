@@ -92,6 +92,12 @@ public class HomeFragment extends Fragment {
         map.put("Poultry",R.drawable.poultry);
         map.put("Vegetable",R.drawable.vegetable);
         LinearLayout layout = x.findViewById(R.id.home_contain);
+        x.findViewById(R.id.viewAll_tx).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                search("all");
+            }
+        });
         DisplayMetrics displayMetrics = new DisplayMetrics();
         Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;

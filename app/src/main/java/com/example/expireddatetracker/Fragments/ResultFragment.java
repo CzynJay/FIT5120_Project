@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,6 +29,8 @@ import com.google.android.gms.common.util.ArrayUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -85,9 +88,14 @@ public class ResultFragment extends Fragment{
                 if (!multi) {
                     if (isNumeric(query))
                     {
-                        if((int)temp.get("food_id")==Integer.parseInt(query)){
+
+                    if((int)temp.get("food_id")==Integer.parseInt(query)){
                             putInMap(temp.getString("Nav_category"),temp);
                         }
+                    }
+                    else if (query.equals("all"))
+                   {
+                        putInMap(temp.getString("Nav_category"),temp);
                     }
                     else if (value.contains(query)){
                         putInMap(temp.getString("Nav_category"),temp);
@@ -104,6 +112,7 @@ public class ResultFragment extends Fragment{
                 e.printStackTrace();
             }
         }
+        Log.e("check",String.valueOf(navigation.size()));
     }
 
     private void showNavigation(){
@@ -127,21 +136,21 @@ public class ResultFragment extends Fragment{
                 return o1.toString().substring(0,1).compareTo(o2.toString().substring(0,1));
             }
         });
-        boolean othersIn = false;
-        String otherKey = "";
+        ArrayList<Object> temp = new ArrayList<>();
         for(Object key:cates )
         {
             if (key.toString().startsWith("Other")){
-                othersIn = true;
-                otherKey = key.toString();
+                temp.add(key);
                 continue;
             }
             if (navigation.get(key).length() !=0){
                 viewContainer.addView(initalSingleBlock(vi,key));
         }
         }
-        if (othersIn)
-            viewContainer.addView(initalSingleBlock(vi,otherKey));
+       for(int i =0;i<temp.size();i++)
+       {
+           viewContainer.addView(initalSingleBlock(vi,temp.get(i)));
+       }
     }
 
     private View initalSingleBlock(LayoutInflater vi,Object key){
