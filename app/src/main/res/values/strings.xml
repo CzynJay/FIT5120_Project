@@ -32,9 +32,9 @@
     <string name="discard">Discard</string>
     <string name="consume">Consume</string>
     <string name="no_record">No record yet</string>
-    <string name="freeze">Freeze</string>
+    <string name="freeze">Freezer</string>
     <string name="pantry">Pantry</string>
-    <string name="refrigerate">Refrigerate</string>
+    <string name="refrigerate">Refrigerator</string>
     <string name="tips">Tips</string>
     <string name="feedback">Feedback</string>
     <string name="title_activity_account_">Account_Activity</string>
