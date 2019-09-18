@@ -1,3 +1,7 @@
+# Version 1.0.49
+* Fixed notification not displaying properly bug
+# Version 1.0.48
+* Added dashboard fragment
 # Version 1.0.47
 * Changed tips punctuation
 * Code documentation #1
