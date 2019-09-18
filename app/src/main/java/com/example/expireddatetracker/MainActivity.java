@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.example.expireddatetracker.Fragments.DashboardFragment;
 import com.example.expireddatetracker.Fragments.HomeFragment;
 import com.example.expireddatetracker.Fragments.ResultFragment;
 import com.example.expireddatetracker.Fragments.SettingFragment;
@@ -43,11 +45,14 @@ public class MainActivity extends AppCompatActivity {
                     }
                     fragment = new HomeFragment();
                     break;
-                    case R.id.navigation_dashboard:
+                case R.id.navigation_storage:
                     fragment = new TrackFragment();
                     break;
                 case R.id.navigation_setting:
                     fragment = new SettingFragment();
+                    break;
+                case R.id.navigation_dashboard:
+                    fragment = new DashboardFragment();
                     break;
             }
             return loadFragment(fragment);
