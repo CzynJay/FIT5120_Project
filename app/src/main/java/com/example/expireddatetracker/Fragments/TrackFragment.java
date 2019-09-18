@@ -88,9 +88,9 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
     {
         switch (type)
         {
-            case "Freeze": return freeze;
+            case "Freezer": return freeze;
             case "Pantry": return pantry;
-            case "Refrigerate": return refrigerate;
+            case "Refrigerator": return refrigerate;
         }
          return new ArrayList<>();
     }
@@ -191,9 +191,9 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
     private void placeToArrayList(Map<String,Object> item,String id){
             item.put("id",id);
             switch (item.get(METHOD).toString()){
-                case "Refrigerate":
+                case "Refrigerator":
                     refrigerate.add(item);break;
-                case "Freeze":
+                case "Freezer":
                     freeze.add(item);break;
                 case "Pantry":
                     pantry.add(item);break;

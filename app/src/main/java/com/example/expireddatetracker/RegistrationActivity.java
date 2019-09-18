@@ -46,6 +46,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
     private void registerNewUser() {
+        progress.setVisibility(View.VISIBLE);
         String email, password;
         email = emailTV.getText().toString();
         password = passwordTV.getText().toString();
@@ -81,6 +82,7 @@ public class RegistrationActivity extends AppCompatActivity {
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
                             user.updateProfile(profileUpdates);
                             Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_LONG).show();
+                            progress.setVisibility(View.GONE);
                             Intent intent = new Intent(RegistrationActivity.this, UserLoginActivity.class);
                             startActivity(intent);
                             finish();
@@ -90,7 +92,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         }
                     }
                 });
-        progress.setVisibility(View.GONE);
+
     }
 
     private void initializeUI() {

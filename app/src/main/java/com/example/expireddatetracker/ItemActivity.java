@@ -214,12 +214,12 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     private String typeSwitcher(String src)
     {
         switch (src){
-            case "DOP_Pantry_Max": return "Pantry";
-            case "DOP_Freeze_Max": return "Freeze";
+            case "DOP_Pantry_Max": return getResources().getString(R.string.pantry);
+            case "DOP_Freeze_Max": return getResources().getString(R.string.freeze);
             case "Cooking_Temperature": return "Temperature";
             case "Preparation_size": return "Size";
             case "Cooking_time": return "Duration";
-            default:return "Refrigerate";
+            default:return getResources().getString(R.string.refrigerate);
         }
 
     }
