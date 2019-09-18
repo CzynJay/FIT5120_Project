@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private EditText emailTV, passwordTV, nameTV;
     private ProgressBar progress;
+    private ImageView backBt;
     private Button regBtn;
     private FirebaseAuth mAuth;
 
@@ -114,6 +116,13 @@ public class RegistrationActivity extends AppCompatActivity {
         regBtn = findViewById(R.id.register);
         nameTV = findViewById(R.id.nameView);
         progress = findViewById(R.id.register_pro);
+        backBt = findViewById(R.id.registration_back);
+        backBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     public static boolean isPasswordValid(String password) {
