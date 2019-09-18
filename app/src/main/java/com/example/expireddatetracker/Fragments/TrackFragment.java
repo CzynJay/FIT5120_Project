@@ -57,6 +57,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
     private ArrayList<Map<String,Object>> freeze = new ArrayList<>();
     private ArrayList<Map<String,Object>> refrigerate = new ArrayList<>();
     private ArrayList<Map<String,Object>> pantry = new ArrayList<>();
+    private  long dayInMilliseconds = 86400000;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -153,7 +154,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
             img.setImageResource(imgResource);
             CircularProgressBar progressBar = v.findViewById(R.id.storage_progressBar);
             View warning = v.findViewById(R.id.warning);
-            int dayDifference = calculateProgress(progressBar,item.get(EXPIRE).toString()
+            long dayDifference = calculateProgress(progressBar,item.get(EXPIRE).toString()
                                     ,item.get(STARTDATE).toString(),warning);
             layout.getLayoutParams().width = width;
             layout.getLayoutParams().height = width;
@@ -173,18 +174,18 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
     }
 
     //Progress circle logic
-    private int calculateProgress(CircularProgressBar circle,String end,String start,View warning)
+    private long calculateProgress(CircularProgressBar circle,String end,String start,View warning)
     {
-        int dayDifference =  0 ;
+        long dayDifference =  0 ;
         try {
             Date end_date= new SimpleDateFormat("dd/MM/yy",Locale.US).parse(end);
             Date start_date =  new SimpleDateFormat("dd/MM/yy", Locale.US).parse(start);
-            long dayInMilliseconds = 86400000;
+
             //Change date to percentage
-            float percent= ( System.currentTimeMillis() -start_date.getTime() )*100/(end_date.getTime() - start_date.getTime());
+            float percent= ( new Date().getTime() -start_date.getTime() )*100/(end_date.getTime() - start_date.getTime());
             circle.setProgress(percent);
             //Calculate remaining days
-            dayDifference = (int)((end_date.getTime() - System.currentTimeMillis())/dayInMilliseconds);
+            dayDifference = end_date.getTime() - new Date().getTime();
             if (percent >=100f)
             {
                 warning.setVisibility(View.VISIBLE);
@@ -251,7 +252,8 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
          String subname = map.get("SUB_NAME").toString();
          subname = subname.equals("null")?"":subname;
          detail_subname.setText(subname);
-         String dayLeft = (int) map.get("DayDifference") > 0 ?map.get("DayDifference") + " days left": "Spoiled Already";
+         String dayLeft = (long) map.get("DayDifference") > 0 ?
+                 (int)((long)map.get("DayDifference")/dayInMilliseconds) + " days left": "Spoiled Already";
          dayLeft = " \n ("+dayLeft +")";
          purchaseTx.setText("Purchase Date: " + map.get(STARTDATE).toString());
          expireTx.setText("Best Before Date: " + map.get(EXPIRE).toString() + dayLeft);

@@ -54,6 +54,7 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
     private final String TWODAYS = "2 Day Left";
     private final String TWO_SEVEN = "2-7 days left";
     private final String MORETHANAWEEK = "more than a week";
+    long dayInMilliseconds = 86400000;
     private View progress;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,27 +107,27 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
     private void placeToMap(Map<String,Object> objectMap)
     {
         String date = objectMap.get("EXPIRE_DATE").toString();
-        int dayleft = calculateDayDifference(date);
+        long dayleft = calculateDayDifference(date);
         if(dayleft<=0)
             dayLeftDict.get(SPOILED).put(objectMap);
-        else if(dayleft <=2)
+        else if(dayleft <= dayInMilliseconds*2)
             dayLeftDict.get(TWODAYS).put(objectMap);
-        else if(dayleft <=7)
+        else if(dayleft <=dayInMilliseconds*7)
             dayLeftDict.get(TWO_SEVEN).put(objectMap);
         else
             dayLeftDict.get(MORETHANAWEEK).put(objectMap);
     }
 
-    private int calculateDayDifference(String date)
+    private long calculateDayDifference(String date)
     {
-        long dayInMilliseconds = 86400000;
+
         Date myDate = new Date();
         try {
             myDate= new SimpleDateFormat("dd/MM/yy", Locale.US).parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return  (int)((myDate.getTime() - System.currentTimeMillis())/dayInMilliseconds);
+        return  (myDate.getTime() - new Date().getTime());
     }
 
     private void drawPieChart(String title)
