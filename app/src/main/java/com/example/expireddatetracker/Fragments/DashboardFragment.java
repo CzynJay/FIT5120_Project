@@ -146,7 +146,7 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
         pieDataSet.setValueFormatter(new DefaultValueFormatter(0));
         PieData pieData = new PieData(pieDataSet);
         pieData.setValueTextSize(20f);
-        pieChart.getLegend().setTextSize(16f);
+        pieChart.getLegend().setTextSize(14f);
         pieChart.setDrawEntryLabels(false);
         pieChart.setData(pieData);
         pieChart.animateY(2000);
