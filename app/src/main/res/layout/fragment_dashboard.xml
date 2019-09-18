@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.DashboardFragment">
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:background="#12022E"
+        android:layout_alignParentTop="true"
+        app:tabIndicatorColor="@color/green"
+        app:tabIndicatorHeight="3dp"
+        app:tabTextColor="@color/white"
+        app:tabMaxWidth="0dp"
+        app:tabGravity="fill"
+        app:tabMode="fixed"
+        android:layout_height="wrap_content" >
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/pantry" />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/freeze"
+            />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/refrigerate"/>
+    </com.google.android.material.tabs.TabLayout>
+    <ProgressBar
+        android:id="@+id/progressing"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"/>
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:layout_marginTop="80dp"
+        android:layout_below="@id/tabLayout"
+        android:id="@+id/piechart"
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+       />
+</RelativeLayout>
