@@ -1,11 +1,13 @@
 package com.example.expireddatetracker.Service;
 
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -24,12 +26,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+
+import static android.content.Context.ACTIVITY_SERVICE;
 
 public class NotificationService extends BroadcastReceiver {
     private FirebaseFirestore db;
@@ -38,21 +43,37 @@ public class NotificationService extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        db = FirebaseFirestore.getInstance();
+        myContext = context;
         if(FirebaseAuth.getInstance().getCurrentUser() == null){
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context, 0, intent,  0);
         AlarmManager manager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         manager.cancel(pendingIntent);
         Log.e("Cancel","yes");}
+        else if(checkApp()){
+            Log.e("Application","Application is opened");
+        }
         else{
-        db = FirebaseFirestore.getInstance();
-        myContext = context;
         map = new HashMap<>();
         map.put("Expire soon",0);
         map.put("Expire already",0);
         loadData();}
     }
+    public boolean checkApp(){
+        ActivityManager am = (ActivityManager) myContext
+                .getSystemService(ACTIVITY_SERVICE);
 
+        // get the info from the currently running task
+        List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+
+        ComponentName componentInfo = taskInfo.get(0).topActivity;
+        if (componentInfo.getPackageName().equalsIgnoreCase("com.example.expireddatetracker")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     private void loadData()
     {
         String [] types = {"Freezer","Pantry","Refrigerator"};

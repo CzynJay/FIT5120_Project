@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         calendar.set(Calendar.MILLISECOND,0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                600000, pendingIntent);
+                100, pendingIntent);
     }
 
 }
