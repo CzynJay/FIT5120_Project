@@ -68,17 +68,21 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
 
     private void init(View x){
         tabs = x.findViewById(R.id.tabLayout);
+        //Discard and consume button
         Button quickDiscardBt = x.findViewById(R.id.quick_discard_bt);
         Button quickConsumeBt = x.findViewById(R.id.quick_consume_bt);
         quickDiscardBt.setTag(quickDiscardBt.getText());
         quickConsumeBt.setTag(quickConsumeBt.getText());
+        //Drag listener for buttons
         quickConsumeBt.setOnDragListener(new MyDragListener());
         quickDiscardBt.setOnDragListener(new MyDragListener());
         container = x.findViewById(R.id.storage_container);
         errorTx = x.findViewById(R.id.no_record);
         activity = (MainActivity) getActivity();
+        //Progress circle of food items
         progressing = x.findViewById(R.id.progressing);
         progressing.setVisibility(View.VISIBLE);
+        //Authenticate user from Firebase
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         tabs.addOnTabSelectedListener(this);
         fetchData("Pantry");
@@ -95,6 +99,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
          return new ArrayList<>();
     }
 
+    //Get data from Firebase
     private void fetchData(final String type)
     {
         final ArrayList<Map<String,Object>> temp = typeSwitch(type);
@@ -161,6 +166,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         }
     }
 
+    //Progress circle logic
     private int calculateProgress(CircularProgressBar circle,String end,String start,View warning)
     {
         int dayDifference =  0 ;

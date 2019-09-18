@@ -39,14 +39,18 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View inflatePage  = inflater.inflate(R.layout.fragment_home, container, false);
         init(inflatePage);
+        //Authenticate user from Firebase
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser mUser = mAuth.getCurrentUser();
         final ImageButton searchButton = inflatePage.findViewById(R.id.searchbutton);
+        //Search bar
         searchBar = inflatePage.findViewById(R.id.searchbar);
-       TextView welcome = inflatePage.findViewById(R.id.welcome_mes);
+        //Welcome message
+        TextView welcome = inflatePage.findViewById(R.id.welcome_mes);
         assert mUser != null;
         String displayInfo = "Hello "+  mUser.getDisplayName();
         welcome.setText(displayInfo);
+        //Remove hint on click
         searchBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -81,6 +85,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
+    //View main category
     private void init(View x){
         String[] types = {"Fruits","Dairy & Eggs","Meat","Seafood","Poultry","Vegetable"};
         //int[] colors = {Color.GREEN,Color.CYAN,Color.RED,Color.YELLOW,Color.RED,Color.YELLOW};
@@ -153,6 +158,7 @@ public class HomeFragment extends Fragment {
 
     }
 
+    //Vibrate function
     private void vibrate()
     {
         Vibrator vibrator = (Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
@@ -164,6 +170,7 @@ public class HomeFragment extends Fragment {
 
     }
 
+    //Search function
     private void search(String q)
     {
         if(q.trim().length()==0){
