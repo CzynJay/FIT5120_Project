@@ -232,13 +232,17 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         final PopupWindow popupWindow=new PopupWindow(popupView,
                 width, LinearLayout.LayoutParams.WRAP_CONTENT,
                 true);
+        //Allow popup to be touchable & focusable
         popupWindow.setTouchable(true);
         popupWindow.setFocusable(true);
         applyDim(root,0.5f);
+        //Set popup animation
         popupWindow.setAnimationStyle(R.style.Animation_Design_BottomSheetDialog);
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+        //Display name and subtitle of selected food item
          TextView detail_name = popupView.findViewById(R.id.record_name);
          TextView detail_subname = popupView.findViewById(R.id.record_subname);
+         //Display purchase and bes before date
          TextView purchaseTx = popupView.findViewById(R.id.purchase_date);
          TextView expireTx = popupView.findViewById(R.id.expire_date);
          TextView storageTx = popupView.findViewById(R.id.storage_type);
