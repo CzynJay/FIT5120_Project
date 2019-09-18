@@ -23,6 +23,7 @@
         app:layout_constraintBottom_toTopOf="@id/navigation"
         />
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        app:labelVisibilityMode="labeled"
         android:id="@+id/navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

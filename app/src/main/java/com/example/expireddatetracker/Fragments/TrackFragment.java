@@ -255,8 +255,10 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
          String subname = map.get("SUB_NAME").toString();
          subname = subname.equals("null")?"":subname;
          detail_subname.setText(subname);
+         //Display day difference
          String dayLeft = (int) map.get("DayDifference") > 0 ?map.get("DayDifference") + " days left": "Spoiled Already";
          dayLeft = " \n ("+dayLeft +")";
+         //Map dates and storage type to display message
          purchaseTx.setText("Purchase Date: " + map.get(STARTDATE).toString());
          expireTx.setText("Best Before Date: " + map.get(EXPIRE).toString() + dayLeft);
          storageTx.setText("Storage Type: "+ map.get(METHOD).toString());
