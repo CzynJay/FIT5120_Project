@@ -1,3 +1,7 @@
+# Version 1.0.50
+* Code documentation #2
+* Fixed infinite progress circle loading in registration page bug
+* Added back button on registration page
 # Version 1.0.49
 * Fixed notification not displaying properly bug
 # Version 1.0.48
