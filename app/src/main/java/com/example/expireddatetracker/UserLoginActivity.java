@@ -70,6 +70,7 @@ public class UserLoginActivity extends AppCompatActivity {
         });
     }
 
+    //At launch, check if user is authenticated
     @Override
     protected void onStart() {
         super.onStart();
@@ -82,6 +83,7 @@ public class UserLoginActivity extends AppCompatActivity {
         }
     }
 
+    //After login or authenticated launch, initizalize tips and progress circle function
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
@@ -124,21 +126,24 @@ public class UserLoginActivity extends AppCompatActivity {
         }
     }
 
+    //Login function
     private void loginUserAccount() {
         String email, password;
         email = emailTV.getText().toString();
         password = passwordTV.getText().toString();
-
+        //If email field is empty
         if (TextUtils.isEmpty(email)) {
             emailTV.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake));
             Toast.makeText(getApplicationContext(), "Please enter email...", Toast.LENGTH_LONG).show();
             return;
         }
+        //If invalid email was entered
         if (!isEmailValid(email))
         {   emailTV.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake));
             Toast.makeText(getApplicationContext(), "Email is invalid", Toast.LENGTH_LONG).show();
             return;
         }
+        //If password field is empty
         if (TextUtils.isEmpty(password)) {
             passwordTV.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake));
             Toast.makeText(getApplicationContext(), "Please enter password!", Toast.LENGTH_LONG).show();
@@ -150,6 +155,7 @@ public class UserLoginActivity extends AppCompatActivity {
 
     }
 
+    //Login logic
     public class UserLoginTask extends AsyncTask<String, Void, Boolean> {
         boolean res =false;
         public UserLoginTask(boolean val)
@@ -161,6 +167,7 @@ public class UserLoginActivity extends AppCompatActivity {
         protected Boolean doInBackground(String... params) {
             // TODO: attempt authentication against a network service.
             if (!res){
+                //Authenticate with Firebase
                 mAuth.signInWithEmailAndPassword(params[0],params[1])
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
@@ -188,7 +195,9 @@ public class UserLoginActivity extends AppCompatActivity {
                 toMain.putExtra("tips",tips.toString());
                 startActivity(toMain);
                 finish();
-            } else {
+            }
+            //If login failed
+            else {
                 showProgress(false);
                 passwordTV.setError(getString(R.string.error_incorrect_password));
                 passwordTV.requestFocus();
@@ -201,6 +210,7 @@ public class UserLoginActivity extends AppCompatActivity {
         }
     }
 
+    //Initialize login layout
     private void initializeUI() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -226,6 +236,7 @@ public class UserLoginActivity extends AppCompatActivity {
         });
     }
 
+    //Check if email is valid
     public static boolean isEmailValid(String email) {
         String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
         Pattern pattern = Pattern.compile(regex);
@@ -233,6 +244,7 @@ public class UserLoginActivity extends AppCompatActivity {
         return matcher.matches();
     }
 
+    //Get data from tips.json
     private void getJson(){
         String json ;
         tips = new JSONArray();

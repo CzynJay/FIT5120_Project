@@ -37,6 +37,7 @@ public class FeedbackActivity extends AppCompatActivity {
         buttonListener();
     }
 
+    //Initialize layout
     private void initUI()
     {
         submit = findViewById(R.id.submit_bt);
@@ -49,6 +50,7 @@ public class FeedbackActivity extends AppCompatActivity {
     }
     private void buttonListener()
     {
+        //Back button
         ImageButton back = findViewById(R.id.feedback_back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +69,7 @@ public class FeedbackActivity extends AppCompatActivity {
                     map.put("Feedback_content",feedbackET.getText().toString());
                     map.put("Feedback_UserId", FirebaseAuth.getInstance().getCurrentUser().getUid());
                     map.put("Feedback_start",String.valueOf(ratingBar.getRating()));
+                    //Add feedback to Firebase
                     FirebaseFirestore.getInstance().collection("Feedback")
                             .document(rb.getText().toString())
                             .collection(date_to_str(new Date())).add(map);
@@ -76,6 +79,8 @@ public class FeedbackActivity extends AppCompatActivity {
             }
         });
     }
+
+    //Convert date to string
     private  String date_to_str(Date date)
     {
         String myFormat = "yyyy-MM-dd"; //In which you need put here

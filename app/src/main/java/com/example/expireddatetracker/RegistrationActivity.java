@@ -35,7 +35,7 @@ public class RegistrationActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         initializeUI();
-
+        //Register button clicked
         regBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,35 +44,47 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
-
+    //Register new user function
     private void registerNewUser() {
+        //Launch circle progress bar
         progress.setVisibility(View.VISIBLE);
         String email, password;
         email = emailTV.getText().toString();
         password = passwordTV.getText().toString();
         final String name = nameTV.getText().toString();
+        //If name field is empty
         if (TextUtils.isEmpty(name)) {
             Toast.makeText(getApplicationContext(), "Please enter Name...", Toast.LENGTH_LONG).show();
+            progress.setVisibility(View.GONE);
             return;
         }
+        //If email field is empty
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(getApplicationContext(), "Please enter email...", Toast.LENGTH_LONG).show();
+            progress.setVisibility(View.GONE);
             return;
         }
+        //If invalid email was entered
         if (!UserLoginActivity.isEmailValid(email)){
             Toast.makeText(getApplicationContext(), "Please enter valid email...", Toast.LENGTH_LONG).show();
+            progress.setVisibility(View.GONE);
             return;
         }
+        //If password fiels is empty
         if (TextUtils.isEmpty(password)) {
             Toast.makeText(getApplicationContext(), "Please enter password!", Toast.LENGTH_LONG).show();
+            progress.setVisibility(View.GONE);
             return;
         }
+        //If invalid password was entered
         if(!isPasswordValid(password))
         {
             Toast.makeText(getApplicationContext(), "password length should be at least 7", Toast.LENGTH_LONG).show();
+            progress.setVisibility(View.GONE);
             return;
         }
 
+        //Register user on firebase
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -81,6 +93,7 @@ public class RegistrationActivity extends AppCompatActivity {
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
                             user.updateProfile(profileUpdates);
+                            //Message to user that registration is successful
                             Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_LONG).show();
                             progress.setVisibility(View.GONE);
                             Intent intent = new Intent(RegistrationActivity.this, UserLoginActivity.class);

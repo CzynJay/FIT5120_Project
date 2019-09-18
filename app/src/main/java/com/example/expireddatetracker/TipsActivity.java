@@ -24,6 +24,7 @@ public class TipsActivity extends AppCompatActivity {
         initUI();
     }
 
+    //Initialize layout
     private void initUI()
     {
         backBt = findViewById(R.id.tips_back);
@@ -42,6 +43,7 @@ public class TipsActivity extends AppCompatActivity {
         });
     }
 
+    //Display tips function
     private void displayTips(JSONArray jsonArray)
     {
         for(int i = 0; i<jsonArray.length();i++)

@@ -54,6 +54,7 @@ public class Account_Activity extends AppCompatActivity implements View.OnClickL
             }
         });
         passwordBt.setOnClickListener(this);
+        //Sign out button, signing our from Firebase
         logoutBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,6 +66,7 @@ public class Account_Activity extends AppCompatActivity implements View.OnClickL
         });
     }
 
+    //Change password popup function
     private void  popUpWindow()
     {
         final ViewGroup root = (ViewGroup) getWindow().getDecorView().getRootView();
@@ -77,9 +79,11 @@ public class Account_Activity extends AppCompatActivity implements View.OnClickL
         final PopupWindow popupWindow=new PopupWindow(popupView,
                 width, LinearLayout.LayoutParams.WRAP_CONTENT,
                 true);
+        //Allow popup to be touchable & focusable
         popupWindow.setTouchable(true);
         popupWindow.setFocusable(true);
         ResultFragment.applyDim(root,0.5f);
+        //Popup window animation
         popupWindow.setAnimationStyle(R.style.Animation_Design_BottomSheetDialog);
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
         TextView detail_name = popupView.findViewById(R.id.record_name);
@@ -89,6 +93,7 @@ public class Account_Activity extends AppCompatActivity implements View.OnClickL
         popupView.findViewById(R.id.expire_date).setVisibility(View.GONE);
         popupView.findViewById(R.id.storage_type).setVisibility(View.GONE);
         popupView.findViewById(R.id.record_closeBt).setVisibility(View.GONE);
+        //Instantiate buttons
         Button confirmBt = popupView.findViewById(R.id.consume_bt);
         confirmBt.setText("Confirm");
         Button discardBt = popupView.findViewById(R.id.discard_bt);
@@ -113,19 +118,23 @@ public class Account_Activity extends AppCompatActivity implements View.OnClickL
         confirmBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //If password too short
                 if (password1st.getText().toString().trim().length()<7)
                 { Toast.makeText(getApplicationContext(),
                             "Password length should be longer than 6",Toast.LENGTH_LONG).show(); return;}
+                //If password is not the same
                 if (!password1st.getText().toString().equals(password2st.getText().toString()))
                 {
                     Toast.makeText(getApplicationContext(),
                             "Passwords are not the same",Toast.LENGTH_LONG).show();return;
                 }
+                //Update password on Firebase
                 FirebaseAuth.getInstance().getCurrentUser().updatePassword(password1st.getText().toString().trim());
                 popupWindow.dismiss();
 
             }
         });
+        //Un-dim after popup is closed
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {

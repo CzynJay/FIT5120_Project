@@ -71,6 +71,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         LoadJson load = new LoadJson();
         load.execute("cook.json");
 
+        //Define the date of selected item
          date = new DatePickerDialog.OnDateSetListener() {
 
             @Override
@@ -87,6 +88,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    //Read the foodsource.json file
     private void readIntent()
     {
         try {
@@ -100,6 +102,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    //Update start date and best before date of selected item function
     private void updateLabel()
     {
         //myCalendar.getTimeInMillis()+dateConversion(duration)
@@ -113,17 +116,22 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         finish();
     }
 
+    //Initialize layout function
     private void  initUI()
     {
         TextView title = findViewById(R.id.foodname);
         TextView subTitle = findViewById(R.id.subname_label);
+        //Cooking and storing labels
         cookIndicator = findViewById(R.id.cook_indicator);
         storageIndicator =findViewById(R.id.storage_indicator);
+        //Container of storage methods
         container = findViewById(R.id.edu_container);
+        //Cooking and storing buttons
         storageBt = findViewById(R.id.storage_button);
         cookBt = findViewById(R.id.cooking_button);
         View close = findViewById(R.id.back2list);
         title.setText(mainTitle);
+        //Make subtitle invisible if null
         if(subtitleText.equals("null"))
             subTitle.setVisibility(View.GONE);
         else subTitle.setText(subtitleText);
@@ -140,6 +148,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    //Try catch JSON file items in UTf-8
     private JSONArray getJson(String source)
     {
         String json ;
@@ -176,10 +185,12 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        //Date picker from calendar
        DatePickerDialog datePickerDialog = new DatePickerDialog(ItemActivity.this, date, myCalendar
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.setTitle("When did you buy it");
+        //Set recommended day to choose
        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-(long)v.getTag() + dayInMilliseconds);
        Toast.makeText(getBaseContext(),
@@ -211,6 +222,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    //Return string
     private String typeSwitcher(String src)
     {
         switch (src){
@@ -224,6 +236,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    //Images of icons for storage method
     private int imageSwitcher(String src)
     {
         switch (src)
@@ -249,6 +262,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         String val = json.getString(item);
         val = val.equals("NaN")||val.equals("null")?"Not Recommended":val;
         String unit = unitSwitcher(item);
+        //If null, replace with not recommended
         if (!unit.equals("null")&& !val.equals("Not Recommended"))
             val = ((int)((double)Double.valueOf(val)))+ " "+ json.getString(unit);
         else
@@ -279,8 +293,10 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    //Switching between storage and cooking
     private void InitButton()
     {
+        //Storage button function
         storageBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -288,6 +304,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                         R.anim.fui_slide_out_left);
                 animSlide.setDuration(500);
                 animSlide.setAnimationListener(new Animation.AnimationListener() {
+                    //Switch animation
                     @Override
                     public void onAnimationStart(Animation animation) {
                         storageIndicator.setVisibility(View.VISIBLE);
@@ -314,6 +331,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                     cookIndicator.startAnimation(animSlide);
             }
         });
+        //Cooking button function
         cookBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -321,6 +339,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                         R.anim.anim_slide_out_right);
                 animSlide.setDuration(500);
                 animSlide.setAnimationListener(new Animation.AnimationListener() {
+                    //Switch animation
                     @Override
                     public void onAnimationStart(Animation animation) {
                         cookIndicator.setVisibility(View.VISIBLE);
@@ -352,6 +371,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    //Storage method text
     private void showResult(String source)
     {
         JSONArray res = source.equals("foodsource.json")?storageJson:cookJson;
@@ -397,6 +417,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    //Recommended cooking method and temperature text
     private TextView buildTextView(int width, JSONObject temp) throws JSONException
     {
         String method = "preparation_text";
@@ -413,6 +434,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         return  methodName;
     }
 
+    //Popup add to storage confirmation function
     private void popUpChoice(String[] tag)
     {
         container.setVisibility(View.GONE);
@@ -442,6 +464,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                 popupWindow.dismiss();
             }
         });
+        //Set popup title
         title.setText("I will store it in "+tag[0]);
         duration.setText("Duration: " + tag[1]);
         where = tag[0];
@@ -456,6 +479,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    //Convert dayInMilliseconds to respective units
     private long dateConversion(String date)
     {
         Map<String,Long> conversion = new HashMap<>();
@@ -467,6 +491,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         return (long) (Integer.valueOf(temp[0].trim()) * conversion.get(temp[1].trim()))  ;
     }
 
+    //Add records to database function
     private void postRecord()
     {
         Map<String, Object>  record = new HashMap<>();
@@ -478,6 +503,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         record.put("SUB_NAME",subtitleText);
         record.put("NAV_TITLE",navigation_title);
         String userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        //Add to firebase
         db.collection("tracker").document(userKey)
                 .collection(where).document().set(record)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

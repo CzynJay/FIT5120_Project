@@ -60,6 +60,8 @@ public class NotificationService extends BroadcastReceiver {
         map.put("Expire already",0);
         loadData();}
     }
+
+//    Check if app is running function
     public boolean checkApp(){
         ActivityManager am = (ActivityManager) myContext
                 .getSystemService(ACTIVITY_SERVICE);
@@ -74,6 +76,8 @@ public class NotificationService extends BroadcastReceiver {
             return false;
         }
     }
+
+    //Get data from Firebase function
     private void loadData()
     {
         String [] types = {"Freezer","Pantry","Refrigerator"};
@@ -94,9 +98,11 @@ public class NotificationService extends BroadcastReceiver {
                 });}
     }
 
+    //Calculate days remaining and map to expired or expiring soon function
     private void countingDate(Map<String,Object> data)
     {
         Date expireDate = string_to_Date(Objects.requireNonNull(data.get("EXPIRE_DATE")).toString());
+        //Calculate days to expiry
         long timeDifference =  expireDate.getTime() - new Date().getTime();
         if (timeDifference<=0){
             map.put("Expire already",map.get("Expire already")+1);
@@ -107,6 +113,7 @@ public class NotificationService extends BroadcastReceiver {
        }
     }
 
+    //Convert string to date function
     private Date string_to_Date(String dateStr)
     {
         Date returnDate = new Date();
@@ -118,7 +125,7 @@ public class NotificationService extends BroadcastReceiver {
         return  returnDate;
     }
 
-
+    //Notification function
     private void popNotification()
     {
         NotificationManager manager = (NotificationManager)myContext.
@@ -138,26 +145,28 @@ public class NotificationService extends BroadcastReceiver {
         Intent notificationIntent = new Intent(myContext, UserLoginActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(myContext, 0,
                 notificationIntent, 0);
+        //If a food item is expiring soon
         if(map.get("Expire soon")>0){
             String subcontent = map.get("Expire soon") ==1?
                     map.get("Expire soon")+" item":map.get("Expire soon") + " items";
             Notification builder = new NotificationCompat.Builder(myContext,"Foodtyro")
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setColor(myContext.getResources().getColor(R.color.white))
-                    .setContentTitle("Items expire soon")
+                    .setContentTitle("Items expiring soon")
                     .setContentIntent(pendingIntent)
-                    .setContentText("You have " +subcontent+" expire soon" )
+                    .setContentText("You have " +subcontent+" expiring soon" )
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT).build();
             manager.notify(1,builder);
         }
+        //If a food item is expired
         if(map.get("Expire already")>0){
             String subcontent = map.get("Expire already") ==1?
                     map.get("Expire already") +" item":map.get("Expire already") + " items";
             Notification builder = new NotificationCompat.Builder(myContext, "Foodtyro")
                     .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentTitle("Items expire already")
+                    .setContentTitle("Items expired already")
                     .setContentIntent(pendingIntent)
-                    .setContentText("You have " +subcontent+" expire already" )
+                    .setContentText("You have " +subcontent+" expired already" )
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT).build();
             manager.notify(2,builder);
         }

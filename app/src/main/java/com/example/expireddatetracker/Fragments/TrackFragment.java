@@ -131,6 +131,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
     private void displayStatus( ArrayList<Map<String,Object>> lists){
 
         errorTx.setVisibility(View.GONE);
+        //If there is no records in selected storage
         if(lists.size()==0){
             errorTx.setVisibility(View.VISIBLE);
                         return;}
@@ -243,7 +244,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         //Display name and subtitle of selected food item
          TextView detail_name = popupView.findViewById(R.id.record_name);
          TextView detail_subname = popupView.findViewById(R.id.record_subname);
-         //Display purchase and bes before date
+         //Display purchase and best before date
          TextView purchaseTx = popupView.findViewById(R.id.purchase_date);
          TextView expireTx = popupView.findViewById(R.id.expire_date);
          TextView storageTx = popupView.findViewById(R.id.storage_type);
@@ -259,6 +260,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
          String dayLeft = (long) map.get("DayDifference") > 0 ?
                  (int)((long)map.get("DayDifference")/dayInMilliseconds) + " days left": "Spoiled Already";
          dayLeft = " \n ("+dayLeft +")";
+         //Define texts for purchase date, best before date, and storage method
          purchaseTx.setText("Purchase Date: " + map.get(STARTDATE).toString());
          expireTx.setText("Best Before Date: " + map.get(EXPIRE).toString() + dayLeft);
          storageTx.setText("Storage Type: "+ map.get(METHOD).toString());
@@ -290,6 +292,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
          });
     }
 
+    //Dimming effect when pop up appears
     public static void applyDim(@NonNull ViewGroup parent, float dimAmount){
         Drawable dim = new ColorDrawable(Color.BLACK);
         dim.setBounds(0, 0, parent.getWidth(), parent.getHeight());
@@ -299,6 +302,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         overlay.add(dim);
     }
 
+    //Un-dim after popup is closed
     public static void clearDim(@NonNull ViewGroup parent) {
         ViewGroupOverlay overlay = parent.getOverlay();
         overlay.clear();
@@ -322,6 +326,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
 
     }
 
+    //Drag and drop function
     private final class MyTouchListener implements View.OnTouchListener {
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
@@ -337,6 +342,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         }
     }
 
+    //Drag and drop class
     class MyDragListener implements View.OnDragListener {
 
         @Override
@@ -373,6 +379,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         return  sdf.format(date);
     }
 
+    //Remove food storage function
     private void removeView(final View view,String finishType){
         final ViewGroup owner = (ViewGroup) view.getParent();
         String type_temp =tabs.getTabAt(tabs.getSelectedTabPosition()).getText().toString();
@@ -381,6 +388,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         String id = (String) temp.get("id");
         activity.db.collection("tracker").document(uid)
                 .collection(finishType).add(temp);
+        //Remove data from Firebase
         activity.db.collection("tracker").document(uid)
                 .collection(type_temp).document(id).delete();
         freeze = new ArrayList<>();

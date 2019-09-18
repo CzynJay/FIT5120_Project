@@ -32,6 +32,7 @@ public class List_item_activity extends AppCompatActivity {
         displayRow();
     }
 
+    //Initialize layout for search result item list
     private void initUI()
     {
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -56,8 +57,9 @@ public class List_item_activity extends AppCompatActivity {
         titleImg.setImageResource(MainActivity.String_to_img(keyTitle));
     }
 
-
+    //Display row function of search results
     private void displayRow(){
+            //If there is no search result
             if (jsonArray.length()==0)
             {
                 LayoutInflater vi = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -68,6 +70,7 @@ public class List_item_activity extends AppCompatActivity {
                 sub.setText("Please enter correct food name");
                 container.addView(v);
             }
+            //If search result exists
             for(int i=0;i<jsonArray.length();i++)
             {
                 try {
@@ -95,6 +98,7 @@ public class List_item_activity extends AppCompatActivity {
                             }
                         }
                     });
+                    //Add food name and subtitle to row
                     main.setText(temp.getString("food_name"));
                     sub.setText(temp.getString("food_subtitle").equals("null")?"":temp.getString("food_subtitle"));
                     container.addView(v);

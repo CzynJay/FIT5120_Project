@@ -31,12 +31,14 @@ public class MainActivity extends AppCompatActivity {
     boolean doubleBackToExitPressedOnce = false;
     public FirebaseFirestore db;
     public JSONArray food_source;
+    //Bottom navigation menu
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment fragment = null;
+            //Fragments for bottom navigation menu
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     FragmentManager fm = getSupportFragmentManager();
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    //Load fragment
     private boolean loadFragment(Fragment fragment) {
         //switching fragment
         if (fragment != null) {
@@ -80,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         LoadJson asynTask = new LoadJson();
         asynTask.execute();
+        //Home fragment on launch
         loadFragment(new HomeFragment());
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -133,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //Sub-category image
     public static int String_to_img(String category)
     {
         switch (category)
@@ -170,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //Push notification function
     public void startAlertAtParticularTime() {
         Intent intent = new Intent(this, NotificationService.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
