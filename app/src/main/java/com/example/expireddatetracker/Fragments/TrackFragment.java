@@ -53,6 +53,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
     final private String DISPLAY = "DISPLAY_NAME";
     private TabLayout tabs;
     private View progressing,errorTx;
+    //Instantiate ArrayList for storage methods
     private ArrayList<Map<String,Object>> freeze = new ArrayList<>();
     private ArrayList<Map<String,Object>> refrigerate = new ArrayList<>();
     private ArrayList<Map<String,Object>> pantry = new ArrayList<>();
@@ -68,17 +69,21 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
 
     private void init(View x){
         tabs = x.findViewById(R.id.tabLayout);
+        //Discard and consume button
         Button quickDiscardBt = x.findViewById(R.id.quick_discard_bt);
         Button quickConsumeBt = x.findViewById(R.id.quick_consume_bt);
         quickDiscardBt.setTag(quickDiscardBt.getText());
         quickConsumeBt.setTag(quickConsumeBt.getText());
+        //Drag listener for buttons
         quickConsumeBt.setOnDragListener(new MyDragListener());
         quickDiscardBt.setOnDragListener(new MyDragListener());
         container = x.findViewById(R.id.storage_container);
         errorTx = x.findViewById(R.id.no_record);
         activity = (MainActivity) getActivity();
+        //Progress circle of food items
         progressing = x.findViewById(R.id.progressing);
         progressing.setVisibility(View.VISIBLE);
+        //Authenticate user from Firebase
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         tabs.addOnTabSelectedListener(this);
         fetchData("Pantry");
@@ -88,6 +93,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
     {
         switch (type)
         {
+            //Define cases for different storage method
             case "Freezer": return freeze;
             case "Pantry": return pantry;
             case "Refrigerator": return refrigerate;
@@ -95,6 +101,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
          return new ArrayList<>();
     }
 
+    //Get data from Firebase
     private void fetchData(final String type)
     {
         final ArrayList<Map<String,Object>> temp = typeSwitch(type);
@@ -106,6 +113,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()){
+                            //Get data from Firebase
                             for(DocumentSnapshot item:task.getResult().getDocuments()){
                                 placeToArrayList(item.getData(),item.getId());
                             }
@@ -118,6 +126,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
             displayStatus(temp);
     }
 
+    //Display list of all the food in storage
     private void displayStatus( ArrayList<Map<String,Object>> lists){
 
         errorTx.setVisibility(View.GONE);
@@ -138,6 +147,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
             name.setText(item.get(DISPLAY).toString());
             int imgResource = R.drawable.app_icon;
               if(item.get("NAV_TITLE")!=null)
+                  //Get subcategory image
                   imgResource = MainActivity.String_to_img(item.get("NAV_TITLE").toString());
             ImageButton img = v.findViewById(R.id.storage_button);
             img.setImageResource(imgResource);
@@ -147,6 +157,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                                     ,item.get(STARTDATE).toString(),warning);
             layout.getLayoutParams().width = width;
             layout.getLayoutParams().height = width;
+            //Set dimensions of popup
             warning.getLayoutParams().width = layout.getLayoutParams().width /3;
             warning.getLayoutParams().height = layout.getLayoutParams().height /3;
             item.put("DayDifference",dayDifference);
@@ -161,6 +172,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         }
     }
 
+    //Progress circle logic
     private int calculateProgress(CircularProgressBar circle,String end,String start,View warning)
     {
         int dayDifference =  0 ;
@@ -168,9 +180,10 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
             Date end_date= new SimpleDateFormat("dd/MM/yy",Locale.US).parse(end);
             Date start_date =  new SimpleDateFormat("dd/MM/yy", Locale.US).parse(start);
             long dayInMilliseconds = 86400000;
-
+            //Change date to percentage
             float percent= ( System.currentTimeMillis() -start_date.getTime() )*100/(end_date.getTime() - start_date.getTime());
             circle.setProgress(percent);
+            //Calculate remaining days
             dayDifference = (int)((end_date.getTime() - System.currentTimeMillis())/dayInMilliseconds);
             if (percent >=100f)
             {
@@ -205,6 +218,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         popUpWindow(v);
     }
 
+    //Popup after food item is selected
     private void  popUpWindow(final View itemView)
     {
         final ViewGroup root = (ViewGroup) getActivity().getWindow().getDecorView().getRootView();

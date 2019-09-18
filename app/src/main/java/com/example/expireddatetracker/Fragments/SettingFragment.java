@@ -29,6 +29,7 @@ public class SettingFragment extends Fragment {
         return settingView;
     }
 
+    //Initialise layouts items in settings page
     private void initUI(View parent){
         accountLayout = parent.findViewById(R.id.account_layout);
         tipsLayout = parent.findViewById(R.id.tips_layout);
@@ -37,8 +38,10 @@ public class SettingFragment extends Fragment {
         clickButtonListener();
     }
 
+    //Buttons in settings page
     private void clickButtonListener()
     {
+        //Account button
         accountLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,6 +49,7 @@ public class SettingFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        //Tips button
         tipsLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +58,7 @@ public class SettingFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        //Feedback button
         feedbackLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,6 +66,7 @@ public class SettingFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        //Link to website
         websiteLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

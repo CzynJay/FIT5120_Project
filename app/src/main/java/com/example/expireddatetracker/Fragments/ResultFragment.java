@@ -48,7 +48,7 @@ public class ResultFragment extends Fragment{
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        //Inflate the layout for this fragment
         View x =  inflater.inflate(R.layout.fragment_result, container, false);
         Bundle bundle =  this.getArguments();
         TextView tx = x.findViewById(R.id.query);
@@ -59,6 +59,7 @@ public class ResultFragment extends Fragment{
         searchResult(mainActivity.food_source,query);
         showNavigation();
         tx.setText(query);
+        //Transition animation
         bt.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
@@ -74,6 +75,7 @@ public class ResultFragment extends Fragment{
         return x;
     }
 
+    //Subcategory search
     private void searchResult(JSONArray source, String query)
     {
         boolean multi = false;
@@ -83,6 +85,7 @@ public class ResultFragment extends Fragment{
         {
             try {
                 JSONObject temp = source.getJSONObject(i);
+                //Trim and change search query to lowercase
                 String value = temp.toString().trim().toLowerCase();
                 query = query.trim().toLowerCase();
                 if (!multi) {
@@ -115,10 +118,12 @@ public class ResultFragment extends Fragment{
         Log.e("check",String.valueOf(navigation.size()));
     }
 
+    //Display subcategory
     private void showNavigation(){
         DisplayMetrics displayMetrics = new DisplayMetrics();
         Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         LayoutInflater vi = (LayoutInflater) Objects.requireNonNull(getContext()).getSystemService(LAYOUT_INFLATER_SERVICE);
+        //If subcategory does not exist
         if(Objects.requireNonNull(navigation.keySet().toArray()).length==0)
         {
             final View v = vi.inflate(R.layout.subtype_layout, null);
@@ -220,15 +225,18 @@ public class ResultFragment extends Fragment{
 
     }
 
+    //Show results
     private void showResult(View x, JSONArray jsonArray, final PopupWindow window){
         LinearLayout layout = x.findViewById(R.id.cate_container);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int widthPixels  = displayMetrics.widthPixels;
+        //If food does not exist
         if (jsonArray.length()==0)
         {
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
             final View v = vi.inflate(R.layout.search_row, null);
+            //Add title and subtitle to header
             TextView main = v.findViewById(R.id.mainname);
             TextView sub = v.findViewById(R.id.subname);
             main.setText("No result");
@@ -240,6 +248,7 @@ public class ResultFragment extends Fragment{
             try {
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
             final View v = vi.inflate(R.layout.search_row, null);
+            //Add title and subtitle to header
             TextView main = v.findViewById(R.id.mainname);
             TextView sub = v.findViewById(R.id.subname);
             final JSONObject temp = (JSONObject) jsonArray.get(i);
