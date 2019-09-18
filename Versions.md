@@ -1,3 +1,8 @@
+# Version 1.0.46
+* Changed tracking page storage names from verbs to nouns
+# Version 1.0.45
+* Added test data for triggering notification
+* UI changes for confirmation popup for tracking
 # Version 1.0.44
 * Added new sub-category for shellfish
 # Version 1.0.43
