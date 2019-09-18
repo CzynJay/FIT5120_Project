@@ -55,7 +55,7 @@ public class NotificationService extends BroadcastReceiver {
 
     private void loadData()
     {
-        String [] types = {"Freeze","Pantry","Refrigerate"};
+        String [] types = {"Freezer","Pantry","Refrigerator"};
         for(String type: types)
         {
         db.collection("tracker").document(FirebaseAuth.getInstance()
