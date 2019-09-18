@@ -1,3 +1,6 @@
+# Version 1.0.47
+* Changed tips punctuation
+* Code documentation #1
 # Version 1.0.46
 * Changed tracking page storage names from verbs to nouns
 # Version 1.0.45
