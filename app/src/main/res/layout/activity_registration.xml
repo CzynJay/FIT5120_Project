@@ -17,6 +17,7 @@
         android:background="#00FF0000"
         android:layout_margin="0dp"
         android:src="@drawable/back"
+
         />
     <ImageView
         android:id="@+id/app_icon"
