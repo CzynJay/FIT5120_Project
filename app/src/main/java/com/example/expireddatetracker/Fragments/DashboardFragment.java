@@ -51,9 +51,9 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
     MainActivity activity ;
     Map<String, JSONArray> dayLeftDict = new HashMap<>();
     private final String SPOILED = "Spoiled";
-    private final String TWODAYS = "2 Day Left";
+    private final String TWODAYS = "Less than 2 days left";
     private final String TWO_SEVEN = "2-7 days left";
-    private final String MORETHANAWEEK = "more than a week";
+    private final String MORETHANAWEEK = "More than a week";
     long dayInMilliseconds = 86400000;
     private View progress;
 
