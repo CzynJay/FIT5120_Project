@@ -1,15 +1,18 @@
 <resources>
-    <string name="app_name">ExpiredDateTracker</string>
+    <string name="app_name">FoodTyro</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_login">Sign in</string>
+    <string name="title_setting">Settings</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password </string>
-    <string name="sign_up">Sign up </string>
+    <string name="sign_up">Sign up</string>
+    <string name="storage">Storage</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
+    <string name="account">Account</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
@@ -17,7 +20,39 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-
+    <string name="no_result">No result, Please enter correct food name!</string>
+    <string name="no_recommend">No Recommendation</string>
+    <string name="storing">Storing</string>
+    <string name="cooking">Cooking</string>
+    <string name="homeLabel">Food Search</string>
+    <string name="welcome">Welcome! </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dynamic_text"> Dynamic text</string>
+    <string name="discard">Discard</string>
+    <string name="consume">Consume</string>
+    <string name="no_record">No record yet</string>
+    <string name="freeze">Freezer</string>
+    <string name="pantry">Pantry</string>
+    <string name="refrigerate">Refrigerator</string>
+    <string name="tips">Tips</string>
+    <string name="feedback">Feedback</string>
+    <string name="title_activity_account_">Account_Activity</string>
+    <string name="log_out">Log Out</string>
+    <string name="submit">submit</string>
+    <string name="what_is_your_feedback_about">What is your feedback about?</string>
+    <string name="general_inquiry">General Inquiry</string>
+    <string name="error_report">Error Report</string>
+    <string name="suggestion">Suggestion</string>
+
+    <string name="msg_subscribed">Suggestion</string>
+    <string name="msg_subscribe_failed">Suggestion</string>
+    <string name="fcm_token">FCM: %s</string>
+    <string name="msg_token_fmt"></string>
+    <string name="display_name">Display Name</string>
+    <string name="group_id">Group Id</string>
+    <string name="change_password">Change password</string>
+    <string name="visit_our_website">Visit Our Website</string>
+    <string name="register_new_account">Register new account</string>
+    <string name="category">Category</string>
 </resources>

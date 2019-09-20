@@ -1,23 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".Fragments.TrackFragment"
-    >
-    <TextView android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#FFFFFF"
+    tools:context=".Fragments.TrackFragment">
+ <TextView android:id="@+id/no_record"
+     android:gravity="center"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:layout_centerHorizontal="true"
+     android:layout_centerVertical="true"
+     android:text="@string/no_record"
+     android:visibility="gone"
+     android:textSize="@dimen/labelSize"
+     />
+<com.google.android.material.tabs.TabLayout
+    android:id="@+id/tabLayout"
+    android:layout_width="match_parent"
+    android:background="#12022E"
+    app:tabIndicatorColor="@color/green"
+    app:tabIndicatorHeight="3dp"
+    app:tabTextColor="@color/white"
+    app:tabMaxWidth="0dp"
+    app:tabGravity="fill"
+    app:tabMode="fixed"
+    android:layout_height="wrap_content" >
+    <com.google.android.material.tabs.TabItem
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"/>
-    <ScrollView android:layout_height="wrap_content"
-        android:layout_width="match_parent">
-        <LinearLayout
-            android:id="@+id/filed_container"
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="wrap_content"
-            >
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+        android:text="@string/pantry" />
+    <com.google.android.material.tabs.TabItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/freeze"
+         />
+    <com.google.android.material.tabs.TabItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/refrigerate"/>
+</com.google.android.material.tabs.TabLayout>
+<ProgressBar
+    android:id="@+id/progressing"
+    android:layout_width="70dp"
+    android:layout_height="70dp"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:visibility="gone"/>
+ <ScrollView
+     android:id="@+id/scroll_container"
+     android:layout_below="@id/tabLayout"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:layout_above="@id/buttonLayout"
+     >
+ <GridLayout
+
+     android:layout_margin="20dp"
+     android:id="@+id/storage_container"
+     android:layout_width="match_parent"
+     android:useDefaultMargins="true"
+     android:layout_height="wrap_content"
+     android:columnCount="3"
+     /></ScrollView>
+ <LinearLayout
+     android:id="@+id/buttonLayout"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:layout_marginTop="10dp"
+     android:layout_alignParentBottom="true"
+     android:weightSum="2"
+     android:orientation="horizontal">
+  <Button
+      android:id="@+id/quick_discard_bt"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:layout_width="0dp"
+      android:textColor="@color/white"
+      android:textStyle="bold"
+      android:background="#ff00"
+      android:gravity="center"
+      android:textSize="18sp"
+      android:text="@string/discard"
+      />
+  <Button
+      android:id="@+id/quick_consume_bt"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:textColor="@color/white"
+
+      android:background="@color/green"
+      android:textStyle="bold"
+      android:textSize="18sp"
+      android:layout_width="0dp"
+      android:text="@string/consume"
+      />
+ </LinearLayout>
+</RelativeLayout>

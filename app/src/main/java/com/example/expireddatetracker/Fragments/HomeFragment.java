@@ -6,22 +6,27 @@ import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.example.expireddatetracker.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import static android.content.Context.VIBRATOR_SERVICE;
@@ -34,12 +39,22 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View inflatePage  = inflater.inflate(R.layout.fragment_home, container, false);
         init(inflatePage);
+        //Authenticate user from Firebase
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser mUser = mAuth.getCurrentUser();
         final ImageButton searchButton = inflatePage.findViewById(R.id.searchbutton);
+        //Search bar
         searchBar = inflatePage.findViewById(R.id.searchbar);
+        //Welcome message
+        TextView welcome = inflatePage.findViewById(R.id.welcome_mes);
+        assert mUser != null;
+        String displayInfo = "Hello "+  mUser.getDisplayName();
+        welcome.setText(displayInfo);
+        //Remove hint on click
         searchBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus == true)
+                if(hasFocus)
                     searchBar.setHint("");
                 else
                     searchBar.setHint("");
@@ -65,38 +80,58 @@ public class HomeFragment extends Fragment {
         return inflatePage;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    //View main category
     private void init(View x){
-        String[] types = {"Fruit","Dairy & Egg","Meat","Seafood","Poultry","Vegetable"};
+        String[] types = {"Fruits","Dairy & Eggs","Meat","Seafood","Poultry","Vegetable"};
         //int[] colors = {Color.GREEN,Color.CYAN,Color.RED,Color.YELLOW,Color.RED,Color.YELLOW};
         Map<String, Integer> map = new HashMap<String,Integer>();
-        map.put("Fruit",R.drawable.fruit);
-        map.put("Dairy & Egg",R.drawable.milk);
+        map.put("Fruits",R.drawable.fruit);
+        map.put("Dairy & Eggs",R.drawable.milk_eggs);
         map.put("Meat",R.drawable.meat);
         map.put("Seafood",R.drawable.seafood);
         map.put("Poultry",R.drawable.poultry);
         map.put("Vegetable",R.drawable.vegetable);
         LinearLayout layout = x.findViewById(R.id.home_contain);
+        x.findViewById(R.id.viewAll_tx).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                search("all");
+            }
+        });
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
-        width = (int)(width / (2.5));
-        RelativeLayout.LayoutParams paramsBt = new RelativeLayout.LayoutParams(width, width);
+        width = (int)(width / (3.5));
+        LinearLayout.LayoutParams paramsBt = new LinearLayout.LayoutParams(width, width);
         for(int temp=0;temp< types.length;temp++){
-            LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater vi = (LayoutInflater) Objects.requireNonNull(getContext())
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final View v = vi.inflate(R.layout.image_button, null);
             ImageButton bt1 = v.findViewById(R.id.img1);
-            bt1.setImageResource(map.get(types[temp]));
+            ImageButton bt2 = v.findViewById(R.id.img2);
+            ImageButton bt3 = v.findViewById(R.id.img3);
             final TextView tx1  = v.findViewById(R.id.tx1);
+            final TextView tx2  = v.findViewById(R.id.tx2);
+            final TextView tx3  = v.findViewById(R.id.tx3);
+            bt1.setImageResource(map.get(types[temp]));
             tx1.setText(types[temp]);
             temp++;
-            ImageButton bt2 = v.findViewById(R.id.img2);
             bt2.setImageResource(map.get(types[temp]));
-            final TextView tx2 = v.findViewById(R.id.tx2);
             tx2.setText(types[temp]);
+            temp++;
+            bt3.setImageResource(map.get(types[temp]));
+            tx3.setText(types[temp]);
             bt1.setLayoutParams(paramsBt);
             bt2.setLayoutParams(paramsBt);
+            bt3.setLayoutParams(paramsBt);
             tx1.getLayoutParams().width = width;
             tx2.getLayoutParams().width = width;
+            tx3.getLayoutParams().width = width;
             layout.addView(v);
             bt1.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -112,10 +147,18 @@ public class HomeFragment extends Fragment {
                     search(temp);
                 }
             });
+            bt3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String temp = tx3.getText().toString();
+                    search(temp);
+                }
+            });
         };
 
     }
 
+    //Vibrate function
     private void vibrate()
     {
         Vibrator vibrator = (Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
@@ -127,6 +170,7 @@ public class HomeFragment extends Fragment {
 
     }
 
+    //Search function
     private void search(String q)
     {
         if(q.trim().length()==0){
@@ -142,13 +186,12 @@ public class HomeFragment extends Fragment {
         fragment.setArguments(bundle);
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .setCustomAnimations(android.R.anim.fade_in,android.R.anim.fade_out,
-                        android.R.anim.fade_in, android.R.anim.fade_out
+                .setCustomAnimations(R.anim.anim_slide_in_right,R.anim.anim_slide_out_right,
+                        R.anim.anim_slide_in_left,R.anim.anim_slide_out_left
                 ).addToBackStack(null)
                 .replace(R.id.fragment_container,fragment)
                 .commit();
         }
     }
-
 
 }

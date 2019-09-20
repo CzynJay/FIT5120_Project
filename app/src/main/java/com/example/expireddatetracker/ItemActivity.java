@@ -1,21 +1,19 @@
 package com.example.expireddatetracker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
-import android.text.Layout;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -25,51 +23,55 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.example.expireddatetracker.Fragments.ResultFragment;
 import com.google.android.gms.common.util.ArrayUtils;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Date;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 public class ItemActivity extends AppCompatActivity implements View.OnClickListener {
-    private TextView title;
-    private View cookIndicator;
-    private View storageIndicator;
+    private View cookIndicator,storageIndicator;
     private LinearLayout container;
-    private Button storageBt;
-    private Button cookBt;
-    private View close;
-    private int height;
-    private String foodID = "1";
-    private int width;
-    private JSONArray storageJson = new JSONArray();
-    private  JSONArray cookJson = new JSONArray();
-    private String[] storageTypes = {"DOP_Pantry_Max","DOP_Freeze_Max","DOP_Refrigerate_Max"};
+    private Button storageBt,cookBt;
+    private int height,width;
+    private String foodID,mainTitle,subtitleText= "1";
+    private JSONArray storageJson= new JSONArray();
+    private JSONArray cookJson = new JSONArray();
+    final private String[] storageTypes = {"DOP_Pantry_Max","DOP_Freeze_Max","DOP_Refrigerate_Max"};
     private Calendar myCalendar = Calendar.getInstance();
     private DatePickerDialog.OnDateSetListener date;
     final private long dayInMilliseconds = 86400000;
+    private PopupWindow popupWindow;
+    private FirebaseFirestore db;
+    private String startDate,endDate,where,timeSpan,navigation_title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.item_details);
-        foodID = getIntent().getStringExtra("id");
+        db = FirebaseFirestore.getInstance();
+        readIntent();
         initUI();
-        LoadJson load = new LoadJson();
-        load.execute("foodsource.json","cook.json");
         InitButton();
+        LoadJson load = new LoadJson();
+        load.execute("cook.json");
+
+        //Define the date of selected item
          date = new DatePickerDialog.OnDateSetListener() {
 
             @Override
@@ -86,30 +88,58 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    //Read the foodsource.json file
+    private void readIntent()
+    {
+        try {
+            storageJson.put(new JSONObject(getIntent().getStringExtra("jsonObject")));
+            foodID = storageJson.getJSONObject(0).getString("food_id");
+            mainTitle =storageJson.getJSONObject(0).getString("food_name");
+            subtitleText = storageJson.getJSONObject(0).getString("food_subtitle");
+            navigation_title = storageJson.getJSONObject(0).getString("Nav_category");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Update start date and best before date of selected item function
     private void updateLabel()
     {
-        String myFormat = "MM/dd/yy"; //In which you need put here
+        //myCalendar.getTimeInMillis()+dateConversion(duration)
+        String myFormat = "dd/MM/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        Toast.makeText(getBaseContext(),sdf.format(myCalendar.getTime()) + " is selected",Toast.LENGTH_LONG).show();
+        startDate = sdf.format(myCalendar.getTime());
+        endDate = sdf.format(new Date(myCalendar.getTime().getTime()+dateConversion(timeSpan)));
+        Post upDateRecord =new Post();
+        upDateRecord.execute();
+        popupWindow.dismiss();
         finish();
     }
 
+    //Initialize layout function
     private void  initUI()
     {
-        title = findViewById(R.id.foodname);
-        title.setText(getIntent().getStringExtra("name"));
+        TextView title = findViewById(R.id.foodname);
+        TextView subTitle = findViewById(R.id.subname_label);
+        //Cooking and storing labels
         cookIndicator = findViewById(R.id.cook_indicator);
         storageIndicator =findViewById(R.id.storage_indicator);
+        //Container of storage methods
         container = findViewById(R.id.edu_container);
+        //Cooking and storing buttons
         storageBt = findViewById(R.id.storage_button);
         cookBt = findViewById(R.id.cooking_button);
-        close = findViewById(R.id.back2list);
+        View close = findViewById(R.id.back2list);
+        title.setText(mainTitle);
+        //Make subtitle invisible if null
+        if(subtitleText.equals("null"))
+            subTitle.setVisibility(View.GONE);
+        else subTitle.setText(subtitleText);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         height = (int) (displayMetrics.heightPixels );
         width = (int)(displayMetrics.widthPixels);
-        storageIndicator.getLayoutParams().width =  (int)(width/2.5);
-        cookIndicator.getLayoutParams().width=(int)(width/2.5);
+
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,6 +148,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    //Try catch JSON file items in UTf-8
     private JSONArray getJson(String source)
     {
         String json ;
@@ -128,12 +159,10 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
             byte[] buffer = new byte[size];
             is.read(buffer);
             is.close();
-            json = new String(buffer,"UTF-8");
+            json = new String(buffer, StandardCharsets.UTF_8);
             jarry = new JSONArray(json);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
         return  jarry;
@@ -156,12 +185,14 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        //Date picker from calendar
        DatePickerDialog datePickerDialog = new DatePickerDialog(ItemActivity.this, date, myCalendar
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH));
-       datePickerDialog.setTitle("When did you buy it");
+        datePickerDialog.setTitle("When did you buy it");
+        //Set recommended day to choose
        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-       datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-(long)v.getTag() + 2*dayInMilliseconds);
+       datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-(long)v.getTag() + dayInMilliseconds);
        Toast.makeText(getBaseContext(),
               "If the date is not available, your food may have been spoiled ",Toast.LENGTH_LONG).show();
        datePickerDialog.show();
@@ -171,8 +202,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     {
         @Override
         protected Void doInBackground(String... strings) {
-            storageJson = searchResult(getJson(strings[0]),foodID);
-            cookJson = searchResult(getJson(strings[1]),foodID);
+            cookJson = searchResult(getJson(strings[0]),foodID);
             return null;
         }
 
@@ -192,20 +222,22 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    //Return string
     private String typeSwitcher(String src)
     {
         switch (src){
-            case "DOP_Pantry_Max": return "Pantry";
-            case "DOP_Freeze_Max": return "Freeze";
+            case "DOP_Pantry_Max": return getResources().getString(R.string.pantry);
+            case "DOP_Freeze_Max": return getResources().getString(R.string.freeze);
             case "Cooking_Temperature": return "Temperature";
             case "Preparation_size": return "Size";
             case "Cooking_time": return "Duration";
-            default:return "Refrigerate";
+            default:return getResources().getString(R.string.refrigerate);
         }
 
     }
 
-    private int imgSwithcher(String src)
+    //Images of icons for storage method
+    private int imageSwitcher(String src)
     {
         switch (src)
         {
@@ -224,44 +256,47 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         View v = vi.inflate(R.layout.edu_row, null);
         final TextView edu_info = v.findViewById(R.id.edu_info);
-        ImageView im = v.findViewById(R.id.edu_img);
+        final ImageView im = v.findViewById(R.id.edu_img);
         final TextView type = v.findViewById(R.id.edu_type);
+        final Button addBt = v.findViewById(R.id.add_bt);
         String val = json.getString(item);
         val = val.equals("NaN")||val.equals("null")?"Not Recommended":val;
         String unit = unitSwitcher(item);
+        //If null, replace with not recommended
         if (!unit.equals("null")&& !val.equals("Not Recommended"))
             val = ((int)((double)Double.valueOf(val)))+ " "+ json.getString(unit);
+        else
+            edu_info.setTextColor(getApplicationContext().getResources().getColor(R.color.red));
         val = item.equals("Cooking_Temperature") && !val.equals("Not Recommended")?val+" °C":val;
         type.setText(typeSwitcher(item));
-        im.setImageResource(imgSwithcher(item));
+        im.setImageResource(imageSwitcher(item));
         edu_info.setText(val);
         im.getLayoutParams().height = height/7;
-        im.getLayoutParams().width = (int) (width/2.5);
+        im.getLayoutParams().width = height/7;
         edu_info.getLayoutParams().height = height/7;
         edu_info.getLayoutParams().width = (int) (width/2.5);
         String [] tag = {typeSwitcher(item),val};
         if(ArrayUtils.contains( storageTypes, item ) )
         {
-            v.setTag(tag);
-            v.setOnClickListener(new View.OnClickListener() {
+            addBt.setTag(tag);
+            if (! edu_info.getText().toString().startsWith("Not")){
+                    addBt.setVisibility(View.VISIBLE);
+            addBt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (edu_info.getText().toString().equals("Not Recommended")) {
-                        Toast.makeText(getBaseContext(), type.getText().toString()
-                                + " storage is not recommended", Toast.LENGTH_LONG).show();
-                        vibrate();
-                    }
-                    else
-                        popUpChoice( (String[])v.getTag());
+                    popUpChoice( (String[])v.getTag());
                 }
             });}
+        }
         return v;
 
 
     }
 
+    //Switching between storage and cooking
     private void InitButton()
     {
+        //Storage button function
         storageBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -269,6 +304,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                         R.anim.fui_slide_out_left);
                 animSlide.setDuration(500);
                 animSlide.setAnimationListener(new Animation.AnimationListener() {
+                    //Switch animation
                     @Override
                     public void onAnimationStart(Animation animation) {
                         storageIndicator.setVisibility(View.VISIBLE);
@@ -276,7 +312,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                                 R.anim.fui_slide_in_right);
                         animSlide.setDuration(500);
                         container.removeAllViews();
-                        popupwindowInit("foodsource.json");
+                        showResult("foodsource.json");
                         storageIndicator.startAnimation(animSlide);
                         container.startAnimation(animSlide);
                     }
@@ -295,6 +331,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                     cookIndicator.startAnimation(animSlide);
             }
         });
+        //Cooking button function
         cookBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -302,6 +339,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                         R.anim.anim_slide_out_right);
                 animSlide.setDuration(500);
                 animSlide.setAnimationListener(new Animation.AnimationListener() {
+                    //Switch animation
                     @Override
                     public void onAnimationStart(Animation animation) {
                         cookIndicator.setVisibility(View.VISIBLE);
@@ -309,7 +347,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                                 R.anim.anim_slide_in_right);
                         animSlide.setDuration(500);
                         container.removeAllViews();
-                        popupwindowInit("cook.json");
+                        showResult("cook.json");
                         cookIndicator.startAnimation(animSlide);
                         container.startAnimation(animSlide);
                     }
@@ -333,24 +371,28 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void popupwindowInit(String source)
+    //Storage method text
+    private void showResult(String source)
     {
         JSONArray res = source.equals("foodsource.json")?storageJson:cookJson;
-        LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         if (res.length()==0) {
-            View v = vi.inflate(R.layout.edu_row, null);
-            TextView edu_info = v.findViewById(R.id.edu_info);
-            edu_info.setText("No Recommendation");
-            container.addView(v);
+            TextView error = new TextView(getApplicationContext());
+            error.setText(R.string.no_recommend);
+            error.setGravity(Gravity.CENTER);
+            error.setTextSize(20);
+            error.setTextColor(getResources().getColor(R.color.black));
+            error.setTypeface(error.getTypeface(), Typeface.BOLD);
+            error.setGravity(Gravity.CENTER);
+            error.setPaintFlags(error.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+            container.addView(error);
         }
         else{
             try {
-                JSONObject json = res.getJSONObject(0);
                 if(source.equals("foodsource.json"))
                 {
                     for(String item:storageTypes)
                     {
-                        View v =displayResult(json,item);
+                        View v =displayResult(storageJson.getJSONObject(0),item);
                         container.addView(v);
                     }
                 }
@@ -375,7 +417,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    @SuppressLint("ResourceAsColor")
+    //Recommended cooking method and temperature text
     private TextView buildTextView(int width, JSONObject temp) throws JSONException
     {
         String method = "preparation_text";
@@ -384,7 +426,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                 new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
         methodParmas.gravity = Gravity.CENTER;
         methodName.setTextSize(20);
-        methodName.setTextColor(R.color.fui_bgGitHub);
+        methodName.setTextColor(getResources().getColor(R.color.black));
         methodName.setTypeface(methodName.getTypeface(), Typeface.BOLD);
         methodName.setGravity(Gravity.CENTER);
         methodName.setPaintFlags(methodName.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
@@ -392,21 +434,25 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         return  methodName;
     }
 
+    //Popup add to storage confirmation function
     private void popUpChoice(String[] tag)
     {
+        container.setVisibility(View.GONE);
         LayoutInflater layoutInflater = (LayoutInflater)getBaseContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = (int)(displayMetrics.widthPixels*0.8);
         View popupView = layoutInflater.inflate(R.layout.tracking_type, null);
-        final PopupWindow popupWindow=new PopupWindow(popupView,
+        popupWindow=new PopupWindow(popupView,
                 width, LinearLayout.LayoutParams.WRAP_CONTENT,
                 true);
         popupWindow.setTouchable(true);
         popupWindow.setFocusable(true);
         popupWindow.setAnimationStyle(R.style.Animation_Design_BottomSheetDialog);
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+        final ViewGroup root = (ViewGroup) getWindow().getDecorView().getRootView();
+        ResultFragment.applyDim(root,0.5f);
         final TextView title = popupView.findViewById(R.id.confirm_title);
         final TextView duration = popupView.findViewById(R.id.duration);
         final Button cancel = popupView.findViewById(R.id.cancel_Button);
@@ -418,11 +464,22 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                 popupWindow.dismiss();
             }
         });
+        //Set popup title
         title.setText("I will store it in "+tag[0]);
         duration.setText("Duration: " + tag[1]);
+        where = tag[0];
+        timeSpan = tag[1];
         confirm.setTag(dateConversion(tag[1]));
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                container.setVisibility(View.VISIBLE);
+                ResultFragment.clearDim(root);
+            }
+        });
     }
 
+    //Convert dayInMilliseconds to respective units
     private long dateConversion(String date)
     {
         Map<String,Long> conversion = new HashMap<>();
@@ -434,15 +491,42 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         return (long) (Integer.valueOf(temp[0].trim()) * conversion.get(temp[1].trim()))  ;
     }
 
-    private void vibrate()
+    //Add records to database function
+    private void postRecord()
     {
-        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-        if (Build.VERSION.SDK_INT >= 26) {
-            vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
-        } else {
-            vibrator.vibrate(200);
-        }
-
+        Map<String, Object>  record = new HashMap<>();
+        record.put("PURCHASE_DATE", startDate);
+        record.put("STORAGE_METHOD",where);
+        record.put("EXPIRE_DATE",endDate);
+        record.put("FOOD_ID",foodID);
+        record.put("DISPLAY_NAME",mainTitle);
+        record.put("SUB_NAME",subtitleText);
+        record.put("NAV_TITLE",navigation_title);
+        String userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        //Add to firebase
+        db.collection("tracker").document(userKey)
+                .collection(where).document().set(record)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(ItemActivity.this, "Added to storage successfully",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(ItemActivity.this, "ERROR" +e.toString(),
+                        Toast.LENGTH_SHORT).show();
+                Log.d("TAG", e.toString());
+            }
+        });
     }
 
+    class Post extends AsyncTask<Void,Void,Void>{
+        @Override
+        protected Void doInBackground(Void... voids) {
+            postRecord();
+            return null;
+        }
+    }
 }

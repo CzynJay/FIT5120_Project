@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+<ImageView
+    android:id="@+id/image_display"
+    android:layout_width="70dp"
+    android:layout_height="70dp"
+    android:transitionName="type_img"
+    android:layout_alignParentStart="true"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/circle_stroke"
+    android:src="@drawable/app_icon"
+    android:scaleType="centerCrop"
+    />
+    <TextView
+        android:id="@+id/subcateText"
+        android:layout_width="match_parent"
+        android:textSize="20sp"
+        android:transitionName="type_name"
+        android:text="@string/dynamic_text"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/image_display"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginStart="20dp"
+        android:layout_height="wrap_content"
+        />
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:id="@+id/right_arrow"
+        android:src="@drawable/right_arrow"
+        android:layout_centerInParent="true"
+        />
+</RelativeLayout></androidx.cardview.widget.CardView>
