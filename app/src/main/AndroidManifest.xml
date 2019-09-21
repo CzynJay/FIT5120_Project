@@ -8,23 +8,27 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-
         android:theme="@style/AppTheme">
-        <activity android:name=".List_item_activity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".FeedbackActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".TipsActivity"
-            android:screenOrientation="portrait"/>
+        <activity android:name=".Group_Activity"></activity>
+        <activity
+            android:name=".List_item_activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FeedbackActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".TipsActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Account_Activity"
             android:label="@string/title_activity_account_"
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBar" />
-        <activity android:name=".ItemActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".UserLoginActivity"
+        <activity
+            android:name=".ItemActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".UserLoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,15 +37,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegistrationActivity" android:screenOrientation="portrait"/>
+        <activity
+            android:name=".RegistrationActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/ic_launcher" />
+
         <receiver
             android:name=".Service.NotificationService"
             android:enabled="true" />
@@ -53,7 +60,6 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
         <service
             android:name=".Service.MyFirebaseMessagingService"
             android:exported="false">
@@ -62,10 +68,10 @@
             </intent-filter>
         </service>
     </application>
-    <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+    <uses-permission android:name="android.permission.READ_PROFILE" />
 
 </manifest>

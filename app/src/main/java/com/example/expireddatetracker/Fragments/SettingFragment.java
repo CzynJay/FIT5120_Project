@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.example.expireddatetracker.Account_Activity;
 import com.example.expireddatetracker.FeedbackActivity;
+import com.example.expireddatetracker.Group_Activity;
 import com.example.expireddatetracker.ItemActivity;
 import com.example.expireddatetracker.R;
 import com.example.expireddatetracker.TipsActivity;
@@ -18,7 +19,7 @@ import com.example.expireddatetracker.TipsActivity;
 import androidx.fragment.app.Fragment;
 
 public class SettingFragment extends Fragment {
-    private View accountLayout,tipsLayout,feedbackLayout,websiteLayout;
+    private View accountLayout,tipsLayout,feedbackLayout,websiteLayout,groupLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,6 +32,7 @@ public class SettingFragment extends Fragment {
 
     //Initialise layouts items in settings page
     private void initUI(View parent){
+        groupLayout = parent.findViewById(R.id.group_layout);
         accountLayout = parent.findViewById(R.id.account_layout);
         tipsLayout = parent.findViewById(R.id.tips_layout);
         feedbackLayout = parent.findViewById(R.id.feedback_layout);
@@ -74,6 +76,14 @@ public class SettingFragment extends Fragment {
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
+            }
+        });
+
+        groupLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), Group_Activity.class);
+                startActivity(intent);
             }
         });
 

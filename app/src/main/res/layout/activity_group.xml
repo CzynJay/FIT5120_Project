@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FeedbackActivity">
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:id="@+id/group_title_layout"
+        android:background="@color/colorPrimary"
+        >
+        <ImageButton
+            android:id="@+id/group_back"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00FF0000"
+            android:layout_margin="20dp"
+            android:src="@drawable/back"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:text="@string/group"
+            android:transitionName="@string/feedback"
+            android:textColor="@color/white"
+            android:layout_marginStart= "30dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/labelSize"
+            />
+    </LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:layout_below="@id/group_title_layout"
+    android:orientation="vertical"
+    android:layout_alignParentBottom="true">
+    <RelativeLayout
+        android:id="@+id/code_layout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+       >
+    <EditText
+        android:id="@+id/invitation_et"
+        android:focusable="false"
+        android:gravity="center"
+        android:layout_toStartOf="@id/copy_bt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       />
+    <Button
+        android:layout_marginStart="10dp"
+        android:id="@+id/copy_bt"
+        android:layout_width="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_height="wrap_content"
+        android:text="@string/copy"/>
+    </RelativeLayout>
+    <Button
+        android:id="@+id/create_groupBt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/create_group"
+        android:visibility="gone"
+        />
+    <Button
+        android:id="@+id/leave_groupBt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/leave_group"
+        android:visibility="gone"
+        />
+
+</LinearLayout>
+
+
+</RelativeLayout>

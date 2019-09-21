@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         int interval = 1000 * 60 * 60 * 12;
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 22);
+        calendar.set(Calendar.HOUR_OF_DAY, 9);
         calendar.set(Calendar.MINUTE, 7);
         calendar.set(Calendar.SECOND, 0 );
         calendar.set(Calendar.MILLISECOND,0);

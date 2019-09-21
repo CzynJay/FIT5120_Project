@@ -116,7 +116,7 @@ public class RegistrationActivity extends AppCompatActivity {
         regBtn = findViewById(R.id.register);
         nameTV = findViewById(R.id.nameView);
         progress = findViewById(R.id.register_pro);
-        backBt = findViewById(R.id.registration_back);
+        backBt = findViewById(R.id.register_back);
         backBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

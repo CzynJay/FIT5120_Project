@@ -175,7 +175,6 @@ public class UserLoginActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     res = true;
                                 } else {
-                                    UserLoginTask u = new UserLoginTask(false);
                                     res=false;
                                 }}
                         });}
