@@ -60,7 +60,7 @@ public class Group_Activity extends AppCompatActivity {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("label", codeET.getText().toString());
                 clipboard.setPrimaryClip(clip);
-                Toast.makeText(getBaseContext(),"Code is copied",Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(),"Invitation Code is copied",Toast.LENGTH_LONG).show();
             }
         });
         createBT.setOnClickListener(new View.OnClickListener() {
@@ -80,19 +80,16 @@ public class Group_Activity extends AppCompatActivity {
                                 if (task.isSuccessful())
                                 {
                                    Map<String,Object> map =  task.getResult().getData();
-                                   if (map==null)
+                                   if (map==null||!map.containsKey("Group"))
                                         groupExistHelper(false);
                                    else{
+
                                         findViewById(R.id.code_layout).setVisibility(View.VISIBLE);
                                         groupExistHelper(true);
-                                         codeET.setText(map.get("Group").toString());
-
-                                   }
-                                }
-                    }
-                });
-
+                                         codeET.setText(map.get("Group").toString());}
+                                }}});
     }
+
     private void groupExistHelper(boolean exist)
     {
         if (exist)

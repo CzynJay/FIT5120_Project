@@ -62,4 +62,5 @@
     <string name="create">Create</string>
     <string name="code">Code (4 Digits)</string>
     <string name="copy">Copy</string>
+    <string name="group_name">Group Name</string>
 </resources>
