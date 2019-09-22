@@ -63,4 +63,7 @@
     <string name="code">Code (4 Digits)</string>
     <string name="copy">Copy</string>
     <string name="group_name">Group Name</string>
+    <string name="no_group_yet">No Group Yet</string>
+    <string name="join_group">Join Group</string>
+    <string name="Invitation_code">Invitation Code</string>
 </resources>

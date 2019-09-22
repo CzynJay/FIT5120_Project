@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -53,10 +54,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
     final private String DISPLAY = "DISPLAY_NAME";
     private TabLayout tabs;
     private View progressing,errorTx;
-    //Instantiate ArrayList for storage methods
-    private ArrayList<Map<String,Object>> freeze = new ArrayList<>();
-    private ArrayList<Map<String,Object>> refrigerate = new ArrayList<>();
-    private ArrayList<Map<String,Object>> pantry = new ArrayList<>();
+
     private  long dayInMilliseconds = 86400000;
 
     @Override
@@ -87,28 +85,51 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         //Authenticate user from Firebase
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         tabs.addOnTabSelectedListener(this);
-        fetchData("Pantry");
+        fetchGroupData("Pantry");
     }
 
-    private ArrayList<Map<String,Object>> typeSwitch(String type)
-    {
-        switch (type)
-        {
-            //Define cases for different storage method
-            case "Freezer": return freeze;
-            case "Pantry": return pantry;
-            case "Refrigerator": return refrigerate;
-        }
-         return new ArrayList<>();
-    }
 
-    //Get data from Firebase
-    private void fetchData(final String type)
+
+    private void fetchGroupData(final String type)
     {
-        final ArrayList<Map<String,Object>> temp = typeSwitch(type);
-        if (temp.size()==0){
         progressing.setVisibility(View.VISIBLE);
         activity.db.collection("tracker").document(uid)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                     if(task.isSuccessful()){
+                         String value = task.getResult().getString("GROUP");
+                         if(value!=null)
+                         {
+                             activity.db.collection("tracker")
+                                     .whereEqualTo("GROUP",value).get()
+                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                 @Override
+                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                     if(task.isSuccessful())
+                                     {
+                                         for(DocumentSnapshot item:task.getResult().getDocuments()){
+                                             String id = item.getId();
+                                             String ownerName = (String)item.get("Name");
+                                             fetchData(id,type,ownerName);
+                                         }
+                                     }
+                                 }
+                             });
+                         }
+                         else {
+                             fetchData(uid,type,FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                         }
+                     }
+                progressing.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+    //Get data from Firebase
+    private void fetchData(final String id, final String type, final String ownerName)
+    {
+        final ArrayList<Map<String,Object>> temp = new ArrayList<>();
+        activity.db.collection("tracker").document(id)
                 .collection(type).get().
                 addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -116,19 +137,20 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                         if (task.isSuccessful()){
                             //Get data from Firebase
                             for(DocumentSnapshot item:task.getResult().getDocuments()){
-                                placeToArrayList(item.getData(),item.getId());
+//                                placeToArrayList(item.getData(),item.getId());
+                                Map<String,Object> newMap = item.getData();
+                                newMap.put("id",item.getId());
+                                temp.add(newMap);
                             }
                             progressing.setVisibility(View.GONE);
-                            displayStatus(temp);
+                            displayStatus(temp,id,ownerName);
                         }
                     }
-                });}
-        else
-            displayStatus(temp);
+                });
     }
 
     //Display list of all the food in storage
-    private void displayStatus( ArrayList<Map<String,Object>> lists){
+    private void displayStatus( ArrayList<Map<String,Object>> lists,String id,String ownerName){
 
         errorTx.setVisibility(View.GONE);
         //If there is no records in selected storage
@@ -139,7 +161,8 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         for(Map<String,Object> item:lists)
      {
             try {
-            LayoutInflater vi = (LayoutInflater) Objects.requireNonNull(getContext()).getSystemService(LAYOUT_INFLATER_SERVICE);
+            LayoutInflater vi = (LayoutInflater) Objects.requireNonNull(getContext())
+                    .getSystemService(LAYOUT_INFLATER_SERVICE);
             DisplayMetrics displayMetrics = new DisplayMetrics();
             Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             int width =(int) (displayMetrics.widthPixels / 5.5);
@@ -163,6 +186,8 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
             warning.getLayoutParams().width = layout.getLayoutParams().width /3;
             warning.getLayoutParams().height = layout.getLayoutParams().height /3;
             item.put("DayDifference",dayDifference);
+            item.put("UserID",id);
+            item.put("DisplayName",ownerName);
             v.setTag(item);
             img.setTag(item);
             img.setOnClickListener(this);
@@ -203,17 +228,17 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         return dayDifference;
     }
 
-    private void placeToArrayList(Map<String,Object> item,String id){
-            item.put("id",id);
-            switch (item.get(METHOD).toString()){
-                case "Refrigerator":
-                    refrigerate.add(item);break;
-                case "Freezer":
-                    freeze.add(item);break;
-                case "Pantry":
-                    pantry.add(item);break;
-            }
-    }
+//    private void placeToArrayList(Map<String,Object> item,String id){
+//            item.put("id",id);
+//            switch (item.get(METHOD).toString()){
+//                case "Refrigerator":
+//                    refrigerate.add(item);break;
+//                case "Freezer":
+//                    freeze.add(item);break;
+//                case "Pantry":
+//                    pantry.add(item);break;
+//            }
+//    }
 
     @Override
     public void onClick(View v) {
@@ -248,11 +273,12 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
          TextView purchaseTx = popupView.findViewById(R.id.purchase_date);
          TextView expireTx = popupView.findViewById(R.id.expire_date);
          TextView storageTx = popupView.findViewById(R.id.storage_type);
+         TextView ownerTx = popupView.findViewById(R.id.ownerTx);
          ImageView imgView = popupView.findViewById(R.id.record_closeBt);
          Button discardBt = popupView.findViewById(R.id.discard_bt);
          Button consumeBt = popupView.findViewById(R.id.consume_bt);
-        discardBt.setTag(discardBt.getText().toString());
-        consumeBt.setTag(consumeBt.getText().toString());
+         discardBt.setTag(discardBt.getText().toString());
+         consumeBt.setTag(consumeBt.getText().toString());
          detail_name.setText(map.get(DISPLAY).toString());
          String subname = map.get("SUB_NAME").toString();
          subname = subname.equals("null")?"":subname;
@@ -264,13 +290,14 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
          purchaseTx.setText("Purchase Date: " + map.get(STARTDATE).toString());
          expireTx.setText("Best Before Date: " + map.get(EXPIRE).toString() + dayLeft);
          storageTx.setText("Storage Type: "+ map.get(METHOD).toString());
+        ownerTx.setText("Owner: " + map.get("DisplayName").toString());
          popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
              @Override
              public void onDismiss() {
                  clearDim(root);
              }
          });
-        imgView.setOnClickListener(new View.OnClickListener() {
+         imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
@@ -312,8 +339,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
     public void onTabSelected(TabLayout.Tab tab) {
         container.removeAllViews();
         errorTx.setVisibility(View.GONE);
-        //scrollView.setBackgroundResource(imageSwitch(tab.getText().toString()));
-        fetchData(tab.getText().toString());
+        fetchGroupData(tab.getText().toString());
     }
 
     @Override
@@ -386,14 +412,12 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         Map<String,Object> temp = (Map<String, Object>) view.getTag();
         temp.put("OPERATION_DATE",date_to_str(new Date()));
         String id = (String) temp.get("id");
+        String userId = (String)temp.get("UserID");
         activity.db.collection("tracker").document(uid)
                 .collection(finishType).add(temp);
         //Remove data from Firebase
-        activity.db.collection("tracker").document(uid)
+        activity.db.collection("tracker").document(userId)
                 .collection(type_temp).document(id).delete();
-        freeze = new ArrayList<>();
-        refrigerate = new ArrayList<>();
-        pantry = new ArrayList<>();
         view.setVisibility(View.GONE);
         owner.removeView(view);
         Toast.makeText(getContext(),finishType + " Successfully",Toast.LENGTH_LONG).show();

@@ -17,6 +17,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -85,7 +89,6 @@ public class RegistrationActivity extends AppCompatActivity {
             progress.setVisibility(View.GONE);
             return;
         }
-
         //Register user on firebase
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -93,14 +96,26 @@ public class RegistrationActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            String uid = user.getUid();
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
                             user.updateProfile(profileUpdates);
-                            //Message to user that registration is successful
-                            Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_LONG).show();
-                            progress.setVisibility(View.GONE);
-                            Intent intent = new Intent(RegistrationActivity.this, UserLoginActivity.class);
-                            startActivity(intent);
-                            finish();
+
+                            Map<String,Object> map = new HashMap<>();
+                            map.put("Name",name);
+                            FirebaseFirestore.getInstance().collection("tracker")
+                                    .document(uid).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    //Message to user that registration is successful
+                                    Toast.makeText(getApplicationContext()
+                                            , "Registration successful!", Toast.LENGTH_LONG).show();
+                                    progress.setVisibility(View.GONE);
+                                    Intent intent = new Intent(RegistrationActivity.this, UserLoginActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
+
                         }
                         else {
                             Toast.makeText(getApplicationContext(), task.getException().toString().split(":")[1], Toast.LENGTH_LONG).show();

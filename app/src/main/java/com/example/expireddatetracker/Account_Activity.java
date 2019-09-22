@@ -93,6 +93,7 @@ public class Account_Activity extends AppCompatActivity implements View.OnClickL
         popupView.findViewById(R.id.expire_date).setVisibility(View.GONE);
         popupView.findViewById(R.id.storage_type).setVisibility(View.GONE);
         popupView.findViewById(R.id.record_closeBt).setVisibility(View.GONE);
+        popupView.findViewById(R.id.ownerTx).setVisibility(View.GONE);
         //Instantiate buttons
         Button confirmBt = popupView.findViewById(R.id.consume_bt);
         confirmBt.setText("Confirm");

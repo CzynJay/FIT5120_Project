@@ -2,6 +2,7 @@ package com.example.expireddatetracker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ViewUtils;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.expireddatetracker.Fragments.ResultFragment;
@@ -22,14 +24,18 @@ import com.example.expireddatetracker.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firestore.v1beta1.WriteResult;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Group_Activity extends AppCompatActivity {
     private String uid;
-    private Button createBT,leaveBT,copyBT;
+    private Button createBT;
+    private Button leaveBT,joinBt;
     private FirebaseFirestore db;
     private EditText codeET;
     @Override
@@ -42,7 +48,7 @@ public class Group_Activity extends AppCompatActivity {
 
     private void initUI()
     {   codeET = findViewById(R.id.invitation_et);
-        copyBT = findViewById(R.id.copy_bt);
+        Button copyBT = findViewById(R.id.copy_bt);
         db = FirebaseFirestore.getInstance();
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         findViewById(R.id.group_back).setOnClickListener(new View.OnClickListener() {
@@ -51,9 +57,29 @@ public class Group_Activity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
+        joinBt = findViewById(R.id.joinBt);
         createBT = findViewById(R.id.create_groupBt);
         leaveBT = findViewById(R.id.leave_groupBt);
+        leaveBT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.collection("tracker").document(uid).delete();
+                refresh();
+            }
+        });
+
+        createBT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popUpWindow(true);
+            }
+        });
+        joinBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popUpWindow(false);
+            }
+        });
         copyBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,12 +87,6 @@ public class Group_Activity extends AppCompatActivity {
                 ClipData clip = ClipData.newPlainText("label", codeET.getText().toString());
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(getBaseContext(),"Invitation Code is copied",Toast.LENGTH_LONG).show();
-            }
-        });
-        createBT.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popUpWindow();
             }
         });
     }
@@ -80,13 +100,13 @@ public class Group_Activity extends AppCompatActivity {
                                 if (task.isSuccessful())
                                 {
                                    Map<String,Object> map =  task.getResult().getData();
-                                   if (map==null||!map.containsKey("Group"))
+                                   if (map==null||!map.containsKey("GROUP"))
                                         groupExistHelper(false);
                                    else{
 
                                         findViewById(R.id.code_layout).setVisibility(View.VISIBLE);
                                         groupExistHelper(true);
-                                         codeET.setText(map.get("Group").toString());}
+                                         codeET.setText(map.get("GROUP").toString());}
                                 }}});
     }
 
@@ -94,17 +114,21 @@ public class Group_Activity extends AppCompatActivity {
     {
         if (exist)
         {
+            findViewById(R.id.noGroupTx).setVisibility(View.GONE);
             createBT.setVisibility(View.GONE);
             leaveBT.setVisibility(View.VISIBLE);
+            joinBt.setVisibility(View.GONE);
         }
         else
             {
+                findViewById(R.id.noGroupTx).setVisibility(View.VISIBLE);
                 createBT.setVisibility( View.VISIBLE);
                 leaveBT.setVisibility(View.GONE);
+                joinBt.setVisibility(View.VISIBLE);
             }
     }
 
-    private void popUpWindow()
+    private void popUpWindow(boolean create)
     {
         final ViewGroup root = (ViewGroup) getWindow().getDecorView().getRootView();
         LayoutInflater layoutInflater = (LayoutInflater)getBaseContext()
@@ -129,6 +153,94 @@ public class Group_Activity extends AppCompatActivity {
                 ResultFragment.clearDim(root);
             }
         });
+        final EditText editText = popupView.findViewById(R.id.group_name_et);
+        if (create){
+        popupView.findViewById(R.id.group_confirm_bt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(editText.getText().toString().trim().equals(""))
+                    Toast.makeText(getBaseContext(),"Please enter a group name",Toast.LENGTH_LONG).show();
+                else
+                    {
+                        createNewGroup(editText.getText().toString());
+                        popupWindow.dismiss();
+                    }
+            }
+        });}
+        else{
+            TextView title = popupView.findViewById(R.id.group_pop_title);
+            title.setText(getResources().getString(R.string.join_group));
+            TextView editName = popupView.findViewById(R.id.group_name_tx);
+            editName.setText(getResources().getString(R.string.Invitation_code));
+            Button bt = popupView.findViewById(R.id.group_confirm_bt);
+            bt.setText("Join");
+            bt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final String value = editText.getText().toString().trim();
+                    if(value.equals(""))
+                        Toast.makeText(getBaseContext(),"Please enter Invitation code",Toast.LENGTH_LONG).show();
+                    else
+                    {
+                        db.collection("group").document(value)
+                                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful())
+                                {
+                                   Map<String,Object> map =  task.getResult().getData() ;
+                                   if (map==null)
+                                   {
+                                       Toast.makeText(getBaseContext(),"Invalid Code",Toast.LENGTH_LONG).show();
+                                       editText.setError("Invalid Code");
+                                   }
+                                   else {
+                                       Map<String,Object> group = new HashMap<>();
+                                       group.put("GROUP",value);
+                                       db.collection("tracker").document(uid).set(group)
+                                               .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                   @Override
+                                                   public void onComplete(@NonNull Task<Void> task) {
+                                                       popupWindow.dismiss();
+                                                       refresh();
+                                                   }
+                                               });
+                                   }
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
 
+    }
+
+    private String createNewGroup(String name)
+    {
+        DocumentReference addedDocRef = db.collection("group").document();
+        final String groupID = addedDocRef.getId();
+        Map<String,String> data = new HashMap<>();
+        data.put("GROUP NAME",name);
+        addedDocRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                HashMap<String,String> map = new HashMap<>();
+                map.put("GROUP",groupID);
+                db.collection("tracker").document(uid).set(map)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        refresh();
+                    }
+                });
+            }
+        });
+        return groupID;
+    }
+
+    private void refresh(){
+        finish();
+        startActivity(getIntent());
     }
 }

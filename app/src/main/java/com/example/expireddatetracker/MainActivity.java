@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, NotificationService.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 this.getApplicationContext(), 0, intent,  0);
-        int interval = 1000 * 60 * 60 * 12;
+        int interval = 1000 * 60 * 60 * 24;
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 9);
@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
         calendar.set(Calendar.MILLISECOND,0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                100, pendingIntent);
+                interval, pendingIntent);
     }
 
 }
