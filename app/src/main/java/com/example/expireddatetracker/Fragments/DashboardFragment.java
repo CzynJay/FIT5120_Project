@@ -70,7 +70,7 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
         description.setText("");
         pieChart.setDescription(description);
         pieChart.setEntryLabelColor(Color.BLACK);
-        pieChart.animateY(2000);
+        pieChart.animateXY(300,300);
         pieChart.setCenterTextSize(20f);
         fetchData(getResources().getString(R.string.pantry));
         return inflatePage;
@@ -149,7 +149,7 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
         pieChart.getLegend().setTextSize(14f);
         pieChart.setDrawEntryLabels(false);
         pieChart.setData(pieData);
-        pieChart.animateY(2000);
+        pieChart.animateY(1300);
 
     }
 

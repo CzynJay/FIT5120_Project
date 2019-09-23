@@ -42,6 +42,7 @@ public class Group_Activity extends AppCompatActivity {
     private Button leaveBT,joinBt;
     private FirebaseFirestore db;
     private EditText codeET,invitationEt;
+    private View prograssBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +52,9 @@ public class Group_Activity extends AppCompatActivity {
     }
 
     private void initUI()
-    {   codeET = findViewById(R.id.invitation_et);
+    {
+        prograssBar = findViewById(R.id.group_progressBar);
+        codeET = findViewById(R.id.invitation_et);
         invitationEt = findViewById(R.id.invitationcode_et);
         Button copyBT = findViewById(R.id.copy_bt);
         db = FirebaseFirestore.getInstance();
@@ -98,6 +101,7 @@ public class Group_Activity extends AppCompatActivity {
 
     private void checkGroup()
     {
+        prograssBar.setVisibility(View.VISIBLE);
         db.collection("tracker").document(uid).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -112,7 +116,9 @@ public class Group_Activity extends AppCompatActivity {
                                         findViewById(R.id.code_layout).setVisibility(View.VISIBLE);
                                         groupExistHelper(true);
                                          codeET.setText(map.get("GROUP").toString());}
-                                }}});
+                                }
+                        prograssBar.setVisibility(View.GONE);
+                    }});
     }
 
     private void groupExistHelper(boolean exist)
@@ -161,6 +167,12 @@ public class Group_Activity extends AppCompatActivity {
             }
         });
         final EditText editText = popupView.findViewById(R.id.group_name_et);
+        popupView.findViewById(R.id.group_create_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
         popupView.findViewById(R.id.group_confirm_bt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,6 +189,7 @@ public class Group_Activity extends AppCompatActivity {
     }
 
     private void joinGroup(){
+        prograssBar.setVisibility(View.VISIBLE);
         final String value = invitationEt.getText().toString().trim();
         if(value.equals("")){
             vibrate();
@@ -197,6 +210,7 @@ public class Group_Activity extends AppCompatActivity {
                             invitationEt.setError("Invalid Code");
                             vibrate();
                             invitationEt.startAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.anim.shake));
+                            prograssBar.setVisibility(View.GONE);
                         }
                         else {
                             Map<String,Object> group = new HashMap<>();
@@ -205,11 +219,13 @@ public class Group_Activity extends AppCompatActivity {
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
+                                            prograssBar.setVisibility(View.GONE);
                                             refresh();
                                         }
                                     });
                         }
                     }
+
                 }
             });
         }
@@ -218,6 +234,7 @@ public class Group_Activity extends AppCompatActivity {
 
     private String createNewGroup(String name)
     {
+
         DocumentReference addedDocRef = db.collection("group").document();
         final String groupID = addedDocRef.getId();
         Map<String,String> data = new HashMap<>();

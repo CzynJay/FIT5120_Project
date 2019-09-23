@@ -38,6 +38,11 @@
     android:layout_below="@id/group_title_layout"
     android:orientation="vertical"
     android:layout_alignParentBottom="true">
+    <ProgressBar android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/group_progressBar"
+        android:layout_gravity="center"
+        />
     <RelativeLayout
         android:id="@+id/code_layout"
         android:visibility="gone"
@@ -49,6 +54,7 @@
         android:id="@+id/invitation_et"
         android:focusable="false"
         android:gravity="center"
+        android:inputType="textNoSuggestions"
         android:layout_toStartOf="@id/copy_bt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -87,6 +93,8 @@
                 android:id="@+id/invitationcode_et"
                 android:layout_width="match_parent"
                 android:layout_marginLeft="20dp"
+                android:gravity="center"
+                android:inputType="textNoSuggestions"
                 android:hint="@string/Invitation_code"
                 android:layout_marginRight="20dp"
                 android:layout_height="wrap_content"/>

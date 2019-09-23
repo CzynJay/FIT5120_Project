@@ -68,6 +68,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
 
     private void init(View x){
         tabs = x.findViewById(R.id.tabLayout);
+
         //Discard and consume button
         Button quickDiscardBt = x.findViewById(R.id.quick_discard_bt);
         Button quickConsumeBt = x.findViewById(R.id.quick_consume_bt);
@@ -87,8 +88,6 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         tabs.addOnTabSelectedListener(this);
         fetchGroupData("Pantry");
     }
-
-
 
     private void fetchGroupData(final String type)
     {
@@ -124,6 +123,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                      }
                 progressing.setVisibility(View.VISIBLE);
 
+
             }
         });
     }
@@ -145,6 +145,10 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                             }
                             progressing.setVisibility(View.GONE);
                             displayStatus(temp,id,ownerName);
+                            if(container.getChildCount()==0)
+                            {
+                                errorTx.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 });
@@ -226,18 +230,6 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         return dayDifference;
     }
 
-//    private void placeToArrayList(Map<String,Object> item,String id){
-//            item.put("id",id);
-//            switch (item.get(METHOD).toString()){
-//                case "Refrigerator":
-//                    refrigerate.add(item);break;
-//                case "Freezer":
-//                    freeze.add(item);break;
-//                case "Pantry":
-//                    pantry.add(item);break;
-//            }
-//    }
-
     @Override
     public void onClick(View v) {
         popUpWindow(v);
@@ -268,6 +260,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
          TextView detail_name = popupView.findViewById(R.id.record_name);
          TextView detail_subname = popupView.findViewById(R.id.record_subname);
          //Display purchase and best before date
+         TextView dayLeftTx = popupView.findViewById(R.id.dayleftTx);
          TextView purchaseTx = popupView.findViewById(R.id.purchase_date);
          TextView expireTx = popupView.findViewById(R.id.expire_date);
          TextView storageTx = popupView.findViewById(R.id.storage_type);
@@ -283,10 +276,11 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
          detail_subname.setText(subname);
          String dayLeft = (long) map.get("DayDifference") > 0 ?
                  (int)((long)map.get("DayDifference")/dayInMilliseconds) + " days left": "Spoiled Already";
-         dayLeft = " \n ("+dayLeft +")";
+         dayLeftTx.setText(dayLeft);
+         dayLeftTx.setVisibility(View.VISIBLE);
          //Define texts for purchase date, best before date, and storage method
          purchaseTx.setText("Purchase Date: " + map.get(STARTDATE).toString());
-         expireTx.setText("Best Before Date: " + map.get(EXPIRE).toString() + dayLeft);
+         expireTx.setText("Best Before Date: " + map.get(EXPIRE).toString());
          storageTx.setText("Storage Type: "+ map.get(METHOD).toString());
          ownerTx.setText("Owner: " + map.get("Owner").toString());
          popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {

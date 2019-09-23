@@ -14,13 +14,6 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 public class GettingDeviceToken extends FirebaseMessagingService {
 
     private static final String TAG = "GettingDeviceToken";
-//
-//    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-//        if (!task.isSuccessful()) {
-//            Log.w(TAG, "getInstanceId failed", task.getException());
-//            return;
-//        }
-//    }
 
 
         public void onTokenRefresh (){
