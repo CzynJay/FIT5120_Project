@@ -189,7 +189,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
             v.setTag(item);
             img.setTag(item);
             img.setOnClickListener(this);
-            v.setOnTouchListener(new MyTouchListener());
+            img.setOnLongClickListener(new MyLongClickListener());
             container.addView(v);
             ((GridLayout.LayoutParams) v.getLayoutParams()).columnSpec =
                     GridLayout.spec(GridLayout.UNDEFINED, 1f);
@@ -351,18 +351,17 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
     }
 
     //Drag and drop function
-    private final class MyTouchListener implements View.OnTouchListener {
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                ClipData data = ClipData.newPlainText("", "");
-                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
-                        view);
-                view.startDrag(data, shadowBuilder, view, 0);
-                return true;
-            }
-            else {
-                return false;
-            }
+    private final class MyLongClickListener implements View.OnLongClickListener {
+
+
+        @Override
+        public boolean onLongClick(View view) {
+            View parent =(View)view.getParent().getParent();
+            ClipData data = ClipData.newPlainText("", "");
+            View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
+                    parent);
+            view.startDrag(data, shadowBuilder, parent, 0);
+            return false;
         }
     }
 
