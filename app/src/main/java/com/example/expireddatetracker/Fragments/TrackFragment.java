@@ -116,12 +116,14 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                                      }
                                  }
                              });
+
                          }
                          else {
                              fetchData(uid,type,FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                          }
                      }
                 progressing.setVisibility(View.VISIBLE);
+
             }
         });
     }
@@ -137,7 +139,6 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                         if (task.isSuccessful()){
                             //Get data from Firebase
                             for(DocumentSnapshot item:task.getResult().getDocuments()){
-//                                placeToArrayList(item.getData(),item.getId());
                                 Map<String,Object> newMap = item.getData();
                                 newMap.put("id",item.getId());
                                 temp.add(newMap);
@@ -153,10 +154,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
     private void displayStatus( ArrayList<Map<String,Object>> lists,String id,String ownerName){
 
         errorTx.setVisibility(View.GONE);
-        //If there is no records in selected storage
-        if(lists.size()==0){
-            errorTx.setVisibility(View.VISIBLE);
-                        return;}
+
 
         for(Map<String,Object> item:lists)
      {

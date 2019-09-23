@@ -40,6 +40,7 @@ public class NotificationService extends BroadcastReceiver {
     private FirebaseFirestore db;
     private Map<String,Integer> map;
     private Context myContext;
+    private String uid;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -54,11 +55,51 @@ public class NotificationService extends BroadcastReceiver {
         else if(checkApp()){
             Log.e("Application","Application is opened");
         }
-        else{
-        map = new HashMap<>();
-        map.put("Expire soon",0);
-        map.put("Expire already",0);
-        loadData();}
+        else {
+            uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            map = new HashMap<>();
+            map.put("Expire soon", 0);
+            map.put("Expire already", 0);
+            fetchGroupData();
+        }
+    }
+
+    private void fetchGroupData()
+    {
+        db.collection("tracker").document(uid).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful())
+                    {
+                        String value = task.getResult().getString("GROUP");
+                        if(value!=null)
+                        {
+                            db.collection("tracker")
+                                    .whereEqualTo("GROUP",value).get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if(task.isSuccessful())
+                                            {
+                                                for(DocumentSnapshot item:task.getResult().getDocuments()){
+                                                    String id = item.getId();
+                                                    String ownerName = (String)item.get("Name");
+                                                    loadData(id);
+                                                }
+                                            }
+                                        }
+                                    });
+                        }
+                        else {
+                            loadData(uid);
+                        }
+
+                    }
+            }
+        });
+
+
     }
 
 //    Check if app is running function
@@ -78,13 +119,12 @@ public class NotificationService extends BroadcastReceiver {
     }
 
     //Get data from Firebase function
-    private void loadData()
+    private void loadData(String id)
     {
         String [] types = {"Freezer","Pantry","Refrigerator"};
         for(String type: types)
         {
-        db.collection("tracker").document(FirebaseAuth.getInstance()
-                .getCurrentUser().getUid()).collection(type).get()
+        db.collection("tracker").document(id).collection(type).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

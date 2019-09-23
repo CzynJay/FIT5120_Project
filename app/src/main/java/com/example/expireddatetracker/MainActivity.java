@@ -133,8 +133,6 @@ public class MainActivity extends AppCompatActivity {
             food_source = loadJsonFile();
             return null;
         }
-
-
     }
 
     //Sub-category image

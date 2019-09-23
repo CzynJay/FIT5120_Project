@@ -6,12 +6,16 @@ import androidx.appcompat.widget.ViewUtils;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -37,7 +41,7 @@ public class Group_Activity extends AppCompatActivity {
     private Button createBT;
     private Button leaveBT,joinBt;
     private FirebaseFirestore db;
-    private EditText codeET;
+    private EditText codeET,invitationEt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +52,7 @@ public class Group_Activity extends AppCompatActivity {
 
     private void initUI()
     {   codeET = findViewById(R.id.invitation_et);
+        invitationEt = findViewById(R.id.invitationcode_et);
         Button copyBT = findViewById(R.id.copy_bt);
         db = FirebaseFirestore.getInstance();
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -71,13 +76,13 @@ public class Group_Activity extends AppCompatActivity {
         createBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popUpWindow(true);
+                popUpWindow();
             }
         });
         joinBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popUpWindow(false);
+                joinGroup();
             }
         });
         copyBT.setOnClickListener(new View.OnClickListener() {
@@ -118,6 +123,7 @@ public class Group_Activity extends AppCompatActivity {
             createBT.setVisibility(View.GONE);
             leaveBT.setVisibility(View.VISIBLE);
             joinBt.setVisibility(View.GONE);
+            invitationEt.setVisibility(View.GONE);
         }
         else
             {
@@ -125,10 +131,11 @@ public class Group_Activity extends AppCompatActivity {
                 createBT.setVisibility( View.VISIBLE);
                 leaveBT.setVisibility(View.GONE);
                 joinBt.setVisibility(View.VISIBLE);
+                invitationEt.setVisibility(View.VISIBLE);
             }
     }
 
-    private void popUpWindow(boolean create)
+    private void popUpWindow()
     {
         final ViewGroup root = (ViewGroup) getWindow().getDecorView().getRootView();
         LayoutInflater layoutInflater = (LayoutInflater)getBaseContext()
@@ -154,7 +161,6 @@ public class Group_Activity extends AppCompatActivity {
             }
         });
         final EditText editText = popupView.findViewById(R.id.group_name_et);
-        if (create){
         popupView.findViewById(R.id.group_confirm_bt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,49 +172,43 @@ public class Group_Activity extends AppCompatActivity {
                         popupWindow.dismiss();
                     }
             }
-        });}
-        else{
-            TextView title = popupView.findViewById(R.id.group_pop_title);
-            title.setText(getResources().getString(R.string.join_group));
-            TextView editName = popupView.findViewById(R.id.group_name_tx);
-            editName.setText(getResources().getString(R.string.Invitation_code));
-            Button bt = popupView.findViewById(R.id.group_confirm_bt);
-            bt.setText("Join");
-            bt.setOnClickListener(new View.OnClickListener() {
+        });
+
+    }
+
+    private void joinGroup(){
+        final String value = invitationEt.getText().toString().trim();
+        if(value.equals("")){
+            vibrate();
+            invitationEt.startAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.anim.shake));
+            Toast.makeText(getBaseContext(),"Please enter Invitation code",Toast.LENGTH_LONG).show();}
+        else
+        {
+            db.collection("group").document(value)
+                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
-                public void onClick(View v) {
-                    final String value = editText.getText().toString().trim();
-                    if(value.equals(""))
-                        Toast.makeText(getBaseContext(),"Please enter Invitation code",Toast.LENGTH_LONG).show();
-                    else
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful())
                     {
-                        db.collection("group").document(value)
-                                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful())
-                                {
-                                   Map<String,Object> map =  task.getResult().getData() ;
-                                   if (map==null)
-                                   {
-                                       Toast.makeText(getBaseContext(),"Invalid Code",Toast.LENGTH_LONG).show();
-                                       editText.setError("Invalid Code");
-                                   }
-                                   else {
-                                       Map<String,Object> group = new HashMap<>();
-                                       group.put("GROUP",value);
-                                       db.collection("tracker").document(uid).set(group)
-                                               .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                   @Override
-                                                   public void onComplete(@NonNull Task<Void> task) {
-                                                       popupWindow.dismiss();
-                                                       refresh();
-                                                   }
-                                               });
-                                   }
-                                }
-                            }
-                        });
+                        Map<String,Object> map =  task.getResult().getData() ;
+                        if (map==null)
+                        {
+                            Toast.makeText(getBaseContext(),"Invalid Code",Toast.LENGTH_LONG).show();
+                            invitationEt.setError("Invalid Code");
+                            vibrate();
+                            invitationEt.startAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.anim.shake));
+                        }
+                        else {
+                            Map<String,Object> group = new HashMap<>();
+                            group.put("GROUP",value);
+                            db.collection("tracker").document(uid).set(group)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            refresh();
+                                        }
+                                    });
+                        }
                     }
                 }
             });
@@ -242,5 +242,16 @@ public class Group_Activity extends AppCompatActivity {
     private void refresh(){
         finish();
         startActivity(getIntent());
+    }
+
+    private void vibrate()
+    {
+        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        if (Build.VERSION.SDK_INT >= 26) {
+            vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            vibrator.vibrate(200);
+        }
+
     }
 }
