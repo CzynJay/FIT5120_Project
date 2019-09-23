@@ -502,6 +502,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         record.put("DISPLAY_NAME",mainTitle);
         record.put("SUB_NAME",subtitleText);
         record.put("NAV_TITLE",navigation_title);
+        record.put("Owner",FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         String userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
         //Add to firebase
         db.collection("tracker").document(userKey)

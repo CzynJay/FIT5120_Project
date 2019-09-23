@@ -183,13 +183,13 @@ public class MainActivity extends AppCompatActivity {
         int interval = 1000 * 60 * 60 * 24;
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 9);
-        calendar.set(Calendar.MINUTE, 7);
+        calendar.set(Calendar.HOUR_OF_DAY, 11);
+        calendar.set(Calendar.MINUTE, 36);
         calendar.set(Calendar.SECOND, 0 );
         calendar.set(Calendar.MILLISECOND,0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                interval, pendingIntent);
+                100, pendingIntent);
     }
 
 }

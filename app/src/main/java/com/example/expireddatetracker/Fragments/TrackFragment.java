@@ -161,7 +161,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         for(Map<String,Object> item:lists)
      {
             try {
-            LayoutInflater vi = (LayoutInflater) Objects.requireNonNull(getContext())
+            LayoutInflater vi = (LayoutInflater) getContext()
                     .getSystemService(LAYOUT_INFLATER_SERVICE);
             DisplayMetrics displayMetrics = new DisplayMetrics();
             Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -290,7 +290,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
          purchaseTx.setText("Purchase Date: " + map.get(STARTDATE).toString());
          expireTx.setText("Best Before Date: " + map.get(EXPIRE).toString() + dayLeft);
          storageTx.setText("Storage Type: "+ map.get(METHOD).toString());
-        ownerTx.setText("Owner: " + map.get("DisplayName").toString());
+         ownerTx.setText("Owner: " + map.get("Owner").toString());
          popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
              @Override
              public void onDismiss() {
