@@ -1,3 +1,7 @@
+# Version 1.0.52
+* Added Group notification
+* Change drag gesture from using the text to using the image
+* Rearrange layout of food items in storage
 # Version 1.0.51
 * Added Group ID function
 # Version 1.0.50
