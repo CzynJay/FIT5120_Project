@@ -46,15 +46,14 @@ import java.util.Map;
 
 
 public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSelectedListener {
-    PieChart pieChart;
-    List<PieEntry> entries =  new ArrayList<>();
-    MainActivity activity ;
-    Map<String, JSONArray> dayLeftDict = new HashMap<>();
+    private PieChart pieChart;
+    private List<PieEntry> entries =  new ArrayList<>();
+    private MainActivity activity ;
+    private Map<String, JSONArray> dayLeftDict = new HashMap<>();
     private final String SPOILED = "Spoiled";
     private final String TWODAYS = "Less than 2 days left";
     private final String TWO_SEVEN = "2-7 days left";
     private final String MORETHANAWEEK = "More than a week";
-    long dayInMilliseconds = 86400000;
     private View progress;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -108,11 +107,12 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
     {
         String date = objectMap.get("EXPIRE_DATE").toString();
         long dayleft = calculateDayDifference(date);
+        long dayInMilliseconds = 86400000;
         if(dayleft<=0)
             dayLeftDict.get(SPOILED).put(objectMap);
-        else if(dayleft <= dayInMilliseconds*2)
+        else if(dayleft <= dayInMilliseconds *2)
             dayLeftDict.get(TWODAYS).put(objectMap);
-        else if(dayleft <=dayInMilliseconds*7)
+        else if(dayleft <= dayInMilliseconds *7)
             dayLeftDict.get(TWO_SEVEN).put(objectMap);
         else
             dayLeftDict.get(MORETHANAWEEK).put(objectMap);
@@ -120,7 +120,6 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
 
     private long calculateDayDifference(String date)
     {
-
         Date myDate = new Date();
         try {
             myDate= new SimpleDateFormat("dd/MM/yy", Locale.US).parse(date);
@@ -150,7 +149,6 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
         pieChart.setDrawEntryLabels(false);
         pieChart.setData(pieData);
         pieChart.animateY(1300);
-
     }
 
     @Override

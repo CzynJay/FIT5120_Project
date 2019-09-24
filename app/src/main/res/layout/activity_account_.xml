@@ -45,7 +45,6 @@
             android:text="@string/display_name"
             />
         <EditText
-            android:editable="false"
             android:focusable="false"
             android:gravity="center"
             android:clickable="false"
@@ -53,24 +52,6 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             />
-
-        <TextView android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_margin="10dp"
-            android:textColor="@color/black"
-            android:text="@string/group_id"
-            />
-        <EditText
-            android:inputType="none"
-            android:editable="false"
-            android:focusable="false"
-            android:gravity="center"
-            android:clickable="false"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            />
-
     </LinearLayout>
 
     <Button

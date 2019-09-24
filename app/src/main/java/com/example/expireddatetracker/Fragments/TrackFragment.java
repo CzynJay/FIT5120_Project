@@ -28,6 +28,7 @@ import com.example.expireddatetracker.Models.CircularProgressBar;
 import com.example.expireddatetracker.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -411,7 +412,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                 .collection(type_temp).document(id).delete();
         view.setVisibility(View.GONE);
         owner.removeView(view);
-        Toast.makeText(getContext(),finishType + " Successfully",Toast.LENGTH_LONG).show();
+        Snackbar.make(container,finishType + " Successfully",Snackbar.LENGTH_LONG).show();
     }
 }
 
