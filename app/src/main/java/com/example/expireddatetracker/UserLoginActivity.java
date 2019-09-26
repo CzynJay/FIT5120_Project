@@ -49,16 +49,13 @@ public class UserLoginActivity extends AppCompatActivity {
     private TextView  tipsView;
     private View loginForm;
     private JSONArray tips;
-    private TextView signUp;
     private FirebaseAuth mAuth;
     private View progressForm;
-    private  View appIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_login);
-
         mAuth = FirebaseAuth.getInstance();
         getJson();
         initializeUI();
@@ -156,9 +153,9 @@ public class UserLoginActivity extends AppCompatActivity {
     }
 
     //Login logic
-    public class UserLoginTask extends AsyncTask<String, Void, Boolean> {
+    private class UserLoginTask extends AsyncTask<String, Void, Boolean> {
         boolean res =false;
-        public UserLoginTask(boolean val)
+        UserLoginTask(boolean val)
         {
             res =val;
         }
@@ -220,8 +217,8 @@ public class UserLoginActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.login);
         progressBar = findViewById(R.id.progressBar);
         loginForm = findViewById(R.id.email_login_form);
-        signUp = findViewById(R.id.sign_up);
-        appIcon = findViewById(R.id.app_icon);
+        TextView signUp = findViewById(R.id.sign_up);
+        View appIcon = findViewById(R.id.app_icon);
         appIcon.getLayoutParams().width = (int)(width*0.5);
         appIcon.getLayoutParams().height = (int)(width*0.5);
         progressForm = findViewById(R.id.progress_layout);

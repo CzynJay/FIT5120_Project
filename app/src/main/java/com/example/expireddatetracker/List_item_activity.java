@@ -19,8 +19,6 @@ import org.json.JSONObject;
 import java.util.Objects;
 
 public class List_item_activity extends AppCompatActivity {
-    private ImageView titleImg;
-    private TextView titleTx;
     private JSONArray jsonArray = new JSONArray();
     private LinearLayout container;
 
@@ -51,9 +49,9 @@ public class List_item_activity extends AppCompatActivity {
             public void onClick(View v) {onBackPressed();
             }
         });
-        titleTx = findViewById(R.id.itemlist_title);
+        TextView titleTx = findViewById(R.id.itemlist_title);
         titleTx.setText(keyTitle);
-        titleImg = findViewById(R.id.itemlist_titleimg);
+        ImageView titleImg = findViewById(R.id.itemlist_titleimg);
         titleImg.setImageResource(MainActivity.String_to_img(keyTitle));
     }
 

@@ -465,7 +465,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         //Set popup title
-        title.setText("I will store it in "+tag[0]);
+        title.setText("Store in "+tag[0]);
         duration.setText("Duration: " + tag[1]);
         where = tag[0];
         timeSpan = tag[1];

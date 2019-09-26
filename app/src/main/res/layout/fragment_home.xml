@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#FAF8F8"
-
     >
     <LinearLayout android:layout_width="match_parent"
         android:layout_height="65dp"
@@ -22,7 +21,7 @@
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:src="@drawable/app_icon"
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginStart="20dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,13 +37,14 @@
     <TextView
         android:id="@+id/welcome_mes"
         android:layout_height="wrap_content" android:layout_width="match_parent"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textStyle="bold"
         android:layout_margin="10dp"
         android:layout_below="@id/home_label"
         android:textColor="@color/colorPrimary"
         android:text="@string/welcome"
         />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -56,7 +56,6 @@
     <LinearLayout android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp"
         android:layout_marginBottom="25dp"
         android:weightSum="10"
         >
@@ -65,10 +64,9 @@
             android:id="@+id/searchbar"
             android:layout_width="match_parent"
             android:layout_height="41dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
+
             android:layout_weight="9"
             android:textColor="@color/colorPrimary"
             android:background="@drawable/round_corners"
@@ -76,7 +74,8 @@
             android:hint="Search for food item here!"
             android:includeFontPadding="false"
             android:inputType="text"
-            android:paddingLeft="5dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             android:textColorHint="@color/colorPrimary"
 
             />
@@ -87,7 +86,7 @@
             android:layout_weight="1"
             android:id="@+id/searchbutton"
             android:src="@drawable/ic_magnifying_glass"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
             android:background="#00FF0000"
             android:layout_gravity="center"/>
 
@@ -112,7 +111,7 @@
                 android:id="@+id/viewAll_tx"
                 android:textSize="17sp"
                 android:layout_centerVertical="true"
-                android:text="View All"
+                android:text="@string/view_all"
                 />
         </RelativeLayout>
     <ScrollView

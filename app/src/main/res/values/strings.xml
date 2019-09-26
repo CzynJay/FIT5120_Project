@@ -66,4 +66,8 @@
     <string name="no_group_yet">No Group Yet</string>
     <string name="join_group">Join Group</string>
     <string name="Invitation_code">Invitation Code</string>
+    <string name="pick_purchase_date">Pick Purchase Date</string>
+    <string name="cancel">Cancel</string>
+    <string name="spoiled_warning">If Purchase Date is not available when picking, Your food may have been spoiled</string>
+    <string name="view_all">View All</string>
 </resources>

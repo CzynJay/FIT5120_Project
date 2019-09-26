@@ -17,6 +17,7 @@
         android:layout_height="match_parent"
         app:progress="20"
         app:progressBarThickness="5dp" />
+
     <ImageButton
         android:id="@id/storage_button"
         android:layout_width="match_parent"
@@ -28,6 +29,19 @@
         android:layout_alignBottom="@+id/storage_progressBar"
         android:scaleType="centerInside"
         android:src="@drawable/fruit" />
+    <TextView
+        android:id="@+id/owner_One_letter_tx"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:text="@string/dynamic_text"
+        android:maxLength="1"
+        android:gravity="center"
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:background="@drawable/round_text_1"
+        />
     <ImageView
         android:id="@+id/warning"
         android:visibility="gone"

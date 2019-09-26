@@ -44,7 +44,6 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 public class ResultFragment extends Fragment{
     private LinearLayout viewContainer;
     private Map<String,JSONArray> navigation = new HashMap<>();
-    private MainActivity mainActivity;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -54,7 +53,7 @@ public class ResultFragment extends Fragment{
         TextView tx = x.findViewById(R.id.query);
         viewContainer = x.findViewById(R.id.result_container);
         ImageView bt = x.findViewById(R.id.back);
-        mainActivity = (MainActivity) getActivity();
+        MainActivity mainActivity = (MainActivity) getActivity();
         String query = bundle.getString("key");
         searchResult(mainActivity.food_source,query);
         showNavigation();
@@ -176,117 +175,9 @@ public class ResultFragment extends Fragment{
                         Pair.create((View)main,"type_name")
                         );
                 startActivity(it,options.toBundle());
-//                popUpWindow(v.getTag().toString(),navigation.get(v.getTag().toString()));
             }
         });
         return v;
-    }
-
-    private void popUpWindow(String key,JSONArray jsonArray)
-    {
-        viewContainer.setVisibility(View.GONE);
-        LayoutInflater layoutInflater = (LayoutInflater) Objects.requireNonNull(getContext())
-                .getSystemService(LAYOUT_INFLATER_SERVICE);
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int height = (int) (displayMetrics.heightPixels );
-        int width = (int)(displayMetrics.widthPixels);
-        View popupView = layoutInflater.inflate(R.layout.cate_popup, null);
-        final PopupWindow popupWindow=new PopupWindow(popupView,
-                (int) (width*0.9), ViewGroup.LayoutParams.WRAP_CONTENT ,
-                true);
-        View scrollView = popupView.findViewById(R.id.subcate_scroll);
-        scrollView.getLayoutParams().height = (int)(height*0.5);
-        popupWindow.setTouchable(true);
-        popupWindow.setFocusable(true);
-        View close = popupView.findViewById(R.id.cate_close);
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
-        final ViewGroup root = (ViewGroup) getActivity().getWindow().getDecorView().getRootView();
-        applyDim(root,0.5f);
-        popupWindow.setAnimationStyle(R.style.Animation_Design_BottomSheetDialog);
-        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
-        TextView navi_title = popupView.findViewById(R.id.navi_title);
-        ImageView imgView = popupView.findViewById(R.id.navi_img);
-        imgView.setImageResource(MainActivity.String_to_img(key));
-        navi_title.setText(key);
-        showResult(popupView,jsonArray,popupWindow);
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                viewContainer.setVisibility(View.VISIBLE);
-                clearDim(root);
-            }
-        });
-
-    }
-
-    //Show results
-    private void showResult(View x, JSONArray jsonArray, final PopupWindow window){
-        LinearLayout layout = x.findViewById(R.id.cate_container);
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int widthPixels  = displayMetrics.widthPixels;
-        //If food does not exist
-        if (jsonArray.length()==0)
-        {
-            LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-            final View v = vi.inflate(R.layout.search_row, null);
-            //Add title and subtitle to header
-            TextView main = v.findViewById(R.id.mainname);
-            TextView sub = v.findViewById(R.id.subname);
-            main.setText("No result");
-            sub.setText("Please enter correct food name");
-            layout.addView(v);
-        }
-        for(int i=0;i<jsonArray.length();i++)
-        {
-            try {
-            LayoutInflater vi = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-            final View v = vi.inflate(R.layout.search_row, null);
-            //Add title and subtitle to header
-            TextView main = v.findViewById(R.id.mainname);
-            TextView sub = v.findViewById(R.id.subname);
-            final JSONObject temp = (JSONObject) jsonArray.get(i);
-            v.setTag(temp.get("food_id"));
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        String id = temp.getString("food_id");
-                        Intent intent = new Intent(getContext(), ItemActivity.class);
-                        intent.putExtra("id",id);
-                        intent.putExtra("name",temp.get("food_name").toString());
-                        intent.putExtra("sub",temp.get("food_subtitle").toString());
-                        intent.putExtra("jsonObject",temp.toString());
-                        window.dismiss();
-//                        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity());
-                        startActivity(intent)
-                        ;
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            main.setText(temp.getString("food_name"));
-            sub.setText(temp.getString("food_subtitle").equals("null")?"":temp.getString("food_subtitle"));
-            int main_height = main.getMaxHeight();
-            int sub_height = sub.getMaxHeight();
-            int total_height = main_height + sub_height;
-                LinearLayout.LayoutParams paramsBt = new LinearLayout.LayoutParams(widthPixels, total_height);
-            v.setLayoutParams(paramsBt);
-            layout.addView(v);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-
     }
 
     public static boolean isNumeric(String str) {

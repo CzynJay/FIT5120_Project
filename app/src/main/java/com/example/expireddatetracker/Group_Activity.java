@@ -2,7 +2,6 @@ package com.example.expireddatetracker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.ViewUtils;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -20,18 +19,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.expireddatetracker.Fragments.ResultFragment;
-import com.example.expireddatetracker.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firestore.v1beta1.WriteResult;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -232,9 +228,8 @@ public class Group_Activity extends AppCompatActivity {
 
     }
 
-    private String createNewGroup(String name)
+    private void createNewGroup(String name)
     {
-
         DocumentReference addedDocRef = db.collection("group").document();
         final String groupID = addedDocRef.getId();
         Map<String,String> data = new HashMap<>();
@@ -253,7 +248,6 @@ public class Group_Activity extends AppCompatActivity {
                 });
             }
         });
-        return groupID;
     }
 
     private void refresh(){

@@ -14,7 +14,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class TipsActivity extends AppCompatActivity {
-    private ImageView backBt;
     private LinearLayout container;
     private JSONArray jsonArray = new JSONArray();
     @Override
@@ -27,7 +26,7 @@ public class TipsActivity extends AppCompatActivity {
     //Initialize layout
     private void initUI()
     {
-        backBt = findViewById(R.id.tips_back);
+        ImageView backBt = findViewById(R.id.tips_back);
         container = findViewById(R.id.tips_container);
         try {
             jsonArray = new JSONArray(getIntent().getStringExtra("tips"));

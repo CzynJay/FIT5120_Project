@@ -24,33 +24,43 @@
         android:textStyle="bold"
         android:layout_marginBottom="10dp"
         />
-        <LinearLayout android:layout_width="match_parent"
-        android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+    <TextView
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/warning"
         android:gravity="center"
+        android:text="@string/spoiled_warning">
+    </TextView>
+    <RelativeLayout android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
         android:layout_height="wrap_content" android:orientation="horizontal">
+
         <Button android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:text="Cancel"
+            android:text="@string/cancel"
+
             android:id="@+id/cancel_Button"
-            android:layout_marginRight="40dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/round_button"
-            android:textColor="#FFFFFF"
+            android:layout_toStartOf="@id/confirm_Button"
+            android:background="#00FF0000"
+            android:textColor="#7A7A7A"
             android:layout_gravity="start"
             />
-
         <Button
             android:id="@+id/confirm_Button"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:layout_gravity="right"
             android:layout_marginTop="10dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:padding="7dp"
             android:layout_marginBottom="20dp"
-            android:layout_marginLeft="40dp"
             android:background="@drawable/round_button"
-            android:text="Confirm"
+            android:text="@string/pick_purchase_date"
             android:textColor="#FFFFFF" />
-    </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

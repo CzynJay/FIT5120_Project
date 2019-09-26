@@ -29,7 +29,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private EditText emailTV, passwordTV, nameTV;
     private ProgressBar progress;
-    private ImageView backBt;
     private Button regBtn;
     private FirebaseAuth mAuth;
 
@@ -131,7 +130,7 @@ public class RegistrationActivity extends AppCompatActivity {
         regBtn = findViewById(R.id.register);
         nameTV = findViewById(R.id.nameView);
         progress = findViewById(R.id.register_pro);
-        backBt = findViewById(R.id.register_back);
+        ImageView backBt = findViewById(R.id.register_back);
         backBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
