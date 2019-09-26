@@ -1,3 +1,6 @@
+# Version 1.0.53
+* Added add to storage warning message
+* Added initials on food items to represent different users in group storage
 # Version 1.0.52
 * Added Group notification
 * Change drag gesture from using the text to using the image
