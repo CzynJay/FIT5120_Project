@@ -15,11 +15,12 @@ import com.example.expireddatetracker.Group_Activity;
 import com.example.expireddatetracker.ItemActivity;
 import com.example.expireddatetracker.R;
 import com.example.expireddatetracker.TipsActivity;
+import com.example.expireddatetracker.Tutorial_Activity;
 
 import androidx.fragment.app.Fragment;
 
 public class SettingFragment extends Fragment {
-    private View accountLayout,tipsLayout,feedbackLayout,websiteLayout,groupLayout;
+    private View accountLayout,tipsLayout,feedbackLayout,websiteLayout,groupLayout,tutorialLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,6 +38,7 @@ public class SettingFragment extends Fragment {
         tipsLayout = parent.findViewById(R.id.tips_layout);
         feedbackLayout = parent.findViewById(R.id.feedback_layout);
         websiteLayout = parent.findViewById(R.id.ourwebsite_layout);
+        tutorialLayout = parent.findViewById(R.id.tute_layout);
         clickButtonListener();
     }
 
@@ -83,6 +85,14 @@ public class SettingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), Group_Activity.class);
+                startActivity(intent);
+            }
+        });
+
+        tutorialLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), Tutorial_Activity.class);
                 startActivity(intent);
             }
         });

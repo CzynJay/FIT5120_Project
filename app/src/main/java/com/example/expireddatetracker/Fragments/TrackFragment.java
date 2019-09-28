@@ -242,7 +242,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         final ViewGroup root = (ViewGroup) getActivity().getWindow().getDecorView().getRootView();
         Map<String,Object> map = (Map<String, Object>) itemView.getTag();
         LayoutInflater layoutInflater = (LayoutInflater)getContext()
-                .getSystemService(LAYOUT_INFLATER_SERVICE);
+            .getSystemService(LAYOUT_INFLATER_SERVICE);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = (int)(displayMetrics.widthPixels*0.8);

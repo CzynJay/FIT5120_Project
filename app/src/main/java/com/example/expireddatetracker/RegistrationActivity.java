@@ -1,16 +1,25 @@
 package com.example.expireddatetracker;
 import android.content.Intent;
 
-import android.os.AsyncTask;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.expireddatetracker.Fragments.TrackFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -31,6 +40,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private ProgressBar progress;
     private Button regBtn;
     private FirebaseAuth mAuth;
+    private CheckBox readBt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +98,12 @@ public class RegistrationActivity extends AppCompatActivity {
             progress.setVisibility(View.GONE);
             return;
         }
+        if(!readBt.isChecked())
+        {
+            Toast.makeText(getApplicationContext(), "Terms of use are not accepted", Toast.LENGTH_LONG).show();
+            progress.setVisibility(View.GONE);
+            return;
+        }
         //Register user on firebase
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -109,12 +125,11 @@ public class RegistrationActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext()
                                             , "Registration successful!", Toast.LENGTH_LONG).show();
                                     progress.setVisibility(View.GONE);
-                                    Intent intent = new Intent(RegistrationActivity.this, UserLoginActivity.class);
+                                    Intent intent = new Intent(RegistrationActivity.this, Tutorial_Activity.class);
                                     startActivity(intent);
                                     finish();
                                 }
                             });
-
                         }
                         else {
                             Toast.makeText(getApplicationContext(), task.getException().toString().split(":")[1], Toast.LENGTH_LONG).show();
@@ -125,6 +140,9 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
+        readBt = findViewById(R.id.checkbox_accept);
+        TextView termTx = findViewById(R.id.termTx);
+        termTx.setPaintFlags(termTx.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         emailTV = findViewById(R.id.email);
         passwordTV = findViewById(R.id.password);
         regBtn = findViewById(R.id.register);
@@ -137,11 +155,57 @@ public class RegistrationActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        termTx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popUpTermOfUse();
+            }
+        });
+
     }
 
     public static boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 6;
+    }
+
+    private void popUpTermOfUse()
+    {
+        final ViewGroup root = (ViewGroup) getWindow().getDecorView().getRootView();
+        LayoutInflater layoutInflater = (LayoutInflater)getBaseContext()
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = (int)(displayMetrics.widthPixels*0.8);
+        View popupView = layoutInflater.inflate(R.layout.termofuse_popup, null);
+        final PopupWindow popupWindow=new PopupWindow(popupView,
+                width, LinearLayout.LayoutParams.WRAP_CONTENT,
+                true);
+        //Allow popup to be touchable & focusable
+        popupWindow.setTouchable(true);
+        popupWindow.setFocusable(true);
+        TrackFragment.applyDim(root,0.5f);
+        //Set popup animation
+        popupWindow.setAnimationStyle(R.style.Animation_Design_BottomSheetDialog);
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+        popupView.findViewById(R.id.cancel_bt_term).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+        popupView.findViewById(R.id.accept_bt_term).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                readBt.setChecked(true);
+                popupWindow.dismiss();
+            }
+        });
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                TrackFragment.clearDim(root);
+            }
+        });
     }
 
 }
