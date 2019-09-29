@@ -82,16 +82,16 @@ public class List_item_activity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             try {
-                                String id = temp.getString("food_id");
+//                                String id = temp.getString("food_id");
                                 Intent intent = new Intent(getBaseContext(), ItemActivity.class);
-                                intent.putExtra("id",id);
-                                intent.putExtra("name",temp.get("food_name").toString());
-                                intent.putExtra("sub",temp.get("food_subtitle").toString());
+//                                intent.putExtra("id",id);
+//                                intent.putExtra("name",temp.get("food_name").toString());
+//                                intent.putExtra("sub",temp.get("food_subtitle").toString());
                                 intent.putExtra("jsonObject",temp.toString());
                                 finish();
                                 startActivity(intent)
                                 ;
-                            } catch (JSONException e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }

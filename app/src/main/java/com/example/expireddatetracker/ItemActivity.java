@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -25,10 +27,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.expireddatetracker.Fragments.ResultFragment;
 import com.google.android.gms.common.util.ArrayUtils;
+import com.google.android.gms.common.util.CollectionUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,6 +53,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     private Button storageBt,cookBt;
     private int height,width;
     private String foodID,mainTitle,subtitleText= "1";
+    private String uid;
     private JSONArray storageJson= new JSONArray();
     private JSONArray cookJson = new JSONArray();
     final private String[] storageTypes = {"DOP_Pantry_Max","DOP_Freeze_Max","DOP_Refrigerate_Max"};
@@ -58,6 +63,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     private PopupWindow popupWindow;
     private FirebaseFirestore db;
     private String startDate,endDate,where,timeSpan,navigation_title;
+    private Map<String,Double> myMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -65,6 +71,8 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.item_details);
         db = FirebaseFirestore.getInstance();
+        uid = FirebaseAuth
+                .getInstance().getCurrentUser().getUid();
         readIntent();
         initUI();
         InitButton();
@@ -203,6 +211,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected Void doInBackground(String... strings) {
             cookJson = searchResult(getJson(strings[0]),foodID);
+            readSharedPreference();
             return null;
         }
 
@@ -503,9 +512,8 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         record.put("SUB_NAME",subtitleText);
         record.put("NAV_TITLE",navigation_title);
         record.put("Owner",FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-        String userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
         //Add to firebase
-        db.collection("tracker").document(userKey)
+        db.collection("tracker").document(uid)
                 .collection(where).document().set(record)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -527,7 +535,43 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected Void doInBackground(Void... voids) {
             postRecord();
+            try {
+                writeSharedPreference(storageJson.getJSONObject(0).toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             return null;
         }
     }
+
+    private void readSharedPreference(){
+        SharedPreferences sharedPreferences = this.getSharedPreferences(uid,Context.MODE_PRIVATE);
+        if (sharedPreferences!=null){
+            String mapStr = sharedPreferences.getString("map","");
+            if(!mapStr.equals(""))
+            {
+                try {
+                    myMap = new Gson().fromJson(mapStr,myMap.getClass());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void writeSharedPreference(String item)
+    {
+        SharedPreferences sharedPreferences = this.getSharedPreferences(uid,Context.MODE_PRIVATE);
+        if(myMap.containsKey(item))
+        {
+            myMap.put(item,myMap.get(item)+1);
+        }
+        else {
+            myMap.put(item,1.0);
+        }
+        sharedPreferences.edit().putString("map",new Gson().toJson(myMap)).apply();
+    }
+
+
+
 }
