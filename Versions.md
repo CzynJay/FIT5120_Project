@@ -1,3 +1,8 @@
+# Version 1.0.55
+* Added quick add option (prototype)
+# Version 1.0.54
+* Added terms of use
+* Added tutorial page after registration
 # Version 1.0.53
 * Added add to storage warning message
 * Added initials on food items to represent different users in group storage
