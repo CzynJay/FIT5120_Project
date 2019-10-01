@@ -503,6 +503,8 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     //Add records to database function
     private void postRecord()
     {
+        String name = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        name = name==null?"":name;
         Map<String, Object>  record = new HashMap<>();
         record.put("PURCHASE_DATE", startDate);
         record.put("STORAGE_METHOD",where);
@@ -511,7 +513,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         record.put("DISPLAY_NAME",mainTitle);
         record.put("SUB_NAME",subtitleText);
         record.put("NAV_TITLE",navigation_title);
-        record.put("Owner",FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        record.put("Owner",name);
         //Add to firebase
         db.collection("tracker").document(uid)
                 .collection(where).document().set(record)

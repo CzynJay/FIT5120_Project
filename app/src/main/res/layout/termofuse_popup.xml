@@ -1,68 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     >
-<LinearLayout android:layout_width="match_parent"
+<LinearLayout
+    android:id="@+id/termofusetitle"
+    android:layout_alignParentTop="true"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#13152B"
-    android:orientation="horizontal">
+    android:background="#f9aa33"
+    android:orientation="horizontal"
+
+    >
     <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:textSize="@dimen/labelSize"
         android:text="@string/terms_of_use"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textStyle="bold"/>
 </LinearLayout>
     <ScrollView
+        android:layout_below="@id/termofusetitle"
         android:layout_margin="20dp"
         android:layout_width="match_parent"
+        android:layout_above="@id/term_bt"
         android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:showDividers="middle"
-            android:divider="@drawable/tips_divider"
-            android:orientation="vertical">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="@string/dynamic_text"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="@string/dynamic_text"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="@string/dynamic_text"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="@string/dynamic_text"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="@string/dynamic_text"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="@string/dynamic_text"/>
-        </LinearLayout>
-
+                android:text="@string/terms"
+                android:textColor="@color/black" />
     </ScrollView>
 
-    <RelativeLayout android:layout_width="match_parent"
+    <RelativeLayout
+        android:id="@+id/term_bt"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
         <Button
@@ -86,4 +63,4 @@
             android:layout_marginEnd="20dp"
             android:textColor="@color/white"/>
     </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>

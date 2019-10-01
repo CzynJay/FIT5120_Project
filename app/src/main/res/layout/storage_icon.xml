@@ -35,6 +35,7 @@
         android:layout_height="22dp"
         android:text="@string/dynamic_text"
         android:maxLength="1"
+        android:visibility="gone"
         android:gravity="center"
         android:layout_alignParentEnd="true"
         android:textColor="@color/white"

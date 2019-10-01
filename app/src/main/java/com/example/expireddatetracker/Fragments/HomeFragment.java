@@ -1,5 +1,6 @@
 package com.example.expireddatetracker.Fragments;
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,28 +11,20 @@ import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.example.expireddatetracker.ItemActivity;
 import com.example.expireddatetracker.R;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
-
-
-import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -60,8 +53,6 @@ public class HomeFragment extends Fragment {
         fav_container = inflatePage.findViewById(R.id.fav_container);
         fav_layout = inflatePage.findViewById(R.id.fav_layout);
         //Authenticate user from Firebase
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser mUser = mAuth.getCurrentUser();
         final ImageButton searchButton = inflatePage.findViewById(R.id.searchbutton);
         //Search bar
         searchBar = inflatePage.findViewById(R.id.searchbar);
@@ -107,7 +98,12 @@ public class HomeFragment extends Fragment {
     //View main category
     private void init(View x){
         String[] types = {"Fruits","Dairy & Eggs","Meat","Seafood","Poultry","Vegetable"};
-//        int[] colors = {Color.CYAN,Color.RED,Color.YELLOW,Color.RED,Color.YELLOW,Color.GREEN};
+        int[] colors = {Color.rgb(240,119,65)
+                ,Color.rgb(5,132,209)
+                ,Color.rgb(135,0,0)
+                ,Color.rgb(26,35,126)
+                ,Color.rgb(252,198,18)
+                ,Color.rgb(46,125,50)};
         Map<String, Integer> map = new HashMap<String,Integer>();
         map.put("Fruits",R.drawable.fruit);
         map.put("Dairy & Eggs",R.drawable.milk_eggs);
@@ -139,15 +135,15 @@ public class HomeFragment extends Fragment {
             final TextView tx3  = v.findViewById(R.id.tx3);
             bt1.setImageResource(map.get(types[temp]));
             tx1.setText(types[temp]);
-//            bt1.setBackgroundColor(colors[temp]);
+            bt1.setBackgroundColor(colors[temp]);
             temp++;
             bt2.setImageResource(map.get(types[temp]));
-//            bt2.setBackgroundColor(colors[temp]);
+            bt2.setBackgroundColor(colors[temp]);
             tx2.setText(types[temp]);
             temp++;
             bt3.setImageResource(map.get(types[temp]));
             tx3.setText(types[temp]);
-//            bt3.setBackgroundColor(colors[temp]);
+            bt3.setBackgroundColor(colors[temp]);
             bt1.setLayoutParams(paramsBt);
             bt2.setLayoutParams(paramsBt);
             bt3.setLayoutParams(paramsBt);
@@ -252,6 +248,7 @@ public class HomeFragment extends Fragment {
         return list;
     }
 
+
     private class LoadPreference extends AsyncTask<Void,Void,List<Map.Entry<String,Double>>>{
         @Override
         protected List<Map.Entry<String,Double>> doInBackground(Void... voids) {
@@ -297,6 +294,7 @@ public class HomeFragment extends Fragment {
             }
 
         }}
+
     private String trimString(String inputStr){
         String temp = inputStr;
         if (inputStr.length()>10)

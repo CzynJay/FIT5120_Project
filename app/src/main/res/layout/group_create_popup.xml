@@ -49,7 +49,6 @@
         android:layout_margin="17dp"
         android:layout_height="35dp"
         android:layout_gravity="end"
-
         android:text="@string/create"
         android:background="@drawable/round_button"
         android:textColor="@color/white"

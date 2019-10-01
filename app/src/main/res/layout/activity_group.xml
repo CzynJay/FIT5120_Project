@@ -43,6 +43,15 @@
         android:id="@+id/group_progressBar"
         android:layout_gravity="center"
         />
+
+    <TextView
+        android:id="@+id/invitationTx"
+        android:layout_width="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:visibility="gone"
+        android:text="@string/Invitation_code"/>
     <RelativeLayout
         android:id="@+id/code_layout"
         android:visibility="gone"
@@ -50,6 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
        >
+
     <EditText
         android:id="@+id/invitation_et"
         android:focusable="false"
@@ -104,7 +114,6 @@
            android:layout_height="wrap_content"
            android:visibility="gone"
            android:gravity="center"
-             android:layout_alignParentEnd="true"
            android:layout_gravity="end"
            android:layout_margin="20dp"
            android:text="@string/join_group"

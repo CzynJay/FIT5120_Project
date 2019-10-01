@@ -38,7 +38,7 @@ public class Group_Activity extends AppCompatActivity {
     private Button leaveBT,joinBt;
     private FirebaseFirestore db;
     private EditText codeET,invitationEt;
-    private View prograssBar;
+    private View prograssBar,invitationTx;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +52,7 @@ public class Group_Activity extends AppCompatActivity {
         prograssBar = findViewById(R.id.group_progressBar);
         codeET = findViewById(R.id.invitation_et);
         invitationEt = findViewById(R.id.invitationcode_et);
+        invitationTx = findViewById(R.id.invitationTx);
         Button copyBT = findViewById(R.id.copy_bt);
         db = FirebaseFirestore.getInstance();
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -126,6 +127,7 @@ public class Group_Activity extends AppCompatActivity {
             leaveBT.setVisibility(View.VISIBLE);
             joinBt.setVisibility(View.GONE);
             invitationEt.setVisibility(View.GONE);
+            invitationTx.setVisibility(View.VISIBLE);
         }
         else
             {
@@ -134,6 +136,7 @@ public class Group_Activity extends AppCompatActivity {
                 leaveBT.setVisibility(View.GONE);
                 joinBt.setVisibility(View.VISIBLE);
                 invitationEt.setVisibility(View.VISIBLE);
+                invitationTx.setVisibility(View.GONE);
             }
     }
 

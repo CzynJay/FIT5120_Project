@@ -176,9 +176,10 @@ public class RegistrationActivity extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = (int)(displayMetrics.widthPixels*0.8);
+        int height = (int)(displayMetrics.heightPixels*0.7);
         View popupView = layoutInflater.inflate(R.layout.termofuse_popup, null);
         final PopupWindow popupWindow=new PopupWindow(popupView,
-                width, LinearLayout.LayoutParams.WRAP_CONTENT,
+                width, height,
                 true);
         //Allow popup to be touchable & focusable
         popupWindow.setTouchable(true);
