@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -263,6 +264,7 @@ public class HomeFragment extends Fragment {
             if (entries==null || entries.size()==0) {
                 fav_layout.setVisibility(View.GONE);
             } else {
+                Log.e("check",entries.toString());
                 if (entries.size() > 5)
                     entries = entries.subList(0, 5);
                 for (Map.Entry<String, Double> entry : entries) {
@@ -287,6 +289,7 @@ public class HomeFragment extends Fragment {
                             }
                         });
                         fav_container.addView(view);
+                        view.getLayoutParams().width=300;
                      } catch (Exception e) {
                         e.printStackTrace();
                     }

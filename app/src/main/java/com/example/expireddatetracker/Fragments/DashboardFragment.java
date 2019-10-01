@@ -71,7 +71,7 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
         pieChart.setEntryLabelColor(Color.BLACK);
         pieChart.animateXY(300,300);
         pieChart.setCenterTextSize(20f);
-        fetchData(getResources().getString(R.string.pantry));
+        fetchData(getResources().getString(R.string.refrigerate));
         return inflatePage;
     }
 

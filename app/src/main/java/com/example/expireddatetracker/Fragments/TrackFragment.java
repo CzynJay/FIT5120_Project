@@ -4,7 +4,10 @@ import android.content.ClipData;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.DragEvent;
@@ -44,6 +47,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+import static android.content.Context.VIBRATOR_SERVICE;
 
 public class TrackFragment extends Fragment implements View.OnClickListener, TabLayout.BaseOnTabSelectedListener {
     private GridLayout container;
@@ -87,7 +91,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         //Authenticate user from Firebase
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         tabs.addOnTabSelectedListener(this);
-        fetchGroupData("Pantry");
+        fetchGroupData("Refrigerator");
     }
 
     private void fetchGroupData(final String type)
@@ -155,6 +159,16 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                 });
     }
 
+    private void vibrate()
+    {
+        Vibrator vibrator = (Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
+        if (Build.VERSION.SDK_INT >= 26) {
+            vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            vibrator.vibrate(100);
+        }
+
+    }
     //Display list of all the food in storage
     private void displayStatus( ArrayList<Map<String,Object>> lists,String id,String ownerName){
 
@@ -351,6 +365,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
 
         @Override
         public boolean onLongClick(View view) {
+            vibrate();
             View parent =(View)view.getParent().getParent();
             ClipData data = ClipData.newPlainText("", "");
             View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(

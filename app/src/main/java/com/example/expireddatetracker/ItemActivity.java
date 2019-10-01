@@ -56,7 +56,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     private String uid;
     private JSONArray storageJson= new JSONArray();
     private JSONArray cookJson = new JSONArray();
-    final private String[] storageTypes = {"DOP_Pantry_Max","DOP_Freeze_Max","DOP_Refrigerate_Max"};
+    final private String[] storageTypes = {"DOP_Refrigerate_Max","DOP_Pantry_Max","DOP_Freeze_Max"};
     private Calendar myCalendar = Calendar.getInstance();
     private DatePickerDialog.OnDateSetListener date;
     final private long dayInMilliseconds = 86400000;
