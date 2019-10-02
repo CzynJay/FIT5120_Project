@@ -1,3 +1,6 @@
+# Version 1.0.58
+* Updated dataset (fixed font and "cherries" bug)
+* Updated terms of use
 # Version 1.0.57
 * Rearrange order of storage types
 * Added feedback when long clicking item
