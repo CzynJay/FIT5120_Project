@@ -1,3 +1,8 @@
+# Version 1.0.57
+* Rearrange order of storage types
+* Added feedback when long clicking item
+# Version 1.0.56
+* Added tutorial and terms of use
 # Version 1.0.55
 * Added quick add option (prototype)
 # Version 1.0.54
