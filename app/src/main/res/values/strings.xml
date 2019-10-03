@@ -183,4 +183,7 @@ We are committed to conducting our business in accordance with these principles 
 
 
 </string>
+    <string name="guess_you_like">Guess you like</string>
+    <string name="storage_suggestion">Store your food in the correct storage so that it would stay fresh and safe to consume</string>
+    <string name="cook_suggestion">Follow the cooking method below to ensure all the harmful bacteria is killed - do not undercook your food!</string>
 </resources>

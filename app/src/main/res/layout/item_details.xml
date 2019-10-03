@@ -114,8 +114,19 @@
         android:gravity="center_vertical"
         android:layout_below="@id/buttonViews"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="40dp"
         >
+        <TextView
+            android:id="@+id/suggestTx"
+            android:layout_width="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_height="wrap_content"
+            android:text="@string/dynamic_text"
+            android:textSize="16sp"
+            android:visibility="gone"
+            android:textColor="@color/colorPrimary"
+            android:gravity="center"/>
     <ScrollView
         android:id="@+id/edu_scroll"
         android:layout_width="match_parent"
@@ -129,6 +140,9 @@
             android:divider="@drawable/img_gap"
             android:gravity="center_vertical"
             android:orientation="vertical"
-            android:showDividers="middle"/>
+            android:showDividers="middle">
+
+
+        </LinearLayout>
     </ScrollView></LinearLayout>
 </RelativeLayout>

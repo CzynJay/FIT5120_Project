@@ -1,10 +1,12 @@
 package com.example.expireddatetracker;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
@@ -68,8 +70,7 @@ public class Group_Activity extends AppCompatActivity {
         leaveBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.collection("tracker").document(uid).delete();
-                refresh();
+                leaveGroup();
             }
         });
 
@@ -94,6 +95,35 @@ public class Group_Activity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(),"Invitation Code is copied",Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void leaveGroup()
+    {
+        prograssBar.setVisibility(View.VISIBLE);
+        new AlertDialog.Builder(this)
+                .setTitle("Leave Group")
+                .setMessage("Do you really want to leave this group?")
+                .setIcon(R.drawable.warning)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        db.collection("tracker").document(uid)
+                                .delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                prograssBar.setVisibility(View.GONE);
+                                refresh();
+                                Toast.makeText(getApplicationContext(), "Leave Group Successfully", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    }})
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        prograssBar.setVisibility(View.GONE);
+                    }
+                }).show();
     }
 
     private void checkGroup()
@@ -192,6 +222,7 @@ public class Group_Activity extends AppCompatActivity {
         final String value = invitationEt.getText().toString().trim();
         if(value.equals("")){
             vibrate();
+            prograssBar.setVisibility(View.GONE);
             invitationEt.startAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.anim.shake));
             Toast.makeText(getBaseContext(),"Please enter Invitation code",Toast.LENGTH_LONG).show();}
         else
@@ -214,11 +245,13 @@ public class Group_Activity extends AppCompatActivity {
                         else {
                             Map<String,Object> group = new HashMap<>();
                             group.put("GROUP",value);
+
                             db.collection("tracker").document(uid).set(group)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             prograssBar.setVisibility(View.GONE);
+                                            Toast.makeText(getBaseContext(),"Join successfully ",Toast.LENGTH_SHORT).show();
                                             refresh();
                                         }
                                     });

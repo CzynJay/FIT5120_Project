@@ -64,6 +64,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     private FirebaseFirestore db;
     private String startDate,endDate,where,timeSpan,navigation_title;
     private Map<String,Double> myMap = new HashMap<>();
+    private TextView suggestionTx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -129,6 +130,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     {
         TextView title = findViewById(R.id.foodname);
         TextView subTitle = findViewById(R.id.subname_label);
+        suggestionTx  = findViewById(R.id.suggestTx);
         //Cooking and storing labels
         cookIndicator = findViewById(R.id.cook_indicator);
         storageIndicator =findViewById(R.id.storage_indicator);
@@ -385,6 +387,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
     {
         JSONArray res = source.equals("foodsource.json")?storageJson:cookJson;
         if (res.length()==0) {
+            suggestionTx.setVisibility(View.GONE);
             TextView error = new TextView(getApplicationContext());
             error.setText(R.string.no_recommend);
             error.setGravity(Gravity.CENTER);
@@ -397,8 +400,10 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         }
         else{
             try {
+                suggestionTx.setVisibility(View.VISIBLE);
                 if(source.equals("foodsource.json"))
                 {
+                    suggestionTx.setText(getResources().getString(R.string.storage_suggestion));
                     for(String item:storageTypes)
                     {
                         View v =displayResult(storageJson.getJSONObject(0),item);
@@ -407,6 +412,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 else if (source.equals("cook.json"))
                 {
+                    suggestionTx.setText(getResources().getString(R.string.cook_suggestion));
                     String [] cook = {"Cooking_Temperature","Preparation_size","Cooking_time"};
                     for(int i=0;i<res.length();i++)
                     {

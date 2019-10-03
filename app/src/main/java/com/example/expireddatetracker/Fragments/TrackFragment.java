@@ -9,14 +9,14 @@ import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroupOverlay;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
@@ -24,8 +24,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.example.expireddatetracker.MainActivity;
 import com.example.expireddatetracker.Models.CircularProgressBar;
 import com.example.expireddatetracker.R;
@@ -57,8 +58,9 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
     final private String EXPIRE = "EXPIRE_DATE";
     final private String STARTDATE = "PURCHASE_DATE";
     final private String DISPLAY = "DISPLAY_NAME";
+    private ScrollView sv ;
     private TabLayout tabs;
-    private View progressing,errorTx;
+    private View progressing,errorTx,bt_layout;
 
     private  long dayInMilliseconds = 86400000;
 
@@ -73,13 +75,15 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
 
     private void init(View x){
         tabs = x.findViewById(R.id.tabLayout);
-
+        sv = x.findViewById(R.id.scroll_container);
+        bt_layout = x.findViewById(R.id.buttonLayout);
         //Discard and consume button
         Button quickDiscardBt = x.findViewById(R.id.quick_discard_bt);
         Button quickConsumeBt = x.findViewById(R.id.quick_consume_bt);
         quickDiscardBt.setTag(quickDiscardBt.getText());
         quickConsumeBt.setTag(quickConsumeBt.getText());
         //Drag listener for buttons
+        sv.setOnDragListener(new Drop_fail_listener());
         quickConsumeBt.setOnDragListener(new MyDragListener());
         quickDiscardBt.setOnDragListener(new MyDragListener());
         container = x.findViewById(R.id.storage_container);
@@ -115,7 +119,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                                          for(DocumentSnapshot item:task.getResult().getDocuments()){
                                              String id = item.getId();
                                              String ownerName = (String)item.get("Name");
-                                             fetchData(id,type,ownerName);
+                                             fetchData(id,type,ownerName,true);
                                          }
                                      }
                                  }
@@ -123,7 +127,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
 
                          }
                          else {
-                             fetchData(uid,type,FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                             fetchData(uid,type,FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),false);
                          }
                      }
                 progressing.setVisibility(View.VISIBLE);
@@ -133,7 +137,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         });
     }
     //Get data from Firebase
-    private void fetchData(final String id, final String type, final String ownerName)
+    private void fetchData(final String id, final String type, final String ownerName, final boolean group)
     {
         final ArrayList<Map<String,Object>> temp = new ArrayList<>();
         activity.db.collection("tracker").document(id)
@@ -149,11 +153,9 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                                 temp.add(newMap);
                             }
                             progressing.setVisibility(View.GONE);
-                            displayStatus(temp,id,ownerName);
+                            displayStatus(temp,id,ownerName,group);
                             if(container.getChildCount()==0)
-                            {
                                 errorTx.setVisibility(View.VISIBLE);
-                            }
                         }
                     }
                 });
@@ -170,7 +172,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
 
     }
     //Display list of all the food in storage
-    private void displayStatus( ArrayList<Map<String,Object>> lists,String id,String ownerName){
+    private void displayStatus( ArrayList<Map<String,Object>> lists,String id,String ownerName,boolean group){
 
         errorTx.setVisibility(View.GONE);
 
@@ -186,7 +188,12 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
             View v = vi.inflate(R.layout.storage_icon, null);
             RelativeLayout layout = v.findViewById(R.id.circle_container);
             TextView name = v.findViewById(R.id.storage_name);
+            TextView oneLetter = v.findViewById(R.id.owner_One_letter_tx);
             name.setText(item.get(DISPLAY).toString());
+            if (group){
+                oneLetter.setVisibility(View.VISIBLE);
+                oneLetter.setText(ownerName==null?"U":ownerName.substring(0,1).toUpperCase());
+            }
             int imgResource = R.drawable.app_icon;
               if(item.get("NAV_TITLE")!=null)
                   //Get subcategory image
@@ -351,7 +358,6 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
-
     }
 
     @Override
@@ -366,6 +372,8 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         @Override
         public boolean onLongClick(View view) {
             vibrate();
+//            bt_layout.setVisibility(View.VISIBLE);
+            slide_anim(bt_layout,true);
             View parent =(View)view.getParent().getParent();
             ClipData data = ClipData.newPlainText("", "");
             View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
@@ -397,6 +405,8 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                     // Dropped, reassign View to ViewGroup
                     final View view = (View) event.getLocalState();
                     removeView(view, v.getTag().toString());
+//                    bt_layout.setVisibility(View.GONE);
+                    slide_anim(bt_layout,false);
                     break;
                 default:
                     break;
@@ -405,6 +415,28 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         }
     }
 
+    class Drop_fail_listener implements  View.OnDragListener{
+        @Override
+        public boolean onDrag(View v, DragEvent event) {
+            switch (event.getAction()) {
+                case DragEvent.ACTION_DRAG_STARTED:
+                    // do nothing
+                    break;
+                case DragEvent.ACTION_DRAG_ENTERED:
+                case DragEvent.ACTION_DRAG_EXITED:
+                case DragEvent.ACTION_DRAG_ENDED:
+                    break;
+                case DragEvent.ACTION_DROP:
+                    // Dropped, reassign View to ViewGroup
+//                    bt_layout.setVisibility(View.GONE);
+                    slide_anim(bt_layout,false);
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        }
+    }
     public static String date_to_str(Date date)
     {
         String myFormat = "dd/MM/yy"; //In which you need put here
@@ -428,6 +460,56 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         view.setVisibility(View.GONE);
         owner.removeView(view);
         Snackbar.make(container,finishType + " Successfully",Snackbar.LENGTH_LONG).show();
+    }
+
+    private void slide_anim(final View view, boolean up){
+        if (up)
+        {
+            view.setVisibility(View.VISIBLE);
+            Animation animation = AnimationUtils.loadAnimation(getContext(),R.anim.slide_up);
+            animation.setDuration(500);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            view.startAnimation(animation);
+
+        }
+        else {
+            Animation animation = AnimationUtils.loadAnimation(getContext(),R.anim.slide_down);
+            animation.setDuration(500);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                        view.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            view.startAnimation(animation);
+        }
+
+
     }
 }
 

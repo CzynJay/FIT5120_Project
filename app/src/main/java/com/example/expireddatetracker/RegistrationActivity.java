@@ -132,6 +132,7 @@ public class RegistrationActivity extends AppCompatActivity {
                             });
                         }
                         else {
+                            progress.setVisibility(View.GONE);
                             Toast.makeText(getApplicationContext(), task.getException().toString().split(":")[1], Toast.LENGTH_LONG).show();
                         }
                     }
