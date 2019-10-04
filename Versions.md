@@ -1,3 +1,5 @@
+# Version 1.0.59
+* Added confirmation window when leavingg group
 # Version 1.0.58
 * Updated dataset (fixed font and "cherries" bug)
 * Updated terms of use
