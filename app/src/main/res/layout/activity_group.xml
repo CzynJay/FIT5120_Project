@@ -38,6 +38,15 @@
     android:layout_below="@id/group_title_layout"
     android:orientation="vertical"
     android:layout_alignParentBottom="true">
+    <TextView android:id="@+id/teamnameTx"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/dynamic_text"
+        android:layout_marginBottom="30dp"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:textStyle="bold"/>
     <ProgressBar android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/group_progressBar"
@@ -127,6 +136,13 @@
         android:text="@string/leave_group"
         android:visibility="gone"
         />
+    <Button
+        android:id="@+id/change_colorBT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:text="@string/change_icon_color"/>
 
 </LinearLayout>
 

@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
@@ -119,7 +120,8 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                                          for(DocumentSnapshot item:task.getResult().getDocuments()){
                                              String id = item.getId();
                                              String ownerName = (String)item.get("Name");
-                                             fetchData(id,type,ownerName,true);
+                                             String color = (String) item.get("Color");
+                                             fetchData(id,type,ownerName,true,color);
                                          }
                                      }
                                  }
@@ -127,7 +129,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
 
                          }
                          else {
-                             fetchData(uid,type,FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),false);
+                             fetchData(uid,type,FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),false,null);
                          }
                      }
                 progressing.setVisibility(View.VISIBLE);
@@ -137,7 +139,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
         });
     }
     //Get data from Firebase
-    private void fetchData(final String id, final String type, final String ownerName, final boolean group)
+    private void fetchData(final String id, final String type, final String ownerName, final boolean group, final String color)
     {
         final ArrayList<Map<String,Object>> temp = new ArrayList<>();
         activity.db.collection("tracker").document(id)
@@ -153,7 +155,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                                 temp.add(newMap);
                             }
                             progressing.setVisibility(View.GONE);
-                            displayStatus(temp,id,ownerName,group);
+                            displayStatus(temp,id,ownerName,group,color);
                             if(container.getChildCount()==0)
                                 errorTx.setVisibility(View.VISIBLE);
                         }
@@ -172,7 +174,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
 
     }
     //Display list of all the food in storage
-    private void displayStatus( ArrayList<Map<String,Object>> lists,String id,String ownerName,boolean group){
+    private void displayStatus( ArrayList<Map<String,Object>> lists,String id,String ownerName,boolean group,String color){
 
         errorTx.setVisibility(View.GONE);
 
@@ -192,6 +194,8 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
             name.setText(item.get(DISPLAY).toString());
             if (group){
                 oneLetter.setVisibility(View.VISIBLE);
+                GradientDrawable drawable = (GradientDrawable)oneLetter.getBackground();
+                drawable.setColor(Color.parseColor(color==null?"#FFAB13":color));
                 oneLetter.setText(ownerName==null?"U":ownerName.substring(0,1).toUpperCase());
             }
             int imgResource = R.drawable.app_icon;

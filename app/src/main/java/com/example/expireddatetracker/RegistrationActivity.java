@@ -117,6 +117,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
                             Map<String,Object> map = new HashMap<>();
                             map.put("Name",name);
+                            map.put("Color","#FFAB13");
                             FirebaseFirestore.getInstance().collection("tracker")
                                     .document(uid).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

@@ -186,4 +186,11 @@ We are committed to conducting our business in accordance with these principles 
     <string name="guess_you_like">Guess you like</string>
     <string name="storage_suggestion">Store your food in the correct storage so that it would stay fresh and safe to consume</string>
     <string name="cook_suggestion">Follow the cooking method below to ensure all the harmful bacteria is killed - do not undercook your food!</string>
+    <string name="change_icon_color">Change icon color</string>
+    <string name="confirm">Confirm</string>
+    <string name="orange">Orange</string>
+    <string name="red">Red</string>
+    <string name="blue">Blue</string>
+    <string name="purple">Purple</string>
+    <string name="black">Black</string>
 </resources>

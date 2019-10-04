@@ -7,11 +7,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,15 +24,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.expireddatetracker.Fragments.ResultFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,10 +48,13 @@ import java.util.Map;
 public class Group_Activity extends AppCompatActivity {
     private String uid;
     private Button createBT;
-    private Button leaveBT,joinBt;
+    private Button leaveBT,joinBt,changeColor_BT;
     private FirebaseFirestore db;
+    private FirebaseUser firebaseUser;
     private EditText codeET,invitationEt;
     private View prograssBar,invitationTx;
+    private TextView teamnameTx;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,13 +65,16 @@ public class Group_Activity extends AppCompatActivity {
 
     private void initUI()
     {
+        teamnameTx = findViewById(R.id.teamnameTx);
+        changeColor_BT = findViewById(R.id.change_colorBT);
         prograssBar = findViewById(R.id.group_progressBar);
         codeET = findViewById(R.id.invitation_et);
         invitationEt = findViewById(R.id.invitationcode_et);
         invitationTx = findViewById(R.id.invitationTx);
         Button copyBT = findViewById(R.id.copy_bt);
         db = FirebaseFirestore.getInstance();
-        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        uid = firebaseUser.getUid();
         findViewById(R.id.group_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +90,12 @@ public class Group_Activity extends AppCompatActivity {
                 leaveGroup();
             }
         });
-
+        changeColor_BT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popup_colorChange();
+            }
+        });
         createBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,8 +129,10 @@ public class Group_Activity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
+                        Map<String,Object> updates = new HashMap<>();
+                        updates.put("GROUP", FieldValue.delete());
                         db.collection("tracker").document(uid)
-                                .delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                .update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 prograssBar.setVisibility(View.GONE);
@@ -139,10 +163,18 @@ public class Group_Activity extends AppCompatActivity {
                                    if (map==null||!map.containsKey("GROUP"))
                                         groupExistHelper(false);
                                    else{
-
                                         findViewById(R.id.code_layout).setVisibility(View.VISIBLE);
                                         groupExistHelper(true);
-                                         codeET.setText(map.get("GROUP").toString());}
+                                        String groupId = map.get("GROUP").toString();
+                                       db.collection("group").document(groupId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                           @Override
+                                           public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()){
+                                                    teamnameTx.setText("Welcome to Team "+ task.getResult().get("GROUP NAME").toString());
+                                                    teamnameTx.setVisibility(View.VISIBLE);
+                                                }}
+                                       });
+                                         codeET.setText(groupId);}
                                 }
                         prograssBar.setVisibility(View.GONE);
                     }});
@@ -152,21 +184,25 @@ public class Group_Activity extends AppCompatActivity {
     {
         if (exist)
         {
+
             findViewById(R.id.noGroupTx).setVisibility(View.GONE);
             createBT.setVisibility(View.GONE);
             leaveBT.setVisibility(View.VISIBLE);
             joinBt.setVisibility(View.GONE);
             invitationEt.setVisibility(View.GONE);
             invitationTx.setVisibility(View.VISIBLE);
+            changeColor_BT.setVisibility(View.VISIBLE);
         }
         else
             {
+                teamnameTx.setVisibility(View.GONE);
                 findViewById(R.id.noGroupTx).setVisibility(View.VISIBLE);
                 createBT.setVisibility( View.VISIBLE);
                 leaveBT.setVisibility(View.GONE);
                 joinBt.setVisibility(View.VISIBLE);
                 invitationEt.setVisibility(View.VISIBLE);
                 invitationTx.setVisibility(View.GONE);
+                changeColor_BT.setVisibility(View.GONE);
             }
     }
 
@@ -245,8 +281,7 @@ public class Group_Activity extends AppCompatActivity {
                         else {
                             Map<String,Object> group = new HashMap<>();
                             group.put("GROUP",value);
-
-                            db.collection("tracker").document(uid).set(group)
+                            db.collection("tracker").document(uid).set(group,SetOptions.merge())
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
@@ -299,6 +334,70 @@ public class Group_Activity extends AppCompatActivity {
         } else {
             vibrator.vibrate(200);
         }
-
     }
+
+    private void popup_colorChange()
+    {
+        final ViewGroup root = (ViewGroup) getWindow().getDecorView().getRootView();
+        LayoutInflater layoutInflater = (LayoutInflater)getBaseContext()
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = (int)(displayMetrics.widthPixels);
+        final View popupView = layoutInflater.inflate(R.layout.color_change_popup, null);
+        final PopupWindow popupWindow=new PopupWindow(popupView,
+                width, LinearLayout.LayoutParams.WRAP_CONTENT,
+                true);
+        //Allow popup to be touchable & focusable
+        popupWindow.setTouchable(true);
+        popupWindow.setFocusable(true);
+        ResultFragment.applyDim(root,0.5f);
+        //Popup window animation
+        popupWindow.setAnimationStyle(R.style.Animation_Design_BottomSheetDialog);
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                ResultFragment.clearDim(root);
+            }
+        });
+        final RadioGroup rg = popupView.findViewById(R.id.group_radio_color);
+        Button cancel = popupView.findViewById(R.id.color_cancel);
+        Button confirm = popupView.findViewById(R.id.color_confirm);
+        TextView sampleIcon = popupView.findViewById(R.id.icon_sample);
+        String initName = firebaseUser.getDisplayName();
+        sampleIcon.setText(initName==null||initName.isEmpty()?"U":initName.toUpperCase());
+        final GradientDrawable drawable = (GradientDrawable) sampleIcon.getBackground();
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RadioButton checkedBt = popupView.findViewById(rg.getCheckedRadioButtonId());
+               Map<String,String> tempMap = new HashMap<>();
+               tempMap.put("Color",checkedBt.getTag().toString());
+               db.collection("tracker").document(uid).update("Color",checkedBt.getTag().toString());
+                popupWindow.dismiss();
+                Toast toast = Toast.makeText(getBaseContext(),"Color updated",Toast.LENGTH_LONG);
+                View view = toast.getView();
+                view.setBackgroundResource(R.drawable.round_button);
+                GradientDrawable gradientDrawable = (GradientDrawable) view.getBackground();
+//                gradientDrawable.setColor(Color.parseColor(checkedBt.getTag().toString()));
+                TextView text = (TextView) view.findViewById(android.R.id.message);
+                text.setTextColor(getResources().getColor(R.color.white));
+                toast.show();
+            }});
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton rb = popupView.findViewById(checkedId);
+                 drawable.setColor(Color.parseColor(rb.getTag().toString()));
+            }
+        });
+    }
+
 }

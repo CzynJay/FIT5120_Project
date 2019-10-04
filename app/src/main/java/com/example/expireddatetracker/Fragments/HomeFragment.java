@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +23,7 @@ import android.widget.TextView;
 import com.example.expireddatetracker.ItemActivity;
 import com.example.expireddatetracker.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import org.json.JSONObject;
 import java.util.Collections;
@@ -34,8 +34,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
@@ -60,10 +58,11 @@ public class HomeFragment extends Fragment {
         LoadPreference loadPreference = new LoadPreference();
         loadPreference.execute();
         //Welcome message
-//        TextView welcome = inflatePage.findViewById(R.id.welcome_mes);
-//        assert mUser != null;
-//        String displayInfo = "Hello "+  mUser.getDisplayName();
-//        welcome.setText(displayInfo);
+        TextView welcome = inflatePage.findViewById(R.id.welcome_mes);
+        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert mUser != null;
+        String displayInfo = "Hello "+  mUser.getDisplayName();
+        welcome.setText(displayInfo);
         //Remove hint on click
         searchBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -264,7 +263,6 @@ public class HomeFragment extends Fragment {
             if (entries==null || entries.size()==0) {
                 fav_layout.setVisibility(View.GONE);
             } else {
-                Log.e("check",entries.toString());
                 if (entries.size() > 5)
                     entries = entries.subList(0, 5);
                 for (Map.Entry<String, Double> entry : entries) {
