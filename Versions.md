@@ -1,3 +1,5 @@
+# Version 1.0.60
+* Added profile colour option
 # Version 1.0.59
 * Added confirmation window when leaving group
 # Version 1.0.58
