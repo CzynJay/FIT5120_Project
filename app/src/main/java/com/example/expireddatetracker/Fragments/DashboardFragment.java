@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.JsonReader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,18 +50,12 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
     private PieChart pieChart;
     private List<PieEntry> entries =  new ArrayList<>();
     private MainActivity activity ;
-    private Map<String, JSONArray> dayLeftDict = new HashMap<>();
-    private final String SPOILED = "Spoiled";
-    private final String TWODAYS = "Less than 2 days left";
-    private final String TWO_SEVEN = "2-7 days left";
-    private final String MORETHANAWEEK = "More than a week";
-    private View progress;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View inflatePage  = inflater.inflate(R.layout.fragment_dashboard, container, false);
         TabLayout tabs = inflatePage.findViewById(R.id.tabLayout);
-        progress = inflatePage.findViewById(R.id.progressing);
+        View progress = inflatePage.findViewById(R.id.progressing);
         tabs.addOnTabSelectedListener(this);
         activity = (MainActivity) getActivity();
         pieChart = (PieChart) inflatePage.findViewById(R.id.piechart);
@@ -71,70 +66,85 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
         pieChart.setEntryLabelColor(Color.BLACK);
         pieChart.animateXY(300,300);
         pieChart.setCenterTextSize(20f);
-        fetchData(getResources().getString(R.string.refrigerate));
+        Log.e("c",activity.dayLeftFreeze.toString());
+        Log.e("c",activity.dayLeftPantry.toString());
+        Log.e("c",activity.dayLeftRefrige.toString());
+        drawPieChart(getResources().getString(R.string.refrigerate),switchMap(getResources().getString(R.string.refrigerate)));
+//        fetchData();
         return inflatePage;
     }
 
-    private void fetchData(final String place)
+//    private void fetchData(final String place)
+//    {
+//        entries.clear();
+//        pieChart.setVisibility(View.GONE);
+//        progress.setVisibility(View.VISIBLE);
+//        dayLeftDict.put(SPOILED,new JSONArray());
+//        dayLeftDict.put(TWODAYS,new JSONArray());
+//        dayLeftDict.put(TWO_SEVEN,new JSONArray());
+//        dayLeftDict.put(MORETHANAWEEK,new JSONArray());
+//        activity.db.collection("tracker")
+//                .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+//                .collection(place).get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                    if (task.isSuccessful()){
+//                        for(DocumentSnapshot item:task.getResult().getDocuments()){
+//                            placeToMap(item.getData());
+//                        }
+//                        pieChart.setVisibility(View.VISIBLE);
+//                        drawPieChart(place,switchMap(place));
+//                    }
+//                    progress.setVisibility(View.GONE);
+//                }
+//            });
+//        }
+
+        private Map<String, JSONArray> switchMap(String place)
+        {
+            switch (place)
+            {
+                case "Pantry": return activity.dayLeftPantry;
+                case "Freezer": return activity.dayLeftFreeze;
+                default: return activity.dayLeftRefrige;
+            }
+
+        }
+
+//    private void placeToMap(Map<String,Object> objectMap)
+//    {
+//        String date = objectMap.get("EXPIRE_DATE").toString();
+//        long dayleft = calculateDayDifference(date);
+//        long dayInMilliseconds = 86400000;
+//        if(dayleft<=0)
+//            dayLeftDict.get(SPOILED).put(objectMap);
+//        else if(dayleft <= dayInMilliseconds *2)
+//            dayLeftDict.get(TWODAYS).put(objectMap);
+//        else if(dayleft <= dayInMilliseconds *7)
+//            dayLeftDict.get(TWO_SEVEN).put(objectMap);
+//        else
+//            dayLeftDict.get(MORETHANAWEEK).put(objectMap);
+//    }
+//
+//    private long calculateDayDifference(String date)
+//    {
+//        Date myDate = new Date();
+//        try {
+//            myDate= new SimpleDateFormat("dd/MM/yy", Locale.US).parse(date);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        return  (myDate.getTime() - new Date().getTime());
+//    }
+
+    private void drawPieChart(String title,Map<String,JSONArray> entryMap)
     {
         entries.clear();
-        pieChart.setVisibility(View.GONE);
-        progress.setVisibility(View.VISIBLE);
-        dayLeftDict.put(SPOILED,new JSONArray());
-        dayLeftDict.put(TWODAYS,new JSONArray());
-        dayLeftDict.put(TWO_SEVEN,new JSONArray());
-        dayLeftDict.put(MORETHANAWEEK,new JSONArray());
-        activity.db.collection("tracker")
-                .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .collection(place).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()){
-                        for(DocumentSnapshot item:task.getResult().getDocuments()){
-                            placeToMap(item.getData());
-                        }
-                        pieChart.setVisibility(View.VISIBLE);
-                        drawPieChart(place);
-                    }
-                    progress.setVisibility(View.GONE);
-                }
-            });
-        }
-
-
-    private void placeToMap(Map<String,Object> objectMap)
-    {
-        String date = objectMap.get("EXPIRE_DATE").toString();
-        long dayleft = calculateDayDifference(date);
-        long dayInMilliseconds = 86400000;
-        if(dayleft<=0)
-            dayLeftDict.get(SPOILED).put(objectMap);
-        else if(dayleft <= dayInMilliseconds *2)
-            dayLeftDict.get(TWODAYS).put(objectMap);
-        else if(dayleft <= dayInMilliseconds *7)
-            dayLeftDict.get(TWO_SEVEN).put(objectMap);
-        else
-            dayLeftDict.get(MORETHANAWEEK).put(objectMap);
-    }
-
-    private long calculateDayDifference(String date)
-    {
-        Date myDate = new Date();
-        try {
-            myDate= new SimpleDateFormat("dd/MM/yy", Locale.US).parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return  (myDate.getTime() - new Date().getTime());
-    }
-
-    private void drawPieChart(String title)
-    {
         pieChart.setCenterText(title);
-        for(String name: dayLeftDict.keySet())
+        for(String name: entryMap.keySet())
         {
-            int value = dayLeftDict.get(name).length();
+            int value = entryMap.get(name).length();
             if (value!=0)
                 entries.add(new PieEntry((float) value, name));
         }
@@ -153,16 +163,14 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        fetchData(tab.getText().toString());
+        drawPieChart(tab.getText().toString(),switchMap(tab.getText().toString()));
     }
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
-
     }
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-
     }
 }

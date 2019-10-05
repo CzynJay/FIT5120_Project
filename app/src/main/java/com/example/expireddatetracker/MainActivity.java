@@ -14,14 +14,27 @@ import com.example.expireddatetracker.Fragments.ResultFragment;
 import com.example.expireddatetracker.Fragments.SettingFragment;
 import com.example.expireddatetracker.Fragments.TrackFragment;
 import com.example.expireddatetracker.Service.NotificationService;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -31,6 +44,14 @@ public class MainActivity extends AppCompatActivity {
     boolean doubleBackToExitPressedOnce = false;
     public FirebaseFirestore db;
     public JSONArray food_source;
+    public Map<String,JSONArray> dayLeftRefrige = new HashMap<>();
+    public Map<String,JSONArray> dayLeftPantry = new HashMap<>();
+    public Map<String,JSONArray> dayLeftFreeze = new HashMap<>();
+    private final String SPOILED = "Spoiled";
+    private final String TWODAYS = "Less than 2 days left";
+    private final String TWO_SEVEN = "2-7 days left";
+    private final String MORETHANAWEEK = "More than a week";
+
     //Bottom navigation menu
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -75,6 +96,21 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    private void initMap(){
+        dayLeftRefrige.put(SPOILED,new JSONArray());
+        dayLeftRefrige.put(TWODAYS,new JSONArray());
+        dayLeftRefrige.put(TWO_SEVEN,new JSONArray());
+        dayLeftRefrige.put(MORETHANAWEEK,new JSONArray());
+        dayLeftPantry.put(SPOILED,new JSONArray());
+        dayLeftPantry.put(TWODAYS,new JSONArray());
+        dayLeftPantry.put(TWO_SEVEN,new JSONArray());
+        dayLeftPantry.put(MORETHANAWEEK,new JSONArray());
+        dayLeftFreeze.put(SPOILED,new JSONArray());
+        dayLeftFreeze.put(TWODAYS,new JSONArray());
+        dayLeftFreeze.put(TWO_SEVEN,new JSONArray());
+        dayLeftFreeze.put(MORETHANAWEEK,new JSONArray());
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +118,9 @@ public class MainActivity extends AppCompatActivity {
         startAlertAtParticularTime();
         db = FirebaseFirestore.getInstance();
         LoadJson asynTask = new LoadJson();
+        initMap();
         asynTask.execute();
+        loadChart();
         //Home fragment on launch
         loadFragment(new HomeFragment());
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -190,4 +228,86 @@ public class MainActivity extends AppCompatActivity {
                 100, pendingIntent);
     }
 
+    public void loadChart()
+    {
+        final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        db.collection("tracker")
+                .document(uid)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful())
+                {
+                    String value = task.getResult().getString("GROUP");
+                    if (value!=null)
+                    {
+                        db.collection("tracker")
+                                .whereEqualTo("GROUP",value).get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if(task.isSuccessful())
+                                        {
+                                            for(DocumentSnapshot item:task.getResult().getDocuments()){
+                                                String id = item.getId();
+                                                fetchData(id);
+                                            }
+                                        }
+                                    }
+                                });
+                    }
+                    else
+                        fetchData(uid);
+                }
+            }
+        });
+    }
+
+    public void fetchData(String uid){
+        String [] types = {"Refrigerator","Pantry","Freezer"};
+        for (final String type:types)
+            db.collection("tracker").document(uid).collection(type)
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful())
+                    {
+                        for(DocumentSnapshot item:task.getResult().getDocuments()){
+                            Map<String,Object> newMap = item.getData();
+                            switch (type){
+                                case "Refrigerator": placeToMap(dayLeftRefrige,newMap);break;
+                                case "Pantry": placeToMap(dayLeftPantry,newMap);break;
+                                case "Freezer": placeToMap(dayLeftFreeze,newMap);break;
+                            }
+                        }
+                    }
+                }
+            });
+
+    }
+
+    private void placeToMap(Map<String,JSONArray> storage,Map<String,Object> objectMap)
+    {
+        String date = objectMap.get("EXPIRE_DATE").toString();
+        long dayleft = calculateDayDifference(date);
+        long dayInMilliseconds = 86400000;
+        if(dayleft<=0)
+            storage.get(SPOILED).put(objectMap);
+        else if(dayleft <= dayInMilliseconds *2)
+            storage.get(TWODAYS).put(objectMap);
+        else if(dayleft <= dayInMilliseconds *7)
+            storage.get(TWO_SEVEN).put(objectMap);
+        else
+            storage.get(MORETHANAWEEK).put(objectMap);
+    }
+    private long calculateDayDifference(String date)
+    {
+        Date myDate = new Date();
+        try {
+            myDate= new SimpleDateFormat("dd/MM/yy", Locale.US).parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return  (myDate.getTime() - new Date().getTime());
+    }
 }
