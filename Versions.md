@@ -1,3 +1,5 @@
+# Version 1.0.61
+* Added group storage dashboard
 # Version 1.0.60
 * Added profile colour option
 # Version 1.0.59
