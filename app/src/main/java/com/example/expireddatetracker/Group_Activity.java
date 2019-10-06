@@ -170,7 +170,7 @@ public class Group_Activity extends AppCompatActivity {
                                            @Override
                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                 if (task.isSuccessful()){
-                                                    teamnameTx.setText("Welcome to Team "+ task.getResult().get("GROUP NAME").toString());
+                                                    teamnameTx.setText("Welcome to Group "+ task.getResult().get("GROUP NAME").toString());
                                                     teamnameTx.setVisibility(View.VISIBLE);
                                                 }}
                                        });
