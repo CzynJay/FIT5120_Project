@@ -1,3 +1,5 @@
+# Version 1.0.62
+* Fixed bugs of colour order for dashboard, group page text, navigation menu text, and some typos on dialogues
 # Version 1.0.61
 * Added group storage dashboard
 # Version 1.0.60
