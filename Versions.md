@@ -1,3 +1,9 @@
+# Version 1.0.63
+* Fixed welcome message text overflow with truncated recent item name and settings page not scrollable bug
+# Version 1.0.62
+* Fixed bugs of colour order for dashboard, group page text, navigation menu text, and some typos on dialogues
+# Version 1.0.61
+* Added group storage dashboard
 # Version 1.0.60
 * Added profile colour option
 # Version 1.0.59

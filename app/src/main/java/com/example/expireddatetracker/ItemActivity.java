@@ -204,7 +204,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-(long)v.getTag() + dayInMilliseconds);
        Toast.makeText(getBaseContext(),
-              "If the date is not available, your food may have been spoiled ",Toast.LENGTH_LONG).show();
+              "If Purchase Date is not available when picking, your food might have passed its best before date",Toast.LENGTH_LONG).show();
        datePickerDialog.show();
     }
 

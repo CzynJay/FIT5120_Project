@@ -164,8 +164,10 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
         }
         if (entries.size()==0)
             pieChart.setCenterText("No record yet");
+
         PieDataSet pieDataSet = new PieDataSet(entries, "");
-        pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        final int[] chart_color = {Color.rgb(244,67,54), Color.rgb(255,235,59), Color.rgb(76,175,80)};
+        pieDataSet.setColors(chart_color);
         pieDataSet.setValueFormatter(new DefaultValueFormatter(0));
         PieData pieData = new PieData(pieDataSet);
         pieData.setValueTextSize(20f);
