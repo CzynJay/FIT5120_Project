@@ -115,22 +115,24 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                                      .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                  @Override
                                  public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
                                      if(task.isSuccessful())
                                      {
                                          for(DocumentSnapshot item:task.getResult().getDocuments()){
                                              String id = item.getId();
                                              String ownerName = (String)item.get("Name");
                                              String color = (String) item.get("Color");
-                                             fetchData(id,type,ownerName,true,color);
+                                             if (!id.equals(uid))
+                                                fetchData(id,type,ownerName,true,color);
                                          }
                                      }
                                  }
                              });
+                         }
+                         fetchData(uid,type,FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),false,null);
 
-                         }
-                         else {
-                             fetchData(uid,type,FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),false,null);
-                         }
+
+
                      }
                 progressing.setVisibility(View.VISIBLE);
 

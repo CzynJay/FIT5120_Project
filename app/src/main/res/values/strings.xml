@@ -48,7 +48,6 @@
     <string name="msg_subscribed">Suggestion</string>
     <string name="msg_subscribe_failed">Suggestion</string>
     <string name="fcm_token">FCM: %s</string>
-    <string name="msg_token_fmt"></string>
     <string name="display_name">Display Name</string>
     <string name="group_id">Group Id</string>
     <string name="change_password">Change password</string>
@@ -63,7 +62,7 @@
     <string name="code">Code (4 Digits)</string>
     <string name="copy">Copy</string>
     <string name="group_name">Group Name</string>
-    <string name="no_group_yet">No Group Yet</string>
+    <string name="no_group_yet">You are not in Group Yet</string>
     <string name="join_group">Join Group</string>
     <string name="Invitation_code">Invitation Code</string>
     <string name="pick_purchase_date">Pick Purchase Date</string>
@@ -193,4 +192,5 @@ We are committed to conducting our business in accordance with these principles 
     <string name="blue">Blue</string>
     <string name="purple">Purple</string>
     <string name="black">Black</string>
+    <string name="got_it">Got it</string>
 </resources>

@@ -14,7 +14,7 @@ public class Tutorial_Activity extends com.hololo.tutorial.library.TutorialActiv
                 .setContent("Your one-stop solution for managing fresh foods the right way")
                 .setSummary("An app aimed to prevent food poisoning")
                 .setBackgroundColor(Color.parseColor("#1A237E")) // int background color
-                .setDrawable(R.drawable.app_icon) // int top drawable
+                .setDrawable(R.drawable.app_icon)// int top drawable
                 .build());
         addFragment(new Step.Builder().setTitle("Storage Guide")
                 .setContent("Go through selections of fresh foods and find out where you should store them and for how long")

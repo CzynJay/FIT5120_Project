@@ -36,6 +36,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -118,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
         startAlertAtParticularTime();
         db = FirebaseFirestore.getInstance();
         LoadJson asynTask = new LoadJson();
-        initMap();
         asynTask.execute();
         loadChart();
         //Home fragment on launch
@@ -230,6 +230,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadChart()
     {
+        initMap();
         final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         db.collection("tracker")
                 .document(uid)
@@ -309,5 +310,12 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return  (myDate.getTime() - new Date().getTime());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode ==1 && resultCode==100)
+                    loadChart();
     }
 }

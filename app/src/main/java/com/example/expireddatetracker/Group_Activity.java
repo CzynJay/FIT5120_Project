@@ -152,6 +152,7 @@ public class Group_Activity extends AppCompatActivity {
 
     private void checkGroup()
     {
+
         prograssBar.setVisibility(View.VISIBLE);
         db.collection("tracker").document(uid).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -184,7 +185,9 @@ public class Group_Activity extends AppCompatActivity {
     {
         if (exist)
         {
-
+            findViewById(R.id.create_groupTx).setVisibility(View.GONE);
+            findViewById(R.id.change_color_tx).setVisibility(View.VISIBLE);
+            findViewById(R.id.customize_color_tx).setVisibility(View.VISIBLE);
             findViewById(R.id.noGroupTx).setVisibility(View.GONE);
             createBT.setVisibility(View.GONE);
             leaveBT.setVisibility(View.VISIBLE);
@@ -192,9 +195,16 @@ public class Group_Activity extends AppCompatActivity {
             invitationEt.setVisibility(View.GONE);
             invitationTx.setVisibility(View.VISIBLE);
             changeColor_BT.setVisibility(View.VISIBLE);
+            findViewById(R.id.share_code_tx).setVisibility(View.VISIBLE);
+            findViewById(R.id.joinGroup_tx).setVisibility(View.GONE);
         }
         else
             {
+                findViewById(R.id.joinGroup_tx).setVisibility(View.VISIBLE);
+                findViewById(R.id.create_groupTx).setVisibility(View.VISIBLE);
+                findViewById(R.id.change_color_tx).setVisibility(View.GONE);
+                findViewById(R.id.customize_color_tx).setVisibility(View.GONE);
+                findViewById(R.id.share_code_tx).setVisibility(View.GONE);
                 teamnameTx.setVisibility(View.GONE);
                 findViewById(R.id.noGroupTx).setVisibility(View.VISIBLE);
                 createBT.setVisibility( View.VISIBLE);
@@ -382,11 +392,11 @@ public class Group_Activity extends AppCompatActivity {
                tempMap.put("Color",checkedBt.getTag().toString());
                db.collection("tracker").document(uid).update("Color",checkedBt.getTag().toString());
                 popupWindow.dismiss();
-                Toast toast = Toast.makeText(getBaseContext(),"Color updated",Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(getBaseContext(),checkedBt.getText().toString()+ " Selected",Toast.LENGTH_LONG);
                 View view = toast.getView();
                 view.setBackgroundResource(R.drawable.round_button);
-                GradientDrawable gradientDrawable = (GradientDrawable) view.getBackground();
-//                gradientDrawable.setColor(Color.parseColor(checkedBt.getTag().toString()));
+//                GradientDrawable gradientDrawable = (GradientDrawable) view.getBackground();
+////                gradientDrawable.setColor(Color.parseColor(checkedBt.getTag().toString()));
                 TextView text = (TextView) view.findViewById(android.R.id.message);
                 text.setTextColor(getResources().getColor(R.color.white));
                 toast.show();

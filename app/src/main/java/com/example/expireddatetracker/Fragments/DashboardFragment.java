@@ -8,12 +8,17 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.DisplayMetrics;
 import android.util.JsonReader;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TableLayout;
+import android.widget.TextView;
 
 import com.example.expireddatetracker.MainActivity;
 import com.example.expireddatetracker.R;
@@ -25,6 +30,8 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.DefaultValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,6 +42,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,17 +54,20 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
-public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSelectedListener {
+
+public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSelectedListener, OnChartValueSelectedListener {
     private PieChart pieChart;
     private List<PieEntry> entries =  new ArrayList<>();
+    private TabLayout tabs;
     private MainActivity activity ;
+    private LayoutInflater layoutInflater;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View inflatePage  = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        TabLayout tabs = inflatePage.findViewById(R.id.tabLayout);
-        View progress = inflatePage.findViewById(R.id.progressing);
+        tabs = inflatePage.findViewById(R.id.tabLayout);
         tabs.addOnTabSelectedListener(this);
         activity = (MainActivity) getActivity();
         pieChart = (PieChart) inflatePage.findViewById(R.id.piechart);
@@ -66,9 +78,11 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
         pieChart.setEntryLabelColor(Color.BLACK);
         pieChart.animateXY(300,300);
         pieChart.setCenterTextSize(20f);
-        Log.e("c",activity.dayLeftFreeze.toString());
-        Log.e("c",activity.dayLeftPantry.toString());
-        Log.e("c",activity.dayLeftRefrige.toString());
+        layoutInflater = (LayoutInflater)getContext()
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+//        Log.e("c",activity.dayLeftFreeze.toString());
+//        Log.e("c",activity.dayLeftPantry.toString());
+//        Log.e("c",activity.dayLeftRefrige.toString());
         drawPieChart(getResources().getString(R.string.refrigerate),switchMap(getResources().getString(R.string.refrigerate)));
 //        fetchData();
         return inflatePage;
@@ -155,8 +169,9 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
         pieDataSet.setValueFormatter(new DefaultValueFormatter(0));
         PieData pieData = new PieData(pieDataSet);
         pieData.setValueTextSize(20f);
-        pieChart.getLegend().setTextSize(14f);
+        pieChart.getLegend().setTextSize(16f);
         pieChart.setDrawEntryLabels(false);
+        pieChart.setOnChartValueSelectedListener(this);
         pieChart.setData(pieData);
         pieChart.animateY(1300);
     }
@@ -172,5 +187,71 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
+    }
+
+    @Override
+    public void onValueSelected(Entry e, Highlight h) {
+        PieEntry pieEntry = (PieEntry)e;
+        Map<String,JSONArray> temp = switchMap(tabs.getTabAt(tabs.getSelectedTabPosition()).getText().toString());
+        popUpWindow(((PieEntry) e).getLabel(),temp.get(pieEntry.getLabel()));
+    }
+
+    @Override
+    public void onNothingSelected() {
+
+    }
+
+    private void popUpWindow(String label,JSONArray data)
+    {
+        final ViewGroup root = (ViewGroup) activity.getWindow().getDecorView().getRootView();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = (int)(displayMetrics.widthPixels*0.8);
+        int height = (int)(displayMetrics.heightPixels*0.7);
+        final View popupView = layoutInflater.inflate(R.layout.chart_popup, null);
+        final PopupWindow popupWindow=new PopupWindow(popupView,
+                width, height,
+                true);
+        //Allow popup to be touchable & focusable
+        popupWindow.setTouchable(true);
+        popupWindow.setFocusable(true);
+        ResultFragment.applyDim(root,0.5f);
+        //Popup window animation
+        popupWindow.setAnimationStyle(R.style.Animation_Design_BottomSheetDialog);
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                ResultFragment.clearDim(root);
+            }
+        });
+        TextView tx = popupView.findViewById(R.id.chart_pop_label);
+        LinearLayout container = popupView.findViewById(R.id.chart_pop_container);
+        tx.setText(label);
+        popupView.findViewById(R.id.chart_pop_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+
+        for(int i= 0;i<data.length();i++)
+        {
+
+            try {
+                Map<String,String> tempMap = (Map<String, String>) data.get(i);
+                View tempView = layoutInflater.inflate(R.layout.search_row,null);
+                TextView tx1 = tempView.findViewById(R.id.mainname);
+                TextView tx2 = tempView.findViewById(R.id.subname);
+                tx1.setText(tempMap.get("DISPLAY_NAME"));
+                String subname = tempMap.get("SUB_NAME");
+                tx2.setText(subname==null||subname.equals("null")?"":subname);
+                container.addView(tempView);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
     }
 }

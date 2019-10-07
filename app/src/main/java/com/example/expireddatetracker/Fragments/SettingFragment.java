@@ -13,6 +13,7 @@ import com.example.expireddatetracker.Account_Activity;
 import com.example.expireddatetracker.FeedbackActivity;
 import com.example.expireddatetracker.Group_Activity;
 import com.example.expireddatetracker.ItemActivity;
+import com.example.expireddatetracker.MainActivity;
 import com.example.expireddatetracker.R;
 import com.example.expireddatetracker.TipsActivity;
 import com.example.expireddatetracker.Tutorial_Activity;
@@ -98,6 +99,5 @@ public class SettingFragment extends Fragment {
         });
 
     }
-
 
 }
