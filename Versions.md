@@ -1,3 +1,6 @@
+# Version 1.0.64
+* Updated piechart colour based on category
+* Piechart is now interactive, users can view details by clicking on it
 # Version 1.0.63
 * Fixed welcome message text overflow with truncated recent item name and settings page not scrollable bug
 # Version 1.0.62
