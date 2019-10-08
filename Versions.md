@@ -1,3 +1,6 @@
+# Version 1.0.65
+* Updated some strings to accurate upper and lower case
+* Updated UI for settings page, now scrollable for all items to fit smaller screens
 # Version 1.0.64
 * Updated piechart colour based on category
 * Piechart is now interactive, users can view details by clicking on it
