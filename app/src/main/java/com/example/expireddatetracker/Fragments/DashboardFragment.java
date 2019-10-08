@@ -24,6 +24,7 @@ import com.example.expireddatetracker.MainActivity;
 import com.example.expireddatetracker.R;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -70,7 +71,7 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
         tabs = inflatePage.findViewById(R.id.tabLayout);
         tabs.addOnTabSelectedListener(this);
         activity = (MainActivity) getActivity();
-        pieChart = (PieChart) inflatePage.findViewById(R.id.piechart);
+        pieChart =  inflatePage.findViewById(R.id.piechart);
         pieChart.setDrawEntryLabels(true);
         Description description = new Description();
         description.setText("");
@@ -80,40 +81,10 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
         pieChart.setCenterTextSize(20f);
         layoutInflater = (LayoutInflater)getContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
-//        Log.e("c",activity.dayLeftFreeze.toString());
-//        Log.e("c",activity.dayLeftPantry.toString());
-//        Log.e("c",activity.dayLeftRefrige.toString());
         drawPieChart(getResources().getString(R.string.refrigerate),switchMap(getResources().getString(R.string.refrigerate)));
-//        fetchData();
         return inflatePage;
     }
 
-//    private void fetchData(final String place)
-//    {
-//        entries.clear();
-//        pieChart.setVisibility(View.GONE);
-//        progress.setVisibility(View.VISIBLE);
-//        dayLeftDict.put(SPOILED,new JSONArray());
-//        dayLeftDict.put(TWODAYS,new JSONArray());
-//        dayLeftDict.put(TWO_SEVEN,new JSONArray());
-//        dayLeftDict.put(MORETHANAWEEK,new JSONArray());
-//        activity.db.collection("tracker")
-//                .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-//                .collection(place).get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                    if (task.isSuccessful()){
-//                        for(DocumentSnapshot item:task.getResult().getDocuments()){
-//                            placeToMap(item.getData());
-//                        }
-//                        pieChart.setVisibility(View.VISIBLE);
-//                        drawPieChart(place,switchMap(place));
-//                    }
-//                    progress.setVisibility(View.GONE);
-//                }
-//            });
-//        }
 
         private Map<String, JSONArray> switchMap(String place)
         {
@@ -126,56 +97,49 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
 
         }
 
-//    private void placeToMap(Map<String,Object> objectMap)
-//    {
-//        String date = objectMap.get("EXPIRE_DATE").toString();
-//        long dayleft = calculateDayDifference(date);
-//        long dayInMilliseconds = 86400000;
-//        if(dayleft<=0)
-//            dayLeftDict.get(SPOILED).put(objectMap);
-//        else if(dayleft <= dayInMilliseconds *2)
-//            dayLeftDict.get(TWODAYS).put(objectMap);
-//        else if(dayleft <= dayInMilliseconds *7)
-//            dayLeftDict.get(TWO_SEVEN).put(objectMap);
-//        else
-//            dayLeftDict.get(MORETHANAWEEK).put(objectMap);
-//    }
-//
-//    private long calculateDayDifference(String date)
-//    {
-//        Date myDate = new Date();
-//        try {
-//            myDate= new SimpleDateFormat("dd/MM/yy", Locale.US).parse(date);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        return  (myDate.getTime() - new Date().getTime());
-//    }
-
     private void drawPieChart(String title,Map<String,JSONArray> entryMap)
     {
+
         entries.clear();
+        ArrayList<Integer> colors = new ArrayList<>();
         pieChart.setCenterText(title);
         for(String name: entryMap.keySet())
         {
             int value = entryMap.get(name).length();
-            if (value!=0)
+            if (value!=0){
                 entries.add(new PieEntry((float) value, name));
+                colorSwitcher(name,colors);}
         }
         if (entries.size()==0)
             pieChart.setCenterText("No record yet");
-
         PieDataSet pieDataSet = new PieDataSet(entries, "");
-        final int[] chart_color = {Color.rgb(244,67,54), Color.rgb(255,235,59), Color.rgb(76,175,80)};
-        pieDataSet.setColors(chart_color);
+        pieDataSet.setColors(colors);
         pieDataSet.setValueFormatter(new DefaultValueFormatter(0));
         PieData pieData = new PieData(pieDataSet);
         pieData.setValueTextSize(20f);
         pieChart.getLegend().setTextSize(16f);
+        pieChart.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        pieChart.getLegend().setWordWrapEnabled(true);
         pieChart.setDrawEntryLabels(false);
         pieChart.setOnChartValueSelectedListener(this);
         pieChart.setData(pieData);
         pieChart.animateY(1300);
+    }
+
+
+    private void colorSwitcher(String name,ArrayList<Integer> colors){
+        Log.e("Colors",colors.toString());
+        switch (name){
+            case "Spoiled":
+                colors.add(Color.rgb(244,67,54)); return;
+            case "Less than 2 days left":
+                colors.add(Color.parseColor("#F59254"));return;
+            case "2-7 days left":
+                colors.add(Color.parseColor("#E0C94B"));return;
+            default:
+                colors.add(Color.rgb(76,175,80));
+        }
+
     }
 
     @Override
@@ -239,7 +203,6 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
 
         for(int i= 0;i<data.length();i++)
         {
-
             try {
                 Map<String,String> tempMap = (Map<String, String>) data.get(i);
                 View tempView = layoutInflater.inflate(R.layout.search_row,null);
@@ -252,8 +215,6 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-
         }
     }
 }

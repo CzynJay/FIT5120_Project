@@ -24,7 +24,7 @@
             android:layout_height="65dp"
             android:text="@string/group"
             android:transitionName="@string/feedback"
-            android:textColor="@color/white"
+            android:textColor="#F59254"
             android:layout_marginStart= "30dp"
             android:gravity="center"
             android:textStyle="bold"
