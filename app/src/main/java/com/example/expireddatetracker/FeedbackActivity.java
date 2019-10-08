@@ -73,7 +73,7 @@ public class FeedbackActivity extends AppCompatActivity {
                     FirebaseFirestore.getInstance().collection("Feedback")
                             .document(rb.getText().toString())
                             .collection(date_to_str(new Date())).add(map);
-                    Toast.makeText(getApplicationContext(),"Thanks for your feedback",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"Your feedback is appreciated!",Toast.LENGTH_LONG).show();
                     onBackPressed();
                 }
             }

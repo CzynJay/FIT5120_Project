@@ -62,7 +62,7 @@
     <string name="code">Code (4 Digits)</string>
     <string name="copy">Copy</string>
     <string name="group_name">Group Name</string>
-    <string name="no_group_yet">You are not in Group Yet</string>
+    <string name="no_group_yet">You are not in a Group yet</string>
     <string name="join_group">Join Group</string>
     <string name="Invitation_code">Invitation Code</string>
     <string name="pick_purchase_date">Pick Purchase Date</string>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -61,7 +62,7 @@ public class HomeFragment extends Fragment {
         TextView welcome = inflatePage.findViewById(R.id.welcome_mes);
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
         assert mUser != null;
-        String displayInfo = "Hello "+  mUser.getDisplayName();
+        String displayInfo = "Hello " + mUser.getDisplayName();
         welcome.setText(displayInfo);
         //Remove hint on click
         searchBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {

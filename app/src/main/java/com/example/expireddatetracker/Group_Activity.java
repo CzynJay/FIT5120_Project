@@ -137,7 +137,7 @@ public class Group_Activity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 prograssBar.setVisibility(View.GONE);
                                 refresh();
-                                Toast.makeText(getApplicationContext(), "Leave Group Successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Left group successfully", Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -270,7 +270,7 @@ public class Group_Activity extends AppCompatActivity {
             vibrate();
             prograssBar.setVisibility(View.GONE);
             invitationEt.startAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.anim.shake));
-            Toast.makeText(getBaseContext(),"Please enter Invitation code",Toast.LENGTH_LONG).show();}
+            Toast.makeText(getBaseContext(),"Please enter Invitation Code",Toast.LENGTH_LONG).show();}
         else
         {
             db.collection("group").document(value)
@@ -296,7 +296,7 @@ public class Group_Activity extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             prograssBar.setVisibility(View.GONE);
-                                            Toast.makeText(getBaseContext(),"Join successfully ",Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getBaseContext(),"Joined group successfully ",Toast.LENGTH_SHORT).show();
                                             refresh();
                                         }
                                     });

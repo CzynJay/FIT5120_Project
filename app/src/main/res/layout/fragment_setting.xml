@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:foregroundGravity="center"
-    xmlns:android="http://schemas.android.com/apk/res/android">
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Fragments.SettingFragment"
-    android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
 <LinearLayout android:layout_width="match_parent"
     android:layout_height="65dp"
     android:background="@color/colorPrimary"
@@ -25,6 +19,18 @@
         android:textSize="@dimen/labelSize"
         />
 </LinearLayout>
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foregroundGravity="center"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Fragments.SettingFragment"
+    android:orientation="vertical">
+
     <RelativeLayout
         android:id="@+id/account_layout"
         android:layout_height="wrap_content"
@@ -262,3 +268,4 @@
     </RelativeLayout>
 </LinearLayout>
 </ScrollView>
+</LinearLayout>
