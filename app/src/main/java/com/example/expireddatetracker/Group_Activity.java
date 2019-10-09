@@ -53,7 +53,8 @@ public class Group_Activity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private EditText codeET,invitationEt;
     private View prograssBar,invitationTx;
-    private TextView teamnameTx;
+    private TextView teamnameTx, groupIcon;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +66,7 @@ public class Group_Activity extends AppCompatActivity {
 
     private void initUI()
     {
+        groupIcon = findViewById(R.id.group_icon_tx);
         teamnameTx = findViewById(R.id.teamnameTx);
         changeColor_BT = findViewById(R.id.change_colorBT);
         prograssBar = findViewById(R.id.group_progressBar);
@@ -75,6 +77,7 @@ public class Group_Activity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         uid = firebaseUser.getUid();
+        groupIcon.setText(firebaseUser.getDisplayName().toUpperCase());
         findViewById(R.id.group_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,9 +167,13 @@ public class Group_Activity extends AppCompatActivity {
                                    if (map==null||!map.containsKey("GROUP"))
                                         groupExistHelper(false);
                                    else{
-                                        findViewById(R.id.code_layout).setVisibility(View.VISIBLE);
-                                        groupExistHelper(true);
-                                        String groupId = map.get("GROUP").toString();
+                                       String color = (String) map.get("Color");
+                                       color = color==null||color.equals("null")?"#FFAB13":color;
+                                       GradientDrawable gradientDrawable = (GradientDrawable) groupIcon.getBackground();
+                                       gradientDrawable.setColor(Color.parseColor(color));
+                                       findViewById(R.id.code_layout).setVisibility(View.VISIBLE);
+                                       groupExistHelper(true);
+                                       String groupId = map.get("GROUP").toString();
                                        db.collection("group").document(groupId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                            @Override
                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -185,28 +192,31 @@ public class Group_Activity extends AppCompatActivity {
     {
         if (exist)
         {
+            findViewById(R.id.share_code_tx).setVisibility(View.VISIBLE);
+            findViewById(R.id.joinGroup_tx).setVisibility(View.GONE);
             findViewById(R.id.create_groupTx).setVisibility(View.GONE);
             findViewById(R.id.change_color_tx).setVisibility(View.VISIBLE);
             findViewById(R.id.customize_color_tx).setVisibility(View.VISIBLE);
             findViewById(R.id.noGroupTx).setVisibility(View.GONE);
+            groupIcon.setVisibility(View.VISIBLE);
             createBT.setVisibility(View.GONE);
             leaveBT.setVisibility(View.VISIBLE);
             joinBt.setVisibility(View.GONE);
             invitationEt.setVisibility(View.GONE);
             invitationTx.setVisibility(View.VISIBLE);
             changeColor_BT.setVisibility(View.VISIBLE);
-            findViewById(R.id.share_code_tx).setVisibility(View.VISIBLE);
-            findViewById(R.id.joinGroup_tx).setVisibility(View.GONE);
         }
         else
             {
+
                 findViewById(R.id.joinGroup_tx).setVisibility(View.VISIBLE);
                 findViewById(R.id.create_groupTx).setVisibility(View.VISIBLE);
                 findViewById(R.id.change_color_tx).setVisibility(View.GONE);
                 findViewById(R.id.customize_color_tx).setVisibility(View.GONE);
                 findViewById(R.id.share_code_tx).setVisibility(View.GONE);
-                teamnameTx.setVisibility(View.GONE);
                 findViewById(R.id.noGroupTx).setVisibility(View.VISIBLE);
+                teamnameTx.setVisibility(View.GONE);
+                groupIcon.setVisibility(View.GONE);
                 createBT.setVisibility( View.VISIBLE);
                 leaveBT.setVisibility(View.GONE);
                 joinBt.setVisibility(View.VISIBLE);
@@ -389,17 +399,21 @@ public class Group_Activity extends AppCompatActivity {
             public void onClick(View v) {
                 RadioButton checkedBt = popupView.findViewById(rg.getCheckedRadioButtonId());
                Map<String,String> tempMap = new HashMap<>();
-               tempMap.put("Color",checkedBt.getTag().toString());
+               String color = checkedBt.getTag().toString();
+               GradientDrawable gradientDrawable = (GradientDrawable) groupIcon.getBackground();
+               gradientDrawable.setColor(Color.parseColor(color));
+               tempMap.put("Color",color);
                db.collection("tracker").document(uid).update("Color",checkedBt.getTag().toString());
                 popupWindow.dismiss();
-                Toast toast = Toast.makeText(getBaseContext(),checkedBt.getText().toString()+ " Selected",Toast.LENGTH_LONG);
-                View view = toast.getView();
-                view.setBackgroundResource(R.drawable.round_button);
-//                GradientDrawable gradientDrawable = (GradientDrawable) view.getBackground();
-////                gradientDrawable.setColor(Color.parseColor(checkedBt.getTag().toString()));
-                TextView text = (TextView) view.findViewById(android.R.id.message);
-                text.setTextColor(getResources().getColor(R.color.white));
-                toast.show();
+                Snackbar.make(findViewById(R.id.group_main_layout),checkedBt.getText().toString()+ " Selected",Snackbar.LENGTH_LONG).show();
+//                Toast toast = Toast.makeText(getBaseContext(),checkedBt.getText().toString()+ " Selected",Toast.LENGTH_LONG);
+//                View view = toast.getView();
+//                view.setBackgroundResource(R.drawable.round_button);
+////                GradientDrawable gradientDrawable = (GradientDrawable) view.getBackground();
+//////                gradientDrawable.setColor(Color.parseColor(checkedBt.getTag().toString()));
+//                TextView text = (TextView) view.findViewById(android.R.id.message);
+//                text.setTextColor(getResources().getColor(R.color.white));
+//                toast.show();
             }});
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

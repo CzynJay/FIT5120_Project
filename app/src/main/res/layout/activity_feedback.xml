@@ -33,16 +33,17 @@
             />
     </LinearLayout>
     <ScrollView
+        android:layout_marginTop="40dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
         <LinearLayout
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:gravity="center"
             android:layout_marginBottom="60dp"
-            android:layout_below="@id/feedback_layout">
+           >
             <TextView android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"

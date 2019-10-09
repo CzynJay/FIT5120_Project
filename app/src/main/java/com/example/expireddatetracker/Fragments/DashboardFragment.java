@@ -139,7 +139,6 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
             default:
                 colors.add(Color.rgb(76,175,80));
         }
-
     }
 
     @Override
