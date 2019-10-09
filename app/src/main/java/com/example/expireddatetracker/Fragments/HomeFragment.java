@@ -213,6 +213,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    //Group storage suggestion
     private List<Map.Entry<String,Double>> readSharedPreference(){
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(FirebaseAuth
                 .getInstance().getCurrentUser().getUid(),Context.MODE_PRIVATE);
@@ -250,6 +251,7 @@ public class HomeFragment extends Fragment {
     }
 
 
+    //Preference function
     private class LoadPreference extends AsyncTask<Void,Void,List<Map.Entry<String,Double>>>{
         @Override
         protected List<Map.Entry<String,Double>> doInBackground(Void... voids) {

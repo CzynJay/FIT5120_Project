@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.hololo.tutorial.library.Step;
 
+//Tutorial page
 public class Tutorial_Activity extends com.hololo.tutorial.library.TutorialActivity {
 
     @Override

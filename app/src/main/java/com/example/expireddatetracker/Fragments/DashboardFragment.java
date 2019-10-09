@@ -113,10 +113,12 @@ public class DashboardFragment extends Fragment implements TabLayout.BaseOnTabSe
         if (entries.size()==0)
             pieChart.setCenterText("No record yet");
         PieDataSet pieDataSet = new PieDataSet(entries, "");
+        //Set piechart colors
         pieDataSet.setColors(colors);
         pieDataSet.setValueFormatter(new DefaultValueFormatter(0));
         PieData pieData = new PieData(pieDataSet);
         pieData.setValueTextSize(20f);
+        //Set legend details
         pieChart.getLegend().setTextSize(16f);
         pieChart.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
         pieChart.getLegend().setWordWrapEnabled(true);

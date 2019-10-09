@@ -122,6 +122,7 @@ public class Group_Activity extends AppCompatActivity {
         });
     }
 
+    //Leave group function
     private void leaveGroup()
     {
         prograssBar.setVisibility(View.VISIBLE);
@@ -153,6 +154,7 @@ public class Group_Activity extends AppCompatActivity {
                 }).show();
     }
 
+    //Get group name and ID function
     private void checkGroup()
     {
 
@@ -188,6 +190,7 @@ public class Group_Activity extends AppCompatActivity {
                     }});
     }
 
+    //Switch layout function depending id group exists or not
     private void groupExistHelper(boolean exist)
     {
         if (exist)
@@ -273,6 +276,7 @@ public class Group_Activity extends AppCompatActivity {
 
     }
 
+    //Join group function
     private void joinGroup(){
         prograssBar.setVisibility(View.VISIBLE);
         final String value = invitationEt.getText().toString().trim();
@@ -319,6 +323,7 @@ public class Group_Activity extends AppCompatActivity {
 
     }
 
+    //Create new group name in Firebase function
     private void createNewGroup(String name)
     {
         DocumentReference addedDocRef = db.collection("group").document();
@@ -356,6 +361,7 @@ public class Group_Activity extends AppCompatActivity {
         }
     }
 
+    //Choose colour popup function
     private void popup_colorChange()
     {
         final ViewGroup root = (ViewGroup) getWindow().getDecorView().getRootView();
@@ -382,6 +388,7 @@ public class Group_Activity extends AppCompatActivity {
             }
         });
         final RadioGroup rg = popupView.findViewById(R.id.group_radio_color);
+        //Confirm and cancel button
         Button cancel = popupView.findViewById(R.id.color_cancel);
         Button confirm = popupView.findViewById(R.id.color_confirm);
         TextView sampleIcon = popupView.findViewById(R.id.icon_sample);

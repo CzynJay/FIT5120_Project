@@ -170,6 +170,7 @@ public class RegistrationActivity extends AppCompatActivity {
         return password.length() > 6;
     }
 
+    //Display terms of use
     private void popUpTermOfUse()
     {
         final ViewGroup root = (ViewGroup) getWindow().getDecorView().getRootView();

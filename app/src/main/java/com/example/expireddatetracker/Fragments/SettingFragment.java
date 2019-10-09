@@ -82,6 +82,7 @@ public class SettingFragment extends Fragment {
             }
         });
 
+        //Group button
         groupLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,6 +91,7 @@ public class SettingFragment extends Fragment {
             }
         });
 
+        //Tutorial button
         tutorialLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
