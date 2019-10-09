@@ -1,3 +1,5 @@
+# Version 1.0.66
+* Updated code documentation
 # Version 1.0.65
 * Updated some strings to accurate upper and lower case
 * Updated UI for settings page, now scrollable for all items to fit smaller screens
