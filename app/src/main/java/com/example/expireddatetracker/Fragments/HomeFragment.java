@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment {
         TextView welcome = inflatePage.findViewById(R.id.welcome_mes);
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
         assert mUser != null;
-        String displayInfo = "Hello " + mUser.getDisplayName();
+        String displayInfo = "Hello " + mUser.getDisplayName() + " !";
         welcome.setText(displayInfo);
         //Remove hint on click
         searchBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -280,7 +280,7 @@ public class HomeFragment extends Fragment {
                             subTx.setText(trimString(subtext));
                         else
                             subTx.setText("");
-                        view.setBackgroundResource(R.drawable.round_button);
+                        view.setBackgroundResource(R.drawable.round_fav_text);
                         view.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {

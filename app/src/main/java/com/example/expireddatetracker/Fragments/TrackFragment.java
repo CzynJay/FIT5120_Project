@@ -130,13 +130,8 @@ public class TrackFragment extends Fragment implements View.OnClickListener, Tab
                              });
                          }
                          fetchData(uid,type,FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),false,null);
-
-
-
                      }
                 progressing.setVisibility(View.VISIBLE);
-
-
             }
         });
     }
