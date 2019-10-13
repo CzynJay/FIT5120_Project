@@ -335,7 +335,7 @@ public class Group_Activity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 HashMap<String,String> map = new HashMap<>();
                 map.put("GROUP",groupID);
-                db.collection("tracker").document(uid).set(map)
+                db.collection("tracker").document(uid).set(map,SetOptions.merge())
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -93,8 +92,6 @@ public class HomeFragment extends Fragment {
         });
         return inflatePage;
     }
-
-
 
     //View main category
     private void init(View x){
@@ -249,7 +246,6 @@ public class HomeFragment extends Fragment {
         Collections.sort(list, cmpReverse);
         return list;
     }
-
 
     //Preference function
     private class LoadPreference extends AsyncTask<Void,Void,List<Map.Entry<String,Double>>>{
