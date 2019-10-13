@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/warning"
         android:gravity="center"
-        android:text="@string/spoiled_warning">
+        android:text="Beware of rancid smell, visible mould, slime, or discolouration. Your food might have gone bad already!">
     </TextView>
     <RelativeLayout android:layout_width="match_parent"
         android:layout_gravity="center"

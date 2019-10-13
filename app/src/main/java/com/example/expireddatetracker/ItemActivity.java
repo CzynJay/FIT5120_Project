@@ -277,7 +277,7 @@ public class ItemActivity extends AppCompatActivity implements View.OnClickListe
         if (!unit.equals("null")&& !val.equals("Not Recommended"))
             val = ((int)((double)Double.valueOf(val)))+ " "+ json.getString(unit);
         else
-            edu_info.setTextColor(getApplicationContext().getResources().getColor(R.color.red));
+            edu_info.setTextColor(getApplicationContext().getResources().getColor(R.color.black));
         val = item.equals("Cooking_Temperature") && !val.equals("Not Recommended")?val+" °C":val;
         type.setText(typeSwitcher(item));
         im.setImageResource(imageSwitcher(item));
