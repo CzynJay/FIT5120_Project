@@ -1,3 +1,5 @@
+# Version 1.0.67
+* Minor landing page UI changes
 # Version 1.0.66
 * Updated code documentation
 # Version 1.0.65
