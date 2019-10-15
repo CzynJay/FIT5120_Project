@@ -316,7 +316,6 @@ public class Group_Activity extends AppCompatActivity {
                                     });
                         }
                     }
-
                 }
             });
         }

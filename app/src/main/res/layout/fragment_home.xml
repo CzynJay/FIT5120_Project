@@ -70,8 +70,8 @@
             android:text="@string/guess_you_like"/>
         <HorizontalScrollView android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="none"
             android:layout_marginStart="10dp"
+            android:scrollbarStyle="insideInset"
             android:layout_marginBottom="20dp"
             >
             <LinearLayout
