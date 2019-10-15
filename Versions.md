@@ -1,3 +1,5 @@
+# Version 1.0.69
+* Fixed user not displaying correct initials bug
 # Version 1.0.68
 * Removed "test" data
 * Updated font colour for cooking data
