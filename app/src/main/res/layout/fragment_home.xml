@@ -88,14 +88,12 @@
         android:layout_marginBottom="25dp"
         android:weightSum="10"
         >
-
         <EditText
             android:id="@+id/searchbar"
             android:layout_width="match_parent"
             android:layout_height="41dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="10dp"
-
             android:layout_weight="9"
             android:textColor="@color/colorPrimary"
             android:background="@drawable/round_corners"
@@ -106,10 +104,8 @@
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:textColorHint="@color/colorPrimary"
-
             />
         <ImageButton
-
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -118,7 +114,6 @@
             android:layout_marginEnd="20dp"
             android:background="#00FF0000"
             android:layout_gravity="center"/>
-
     </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -156,8 +151,6 @@
             android:gravity="center_vertical"
             android:orientation="vertical"
             tools:context=".Fragments.HomeFragment"/>
-
-
     </ScrollView>
 </LinearLayout>
 </RelativeLayout>

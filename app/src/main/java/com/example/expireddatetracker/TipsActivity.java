@@ -2,6 +2,7 @@ package com.example.expireddatetracker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,9 +55,14 @@ public class TipsActivity extends AppCompatActivity {
                 v.findViewById(R.id.right_arrow).setVisibility(View.GONE);
                 v.findViewById(R.id.image_display).setVisibility(View.GONE);
                 TextView tx = v.findViewById(R.id.subcateText);
+                tx.setPadding(0,35,0,35);
+                tx.setTypeface(Typeface.DEFAULT);
                 tx.setTextSize(16);
                 tx.setText(json.getString("tips_text"));
                 container.addView(v);
+                LinearLayout.LayoutParams lp =  (LinearLayout.LayoutParams)v.getLayoutParams();
+                lp.setMarginStart(20);
+                lp.setMarginEnd(20);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
