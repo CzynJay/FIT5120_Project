@@ -1,3 +1,9 @@
+# Version 1.0.71
+* Adjusted tips page margin
+# Version 1.0.70
+* Add scrollbar for Frequent Pick
+* Add hint when creating group
+* Modify the milk_eggs scale
 # Version 1.0.69
 * Fixed user not displaying correct initials bug
 # Version 1.0.68
