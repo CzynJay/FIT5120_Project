@@ -1,3 +1,5 @@
+# Version 1.0.72
+* Adjusted overall user interface
 # Version 1.0.71
 * Adjusted tips page margin
 # Version 1.0.70
