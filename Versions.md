@@ -120,6 +120,10 @@
 * Add confirmation window
 # Version 1.0.24
 * Restructure the code
+# Version 1.0.25
+* Redesign the UI
+# Version 1.0.24
+* Fixed bug when users click the Dairy & Eggs Type
 # Version 1.0.23
 * Fixed temperature bug
 # Version 1.0.22
