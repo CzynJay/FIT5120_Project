@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/popupWindowLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="#FFFFFF"
+    android:showDividers="middle"
+    android:divider="@drawable/empty_tall_divider"
+    android:layout_height="wrap_content">
+    <RelativeLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#12022E"
+        >
+        <ImageView
+            android:id="@+id/record_closeBt"
+            android:layout_height="40dp"
+            android:layout_width="40dp"
+            android:src="@drawable/close"
+            android:layout_alignEnd="@id/record_name"
+            android:layout_margin="10dp"
+            />
+<TextView android:layout_width="match_parent"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="10dp"
+    android:layout_height="wrap_content"
+    android:id="@+id/record_name"
+    android:textSize="25sp"
+    android:textColor="@color/white"
+    android:layout_alignParentTop="true"
+    android:textStyle="bold"
+    android:text="@string/dynamic_text"
+    />
+    <TextView android:layout_width="match_parent"
+        android:layout_marginStart="20dp"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content"
+        android:id="@+id/record_subname"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/record_name"
+        android:textSize="18sp"
+        android:text="@string/dynamic_text"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/dayleftTx"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/dynamic_text"
+        android:textColor="@color/red"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        />
+    <TextView android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textSize="18sp"
+        android:id="@+id/purchase_date"
+        android:textColor="@color/black"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/dynamic_text"
+        />
+    <TextView android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:id="@+id/expire_date"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/dynamic_text"
+        />
+
+    <TextView android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:id="@+id/storage_type"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/dynamic_text"
+        />
+    <TextView android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:id="@+id/ownerTx"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:text= "@string/dynamic_text"/>
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:weightSum="2"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/discard_bt"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:background="@color/red"
+            android:textSize="18sp"
+            android:text="@string/discard"
+            />
+        <Button
+            android:id="@+id/consume_bt"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:background="@color/green"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_width="0dp"
+            android:text="@string/consume"
+            />
+    </LinearLayout>
+
+</LinearLayout>

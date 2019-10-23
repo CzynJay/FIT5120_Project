@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/design_default_color_primary_dark"
+    >
+    <TextView
+        android:id="@+id/group_pop_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/creating_group"
+        android:layout_margin="20dp"
+        android:textSize="17sp"
+        android:layout_alignParentStart="true"
+        android:textColor="@color/white"/>
+    <ImageView
+        android:id="@+id/group_create_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/close"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10dp"/>
+</RelativeLayout>
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:id="@+id/group_name_tx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="@string/group_name"/>
+    <EditText
+        android:id="@+id/group_name_et"
+        android:layout_width="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:hint="Enter Group Name here"
+        android:textIsSelectable="true"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        />
+
+    <Button android:id="@+id/group_confirm_bt"
+        android:layout_width="wrap_content"
+        android:layout_margin="17dp"
+        android:layout_height="35dp"
+        android:layout_gravity="end"
+        android:text="@string/create"
+        android:background="@drawable/round_button"
+        android:textColor="@color/white"
+        android:layout_marginBottom="20dp"
+        />
+</LinearLayout>

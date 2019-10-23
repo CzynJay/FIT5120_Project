@@ -1,105 +1,148 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/edu_background"
-    >
+    android:layout_height="match_parent" >
+
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/titleLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/stroke"
-        android:gravity="center"
+        android:background="@color/colorPrimary"
+        android:layout_alignParentTop="true"
         android:orientation="horizontal"
-        android:weightSum="10"
->
+        android:weightSum="10">
 
         <ImageButton
             android:id="@+id/back2list"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:background="#00FF0000"
+            android:scaleType="centerInside"
             android:layout_margin="20dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_return" />
-
+            android:src="@drawable/back" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
         <TextView
             android:id="@+id/foodname"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="8"
-            android:gravity="center"
-            android:text="3333"
-            android:textSize="20dp"
+            android:text="@string/dynamic_text"
+            android:textSize="20sp"
+            android:textColor="@color/white"
             android:textStyle="bold|italic" />
+        <TextView
+            android:id="@+id/subname_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textColor="@color/white"
+            android:text="@string/dynamic_text"
+            />
+    </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
+        android:layout_below="@id/titleLayout"
         android:id="@+id/buttonViews"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
+        android:baselineAligned="false"
         android:orientation="horizontal"
         android:weightSum="2">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
         <LinearLayout android:layout_width="match_parent"
-            android:layout_weight="1"
+            android:id="@+id/storage_layout"
             android:layout_height="wrap_content"
             android:orientation="vertical">
         <Button
             android:id="@+id/storage_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            
-            android:background="@drawable/button_change"
-            android:text="Storing"
+            android:background="#3090DB"
+            android:text="@string/storing"
+            android:textColor="@color/white"
             android:textAllCaps="false" />
+            </LinearLayout>
             <View
                 android:id="@+id/storage_indicator"
                 android:layout_gravity="center"
                 android:visibility="gone"
-                android:layout_width="match_parent" android:layout_height="5dp"
-                android:background="#E4CD34"/></LinearLayout>
-        <LinearLayout
+                android:layout_alignBottom="@id/storage_layout"
+                android:layout_width="match_parent" android:layout_height="3dp"
+                android:background="#14F051"/>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+        <LinearLayout
+            android:id="@+id/cook_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
         <Button
             android:id="@+id/cooking_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/button_change"
-            android:text="Cooking"
+            android:textColor="@color/white"
+            android:background="#3090DB"
+            android:text="@string/cooking"
             android:textAllCaps="false" />
+            </LinearLayout>
             <View
                 android:id="@+id/cook_indicator"
                 android:layout_gravity="center"
                 android:visibility="gone"
-                android:layout_width="match_parent" android:layout_height="5dp"
-                android:background="#E4CD34"/></LinearLayout>
-
+                android:layout_alignBottom="@id/cook_layout"
+                android:layout_width="match_parent" android:layout_height="3dp"
+                android:background="#14F051"/>
+        </RelativeLayout>
     </LinearLayout>
-
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="match_parent"
+    <LinearLayout
         android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:layout_below="@id/buttonViews"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="40dp"
+        >
+        <TextView
+            android:id="@+id/suggestTx"
+            android:layout_width="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_height="wrap_content"
+            android:text="@string/dynamic_text"
+            android:textSize="16sp"
+            android:visibility="gone"
+            android:textColor="@color/colorPrimary"
+            android:gravity="center"/>
+    <ScrollView
+        android:id="@+id/edu_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         >
 
         <LinearLayout
             android:id="@+id/edu_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:divider="@drawable/img_gap"
             android:gravity="center_vertical"
             android:orientation="vertical"
-            android:showDividers="middle"></LinearLayout>
-    </ScrollView>
+            android:showDividers="middle">
 
-</LinearLayout>
+
+        </LinearLayout>
+    </ScrollView></LinearLayout>
+</RelativeLayout>

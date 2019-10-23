@@ -2,24 +2,27 @@
 <LinearLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/round_shape"
     android:gravity="center_vertical"
+    android:background="@drawable/up_down_stroke"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <TextView
         android:id="@+id/mainname"
         android:layout_width="match_parent"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold|italic"
         android:gravity="center_vertical"
-        android:paddingLeft="20dp"
+        android:textColor="@color/black"
+        android:text="@string/dynamic_text"
+        android:paddingStart="20dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"/>
     <TextView
         android:id="@+id/subname"
         android:textStyle="italic"
         android:layout_width="match_parent"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         android:gravity="center_vertical"
-        android:layout_marginLeft="20dp"/>
+        android:layout_marginStart="20dp"/>
 </LinearLayout>

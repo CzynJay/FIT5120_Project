@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#e8ecf1"
+    tools:context=".TipsActivity">
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="@color/colorPrimary"
+        >
+        <ImageButton
+            android:id="@+id/tips_back"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00FF0000"
+            android:layout_margin="20dp"
+            android:src="@drawable/back"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:text="@string/tips"
+            android:transitionName="@string/tips"
+            android:textColor="@color/white"
+            android:layout_marginStart= "30dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/labelSize"
+            />
+    </LinearLayout>
+    <ScrollView
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+        <LinearLayout
+            android:id="@+id/tips_container"
+            android:showDividers="middle"
+            android:divider="@drawable/tips_divider"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            />
+    </ScrollView>
+
+</LinearLayout>

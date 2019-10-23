@@ -13,16 +13,23 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="56dp"
         android:text="@string/title_home"
-        android:background="#ffffff"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@drawable/line"
+        app:layout_constraintBottom_toTopOf="@id/navigation"
+        />
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        app:labelVisibilityMode="labeled"
         android:id="@+id/navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:itemIconTint="@android:color/black"
-        app:itemTextColor="@android:color/black"
-        android:background="#e8ecf1"
+
+        app:itemIconTint="@drawable/selector"
+        app:itemTextColor="@drawable/selector"
+        android:background="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
